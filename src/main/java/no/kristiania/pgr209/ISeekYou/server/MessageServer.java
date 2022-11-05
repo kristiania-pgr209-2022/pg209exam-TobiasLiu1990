@@ -1,8 +1,12 @@
 package no.kristiania.pgr209.ISeekYou.server;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +20,8 @@ public class MessageServer {
 
     public MessageServer(int port){
         this.server = new Server(port);
-        server.setHandler(createWebApp());
+        var context = createWebApp();
+        server.setHandler(createApiContext(context));
     }
 
     private WebAppContext createWebApp() {
@@ -25,6 +30,12 @@ public class MessageServer {
         context.setBaseResource(Resource.newClassPathResource("/webapp"));
         return context;
     }
+
+    private ServletContextHandler createApiContext(ServletContextHandler context) {
+        context.addServlet(new ServletHolder(new ServletContainer(new ResourceConfig(MessageEndPoint.class))), "/api/*");
+        return context;
+    }
+
 
     public URL getURL() throws MalformedURLException {
         return server.getURI().toURL();
