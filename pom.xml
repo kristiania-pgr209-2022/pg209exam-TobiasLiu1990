@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.kristiania.pgr209.placeholder</groupId>
+    <groupId>no.kristiania.pgr209.ISeekYou</groupId>
     <artifactId>pg209exam-SamuelEBG-TobiasLiu1990</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -33,8 +33,8 @@
         </plugins>
     </build>
 
-    <!-- JUnit Testing -->
     <dependencies>
+        <!-- JUnit Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -47,6 +47,21 @@
             <version>3.23.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Jetty web server -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>11.0.12</version>
+        </dependency>
+
+        <!-- logevents -->
+        <dependency>
+            <groupId>org.logevents</groupId>
+            <artifactId>logevents</artifactId>
+            <version>0.4.1</version>
+        </dependency>
+
 
     </dependencies>
 </project>

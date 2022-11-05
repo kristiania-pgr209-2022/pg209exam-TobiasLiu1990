@@ -1,4 +1,4 @@
-package no.kristiania.pgr209.placeholder.server;
+package no.kristiania.pgr209.ISeekYou.server;
 
 import org.junit.jupiter.api.Test;
 
