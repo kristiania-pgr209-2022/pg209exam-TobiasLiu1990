@@ -36,3 +36,4 @@
 * [ ] Datamodellen er *normalisert* - dvs at for eksempel navnet på en meldingsavsender ligger i brukertallen, ikke i meldingstabellen
 * [ ] Når man henter informasjon fra flere tabellen brukes join, i stedet for 1-plus-N queries (et for hovedlisten og et per svar for tilleggsinformasjon)
 * [ ] Det finnes test for alle JAX-RS endpoints og alle DAO-er
+
