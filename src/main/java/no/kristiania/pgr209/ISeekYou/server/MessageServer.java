@@ -1,7 +1,5 @@
 package no.kristiania.pgr209.ISeekYou.server;
 
-import org.eclipse.jetty.server.CustomRequestLog;
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -32,7 +30,7 @@ public class MessageServer {
         return server.getURI().toURL();
     }
 
-    private void start() throws Exception {
+    public void start() throws Exception {
         this.server.start();
         logger.warn("Server starting at {}", getURL());
     }
