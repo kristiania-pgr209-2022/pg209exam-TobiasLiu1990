@@ -8,6 +8,4 @@ public class ServerTest {
     void shouldServerHomePage() {
 
     }
-
-
 }
