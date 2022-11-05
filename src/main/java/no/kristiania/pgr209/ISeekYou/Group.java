@@ -1,7 +1,4 @@
-package no.kristiania.pgr209.ISeekYou.server;
-
-import no.kristiania.pgr209.ISeekYou.Message;
-import no.kristiania.pgr209.ISeekYou.User;
+package no.kristiania.pgr209.ISeekYou;
 
 import java.util.List;
 
