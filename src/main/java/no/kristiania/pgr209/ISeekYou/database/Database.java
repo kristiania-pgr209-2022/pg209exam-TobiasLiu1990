@@ -1,6 +1,7 @@
 package no.kristiania.pgr209.ISeekYou.database;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.flywaydb.core.Flyway;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class Database {
             dataSource.setPassword(password);
         }
 
+        Flyway.configure().dataSource(dataSource).load().migrate();
         return dataSource;
     }
 }

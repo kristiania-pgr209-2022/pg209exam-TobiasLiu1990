@@ -11,10 +11,9 @@ public class Message {
     public Message() {
     }
 
-    public Message(int id, String messageText, LocalDateTime messageDate) {
-        this.id = id;
+    public Message(String messageText) {
         this.messageText = messageText;
-        this.messageDate = messageDate;
+        this.messageDate = LocalDateTime.now();
     }
 
 
