@@ -5,6 +5,9 @@ public class Conversation {
     private int id;
     private String conversationName;
 
+    public Conversation() {
+
+    }
     public Conversation(String conversationName) {
         this.conversationName = conversationName;
     }
