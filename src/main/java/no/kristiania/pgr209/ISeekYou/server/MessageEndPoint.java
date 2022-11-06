@@ -6,6 +6,7 @@ import no.kristiania.pgr209.ISeekYou.Group;
 import no.kristiania.pgr209.ISeekYou.User;
 import no.kristiania.pgr209.ISeekYou.database.UserDao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Path("/")
@@ -16,7 +17,7 @@ public class MessageEndPoint {
     @Path("/user")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getInboxThreads() {
+    public List<User> getInboxThreads() throws SQLException {
         return userDao.listAll();
     }
 
