@@ -4,12 +4,14 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.pgr209.ISeekYou.Group;
 import no.kristiania.pgr209.ISeekYou.User;
+import no.kristiania.pgr209.ISeekYou.database.UserDao;
 
 import java.util.List;
 
 @Path("/")
 public class MessageEndPoint {
 
+    public UserDao userDao;
 
     @Path("/user")
     @GET
