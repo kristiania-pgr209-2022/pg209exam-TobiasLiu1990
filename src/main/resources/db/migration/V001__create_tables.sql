@@ -12,7 +12,7 @@ CREATE TABLE conversation (
 CREATE TABLE message (
     message_id INT IDENTITY PRIMARY KEY,
     sender VARCHAR(100) NOT NULL,
-    date SMALLDATETIME NOT NULL,
+    date date NOT NULL,
     content VARCHAR(9999),
     conversation_id INT FOREIGN KEY REFERENCES conversation(conversation_id)
 )

@@ -1,19 +1,20 @@
 package no.kristiania.pgr209.ISeekYou;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class Message {
 
     private int id;
     private String messageText;
-    private LocalDateTime messageDate;
+    private Date messageDate;
 
     public Message() {
     }
 
     public Message(String messageText) {
         this.messageText = messageText;
-        this.messageDate = LocalDateTime.now();
+        this.messageDate = Date.valueOf(LocalDate.now());
     }
 
 
@@ -33,11 +34,11 @@ public class Message {
         this.messageText = messageText;
     }
 
-    public LocalDateTime getMessageDate() {
+    public Date getMessageDate() {
         return messageDate;
     }
 
-    public void setMessageDate(LocalDateTime messageDate) {
+    public void setMessageDate(Date messageDate) {
         this.messageDate = messageDate;
     }
 }

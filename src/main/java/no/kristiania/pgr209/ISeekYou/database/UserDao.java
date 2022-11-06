@@ -1,10 +1,11 @@
 package no.kristiania.pgr209.ISeekYou.database;
 
-import jakarta.inject.Inject;
 import no.kristiania.pgr209.ISeekYou.User;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +15,6 @@ public class UserDao {
 
     public UserDao(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public List<User> listAll() throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "select * from users";
-            try (var stmt = connection.prepareStatement(query)) {
-                List<User> userList = new ArrayList<>();
-                try (var resultSet = stmt.executeQuery()) {
-                    while (resultSet.next()) {
-                        userList.add(mapFromResultSet(resultSet));
-                    }
-                    return userList;
-                }
-            }
-        }
     }
 
     public void save(User user) throws SQLException {
@@ -57,6 +43,21 @@ public class UserDao {
                     } else {
                         return null;
                     }
+                }
+            }
+        }
+    }
+
+    public List<User> listAll() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "select * from users";
+            try (var stmt = connection.prepareStatement(query)) {
+                List<User> userList = new ArrayList<>();
+                try (var resultSet = stmt.executeQuery()) {
+                    while (resultSet.next()) {
+                        userList.add(mapFromResultSet(resultSet));
+                    }
+                    return userList;
                 }
             }
         }
