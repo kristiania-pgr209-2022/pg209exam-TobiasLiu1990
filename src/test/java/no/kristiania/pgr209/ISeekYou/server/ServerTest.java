@@ -1,8 +1,10 @@
 package no.kristiania.pgr209.ISeekYou.server;
 
+import no.kristiania.pgr209.ISeekYou.InMemoryDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,10 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ServerTest {
 
     private MessageServer server;
+    private final DataSource dataSource = InMemoryDataSource.createDataSource();
 
     @BeforeEach
     void setUp() throws Exception {
-        server = new MessageServer(0);
+        server = new MessageServer(0, dataSource);
         server.start();
     }
 
