@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserDao {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     @Inject
     public UserDao(DataSource dataSource) {
