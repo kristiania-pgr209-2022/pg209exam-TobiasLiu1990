@@ -19,7 +19,7 @@ public class ConversationDao {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into conversation (conversation_name) values (?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, conversation.getConversationName());
+                stmt.setString(1, conversation.getConversationTitle());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -29,13 +29,16 @@ public class ConversationDao {
         }
     }
 
-    public List<Conversation> retrieveAllThreads(int id) throws SQLException {
+    public List<Conversation> retrieveAllConversationsByUserId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
-                    select conversation_name from Conversation
-                    JOIN Group_members ON Conversation.conversation_id = Group_members.conversation_id
-                    JOIN User ON Group_members.user_id = User.user_id
-                    where user_id = ?
+                       select me.content, me.date, me.sender, co.conversation_name
+                       from conversation_members as come
+                       join conversation as co
+                        on co.conversation_id = come.conversation_id
+                       join message as me
+                        on co.conversation_id = me.conversation_id
+                       where come.user_id = ?;
                     """;
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
@@ -44,12 +47,12 @@ public class ConversationDao {
                     while (resultSet.next()) {
                         Conversation conversation = new Conversation();
                         conversation.setId(resultSet.getInt(1));
-                        conversation.setConversationName(resultSet.getString(2));
+                        conversation.setConversationTitle(resultSet.getString(2));
+                        allConversations.add(conversation);
                     }
                     return allConversations;
                 }
             }
         }
     }
-
 }

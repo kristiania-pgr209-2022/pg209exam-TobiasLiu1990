@@ -2,8 +2,10 @@ package no.kristiania.pgr209.ISeekYou.server;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import no.kristiania.pgr209.ISeekYou.Conversation;
 import no.kristiania.pgr209.ISeekYou.Group;
 import no.kristiania.pgr209.ISeekYou.User;
+import no.kristiania.pgr209.ISeekYou.database.ConversationDao;
 import no.kristiania.pgr209.ISeekYou.database.UserDao;
 
 import java.sql.SQLException;
@@ -13,11 +15,12 @@ import java.util.List;
 public class MessageEndPoint {
 
     public UserDao userDao;
+    public ConversationDao conversationDao;
 
     @Path("/user")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getInboxThreads() throws SQLException {
+    public List<User> getAllUsers() throws SQLException {
         return userDao.listAll();
     }
 
@@ -31,15 +34,14 @@ public class MessageEndPoint {
          */
     }
 
-
-    @Path("/user/inbox")
+    @Path("/{user_id}/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Group> userMessages() {
+    public List<Conversation> userMessages(@PathParam("user_id") int id) throws SQLException {
         /*
             Get groups by user_id -> returns all messages.
          */
-        return groupDao.getGroupById();
+        return conversationDao.retrieveAllConversationsByUserId(id);
     }
 
     /*

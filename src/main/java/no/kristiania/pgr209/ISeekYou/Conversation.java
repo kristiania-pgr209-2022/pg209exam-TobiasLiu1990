@@ -3,13 +3,13 @@ package no.kristiania.pgr209.ISeekYou;
 public class Conversation {
 
     private int id;
-    private String conversationName;
+    private String conversationTitle;
 
     public Conversation() {
 
     }
     public Conversation(String conversationName) {
-        this.conversationName = conversationName;
+        this.conversationTitle = conversationName;
     }
 
     public int getId() {
@@ -20,11 +20,11 @@ public class Conversation {
         this.id = id;
     }
 
-    public String getConversationName() {
-        return conversationName;
+    public String getConversationTitle() {
+        return conversationTitle;
     }
 
-    public void setConversationName(String conversationName) {
-        this.conversationName = conversationName;
+    public void setConversationTitle(String conversationTitle) {
+        this.conversationTitle = conversationTitle;
     }
 }
