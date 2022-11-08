@@ -1,6 +1,6 @@
-package no.kristiania.pgr209.ISeekYou.database;
+package no.kristiania.pgr209.iseekyou.database;
 
-import no.kristiania.pgr209.ISeekYou.Conversation;
+import no.kristiania.pgr209.iseekyou.Conversation;
 
 import javax.sql.DataSource;
 import java.sql.*;

@@ -1,4 +1,4 @@
-package no.kristiania.pgr209.ISeekYou;
+package no.kristiania.pgr209.iseekyou;
 
 import java.sql.Date;
 import java.time.LocalDate;

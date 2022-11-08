@@ -1,4 +1,4 @@
-package no.kristiania.pgr209.ISeekYou;
+package no.kristiania.pgr209.iseekyou;
 
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcDataSource;

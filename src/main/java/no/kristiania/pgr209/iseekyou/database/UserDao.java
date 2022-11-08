@@ -1,6 +1,7 @@
-package no.kristiania.pgr209.ISeekYou.database;
+package no.kristiania.pgr209.iseekyou.database;
 
-import no.kristiania.pgr209.ISeekYou.User;
+import jakarta.inject.Inject;
+import no.kristiania.pgr209.iseekyou.User;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ public class UserDao {
 
     private DataSource dataSource;
 
+    @Inject
     public UserDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -52,8 +54,8 @@ public class UserDao {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users";
             try (var stmt = connection.prepareStatement(query)) {
-                List<User> userList = new ArrayList<>();
                 try (var resultSet = stmt.executeQuery()) {
+                    List<User> userList = new ArrayList<>();
                     while (resultSet.next()) {
                         userList.add(mapFromResultSet(resultSet));
                     }

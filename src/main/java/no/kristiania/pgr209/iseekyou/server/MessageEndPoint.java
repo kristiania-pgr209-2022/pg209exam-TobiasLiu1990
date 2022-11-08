@@ -1,11 +1,12 @@
-package no.kristiania.pgr209.ISeekYou.server;
+package no.kristiania.pgr209.iseekyou.server;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import no.kristiania.pgr209.ISeekYou.Conversation;
-import no.kristiania.pgr209.ISeekYou.User;
-import no.kristiania.pgr209.ISeekYou.database.ConversationDao;
-import no.kristiania.pgr209.ISeekYou.database.UserDao;
+import no.kristiania.pgr209.iseekyou.Conversation;
+import no.kristiania.pgr209.iseekyou.User;
+import no.kristiania.pgr209.iseekyou.database.ConversationDao;
+import no.kristiania.pgr209.iseekyou.database.UserDao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.List;
 @Path("/")
 public class MessageEndPoint {
 
+    @Inject
     public UserDao userDao;
+
     public ConversationDao conversationDao;
 
     @Path("/user")

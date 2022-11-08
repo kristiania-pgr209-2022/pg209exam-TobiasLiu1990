@@ -1,6 +1,6 @@
-package no.kristiania.pgr209.ISeekYou.server;
+package no.kristiania.pgr209.iseekyou.server;
 
-import no.kristiania.pgr209.ISeekYou.InMemoryDataSource;
+import no.kristiania.pgr209.iseekyou.InMemoryDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

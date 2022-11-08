@@ -1,7 +1,6 @@
-package no.kristiania.pgr209.ISeekYou.server;
+package no.kristiania.pgr209.iseekyou.server;
 
 import jakarta.servlet.*;
-import org.eclipse.jetty.servlet.Source;
 
 import java.io.IOException;
 

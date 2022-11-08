@@ -1,4 +1,4 @@
-package no.kristiania.pgr209.ISeekYou.database;
+package no.kristiania.pgr209.iseekyou.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
