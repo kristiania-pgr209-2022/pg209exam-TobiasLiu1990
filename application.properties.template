@@ -1,0 +1,3 @@
+jdbc.url=jdbc:sqlserver://iseekyou.database.windows.net:1433;database=pgr209iseekyou;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+jdbc.username=CloudSA45d392b8@iseekyou
+jdbc.password=very secret dp not push to github

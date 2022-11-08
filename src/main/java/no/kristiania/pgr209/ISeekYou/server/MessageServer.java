@@ -1,5 +1,6 @@
 package no.kristiania.pgr209.ISeekYou.server;
 
+import no.kristiania.pgr209.ISeekYou.Message;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;

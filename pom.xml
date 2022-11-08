@@ -74,6 +74,25 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Datasource -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+
+        <!-- Flyway -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+        <!-- Flyway with sql server -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-sqlserver</artifactId>
+            <version>9.5.1</version>
+        </dependency>
 
     </dependencies>
 </project>
