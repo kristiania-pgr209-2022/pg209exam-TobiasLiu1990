@@ -93,6 +93,13 @@
             <artifactId>flyway-sqlserver</artifactId>
             <version>9.5.1</version>
         </dependency>
+        <!-- Provide database connectivity with SQL Server through JDBC -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.1.jre17</version>
+            <scope>runtime</scope>
+        </dependency>
 
     </dependencies>
 </project>

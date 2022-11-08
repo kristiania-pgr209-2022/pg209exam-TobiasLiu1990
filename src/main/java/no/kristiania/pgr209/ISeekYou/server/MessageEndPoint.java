@@ -3,7 +3,6 @@ package no.kristiania.pgr209.ISeekYou.server;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.pgr209.ISeekYou.Conversation;
-import no.kristiania.pgr209.ISeekYou.Group;
 import no.kristiania.pgr209.ISeekYou.User;
 import no.kristiania.pgr209.ISeekYou.database.ConversationDao;
 import no.kristiania.pgr209.ISeekYou.database.UserDao;
