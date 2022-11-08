@@ -1,6 +1,7 @@
 package no.kristiania.pgr209.ISeekYou.server;
 
 import jakarta.servlet.DispatcherType;
+import no.kristiania.pgr209.ISeekYou.database.Database;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -89,7 +90,7 @@ public class MessageServer {
     }
 
     public static void main(String[] args) throws Exception {
-        var server = new MessageServer(8080);
+        var server = new MessageServer(8080, Database.getDatasource());
         server.start();
     }
 }
