@@ -28,7 +28,7 @@ public class MessageServer {
     private final Logger logger = LoggerFactory.getLogger(MessageServer.class);
 
     //Receive dataSource depending on caller (prod vs testing)
-    public MessageServer(int port, DataSource dataSource){
+    public MessageServer(int port, DataSource dataSource) throws IOException {
         this.server = new Server(port);
         server.setHandler(new HandlerList(createApiContext(dataSource), createWebApp()));
         server.setRequestLog(new CustomRequestLog());
@@ -53,7 +53,6 @@ public class MessageServer {
     private ServletContextHandler createApiContext(DataSource dataSource) {
         var context = new ServletContextHandler(server, "/api");
         context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/*");
-        context.addServlet(new ServletHolder(new ServletContainer(new ResourceConfig(MessageEndPoint.class))), "/api/*");
         return context;
     }
 
