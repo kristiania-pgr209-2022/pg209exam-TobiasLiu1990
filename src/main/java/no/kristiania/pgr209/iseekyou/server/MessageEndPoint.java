@@ -31,7 +31,7 @@ public class MessageEndPoint {
     @Path("/user/settings")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettings() {
+    public void userSettings(int userId) {
         /*
             POST - allow for editing of user settings.
                    Need to update run queries to update database
@@ -42,8 +42,8 @@ public class MessageEndPoint {
     @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conversation> userConversations(@QueryParam("id") int id) throws SQLException {
-        return conversationDao.retrieveAllConversationsByUserId(id);
+    public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
+        return conversationDao.retrieveAllConversationsByUserId(1);
     }
 
 

@@ -1,8 +1,21 @@
-#show-users-droplist {
+#app-title {
+  transform: translateX(-50%);
   position: absolute;
-  left: 10%;
-  top: 10%;
+  top: 0;
   background: red;
+}
+
+#show-users-drop-list {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: red;
+}
+
+#conversations {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 20%;
 }
 
 #first-option {
