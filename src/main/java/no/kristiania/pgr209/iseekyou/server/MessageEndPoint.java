@@ -1,11 +1,12 @@
-package no.kristiania.pgr209.ISeekYou.server;
+package no.kristiania.pgr209.iseekyou.server;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import no.kristiania.pgr209.ISeekYou.Conversation;
-import no.kristiania.pgr209.ISeekYou.User;
-import no.kristiania.pgr209.ISeekYou.database.ConversationDao;
-import no.kristiania.pgr209.ISeekYou.database.UserDao;
+import no.kristiania.pgr209.iseekyou.Conversation;
+import no.kristiania.pgr209.iseekyou.User;
+import no.kristiania.pgr209.iseekyou.database.ConversationDao;
+import no.kristiania.pgr209.iseekyou.database.UserDao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,35 +14,38 @@ import java.util.List;
 @Path("/")
 public class MessageEndPoint {
 
+    @Inject
     public UserDao userDao;
+
+    @Inject
     public ConversationDao conversationDao;
 
     @Path("/user")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> listAllUsers() throws SQLException {
         return userDao.listAll();
     }
 
-    @Path("/user")
+
+    @Path("/user/settings")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettings() {
+    public void userSettings(int userId) {
         /*
             POST - allow for editing of user settings.
                    Need to update run queries to update database
          */
     }
 
-    @Path("/{user_id}/inbox")
+
+    @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conversation> userMessages(@PathParam("user_id") int id) throws SQLException {
-        /*
-            Get groups by user_id -> returns all messages.
-         */
-        return conversationDao.retrieveAllConversationsByUserId(id);
+    public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
+        return conversationDao.retrieveAllConversationsByUserId(1);
     }
+
 
     /*
     @Path

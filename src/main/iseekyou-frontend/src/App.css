@@ -1,3 +1,27 @@
+#app-title {
+  transform: translateX(-50%);
+  position: absolute;
+  top: 0;
+  background: red;
+}
+
+#show-users-drop-list {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: red;
+}
+
+#conversations {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 20%;
+}
+
+#first-option {
+  font-weight: bold;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

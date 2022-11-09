@@ -1,4 +1,4 @@
-package no.kristiania.pgr209.ISeekYou;
+package no.kristiania.pgr209.iseekyou;
 
 public class User {
 

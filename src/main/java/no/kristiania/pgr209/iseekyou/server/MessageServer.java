@@ -1,7 +1,8 @@
-package no.kristiania.pgr209.ISeekYou.server;
+package no.kristiania.pgr209.iseekyou.server;
 
 import jakarta.servlet.DispatcherType;
-import no.kristiania.pgr209.ISeekYou.database.Database;
+import no.kristiania.pgr209.iseekyou.MessagingConfig;
+import no.kristiania.pgr209.iseekyou.Database;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -11,7 +12,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class MessageServer {
         setSourceDirectory(webContext);
 
         //Where to locate files
-        webContext.setInitParameter("jersey.config.server.provider.packages", "no.kristiania.pgr209.ISeekYou");
+        webContext.setInitParameter("jersey.config.server.provider.packages", "no.kristiania.pgr209.iseekyou");
 
         //Filter
         webContext.addFilter(new FilterHolder(new MessageServerFilter()), "/", EnumSet.of(DispatcherType.REQUEST));
@@ -54,6 +54,7 @@ public class MessageServer {
     private ServletContextHandler createApiContext(DataSource dataSource) {
         var context = new ServletContextHandler(server, "/api");
         context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/*");
+
         return context;
     }
 
@@ -63,7 +64,7 @@ public class MessageServer {
 
         if (sourceDirectory != null) {
             webContext.setBaseResource(Resource.newResource(sourceDirectory));
-            webContext.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");      //Remove lock on file
+            webContext.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
         } else {
             webContext.setBaseResource(resources);
         }
@@ -90,6 +91,7 @@ public class MessageServer {
     }
 
     public static void main(String[] args) throws Exception {
+        //Forgot to handle azure PORT. Add later
         var server = new MessageServer(8080, Database.getDatasource());
         server.start();
     }

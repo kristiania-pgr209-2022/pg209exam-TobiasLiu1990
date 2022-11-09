@@ -4,9 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.kristiania.pgr209.ISeekYou</groupId>
+    <groupId>no.kristiania.pgr209.iseekyou</groupId>
     <artifactId>pg209exam-SamuelEBG-TobiasLiu1990</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
     <build>
         <plugins>
@@ -34,6 +39,67 @@
     </build>
 
     <dependencies>
+        <!-- Jetty web server -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>11.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <!-- @Inject -->
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <!-- @Produces, @Consumes -->
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <!-- Handle application/json -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <version>3.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <!-- Datasource -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
+        <!-- Flyway -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+        <!-- Flyway with sql server -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-sqlserver</artifactId>
+            <version>9.5.1</version>
+        </dependency>
+        <!-- Provide database connectivity with SQL Server through JDBC -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.1.jre17</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- JUnit Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -55,24 +121,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Jetty web server -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>11.0.12</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>3.0.8</version>
-        </dependency>
-        <!-- @Inject -->
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <version>3.0.8</version>
-        </dependency>
-
         <!-- logevents -->
         <dependency>
             <groupId>org.logevents</groupId>
@@ -80,35 +128,5 @@
             <version>0.4.1</version>
             <scope>runtime</scope>
         </dependency>
-
-        <!-- Datasource -->
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
-        </dependency>
-
-        <!-- Flyway -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>9.5.1</version>
-        </dependency>
-        <!-- Flyway with sql server -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-sqlserver</artifactId>
-            <version>9.5.1</version>
-        </dependency>
-        <!-- Provide database connectivity with SQL Server through JDBC -->
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>11.2.1.jre17</version>
-            <scope>runtime</scope>
-        </dependency>
-
-
-
     </dependencies>
 </project>
