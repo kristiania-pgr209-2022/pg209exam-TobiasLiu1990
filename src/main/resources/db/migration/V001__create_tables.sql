@@ -12,7 +12,7 @@ CREATE TABLE conversations (
 CREATE TABLE messages (
     message_id INT IDENTITY PRIMARY KEY,
     sender VARCHAR(100) NOT NULL,
-    date TIMESTAMP,
+    date SMALLDATETIME default GETUTCDATE(),
     content VARCHAR(4000),
     conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id)
 )
