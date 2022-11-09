@@ -36,7 +36,7 @@ public class UserDao {
 
     public User retrieve(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users where id = ?";
+            String query = "select * from users where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {

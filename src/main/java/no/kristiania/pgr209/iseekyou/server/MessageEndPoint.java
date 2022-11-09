@@ -38,13 +38,11 @@ public class MessageEndPoint {
          */
     }
 
+
     @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conversation> userConversations(int id) throws SQLException {
-        /*
-            Get groups by user_id -> returns all messages.
-         */
+    public List<Conversation> userConversations(@QueryParam("id") int id) throws SQLException {
         return conversationDao.retrieveAllConversationsByUserId(id);
     }
 
