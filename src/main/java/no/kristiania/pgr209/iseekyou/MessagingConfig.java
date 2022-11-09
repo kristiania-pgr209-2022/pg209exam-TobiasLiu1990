@@ -1,9 +1,10 @@
-package no.kristiania.pgr209.iseekyou.server;
+package no.kristiania.pgr209.iseekyou;
 
 import jakarta.inject.Singleton;
 import no.kristiania.pgr209.iseekyou.database.ConversationDao;
 import no.kristiania.pgr209.iseekyou.database.MessageDao;
 import no.kristiania.pgr209.iseekyou.database.UserDao;
+import no.kristiania.pgr209.iseekyou.server.MessageEndPoint;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 

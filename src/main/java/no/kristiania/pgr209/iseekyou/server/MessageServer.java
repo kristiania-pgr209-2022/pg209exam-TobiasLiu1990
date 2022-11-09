@@ -1,7 +1,8 @@
 package no.kristiania.pgr209.iseekyou.server;
 
 import jakarta.servlet.DispatcherType;
-import no.kristiania.pgr209.iseekyou.database.Database;
+import no.kristiania.pgr209.iseekyou.MessagingConfig;
+import no.kristiania.pgr209.iseekyou.Database;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -53,6 +54,7 @@ public class MessageServer {
     private ServletContextHandler createApiContext(DataSource dataSource) {
         var context = new ServletContextHandler(server, "/api");
         context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/*");
+
         return context;
     }
 
@@ -62,7 +64,7 @@ public class MessageServer {
 
         if (sourceDirectory != null) {
             webContext.setBaseResource(Resource.newResource(sourceDirectory));
-            webContext.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");      //Remove lock on file
+            webContext.setInitParameter(DefaultServlet.CONTEXT_INIT + "useFileMappedBuffer", "false");
         } else {
             webContext.setBaseResource(resources);
         }

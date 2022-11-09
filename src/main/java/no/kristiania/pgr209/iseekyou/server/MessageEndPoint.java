@@ -22,7 +22,7 @@ public class MessageEndPoint {
     @Path("/user")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> listAllUsers() throws SQLException {
         return userDao.listAll();
     }
 
