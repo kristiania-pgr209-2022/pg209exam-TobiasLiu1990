@@ -27,7 +27,8 @@ public class MessageEndPoint {
         return userDao.listAll();
     }
 
-    @Path("/user")
+
+    @Path("/user/settings")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void userSettings() {
@@ -40,12 +41,13 @@ public class MessageEndPoint {
     @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conversation> userMessages(@PathParam("user_id") int id) throws SQLException {
+    public List<Conversation> userConversations(int id) throws SQLException {
         /*
             Get groups by user_id -> returns all messages.
          */
         return conversationDao.retrieveAllConversationsByUserId(id);
     }
+
 
     /*
     @Path
