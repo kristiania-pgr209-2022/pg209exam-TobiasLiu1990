@@ -19,7 +19,7 @@ public class ConversationDao {
 
     public void save(Conversation conversation) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into conversation (conversation_title) values (?)";
+            String query = "insert into conversations (conversation_title) values (?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, conversation.getConversationTitle());
                 stmt.executeUpdate();
@@ -32,21 +32,22 @@ public class ConversationDao {
     }
 
     String query = """
-                       select me.content, me.date, me.sender, co.conversation_title
-                       from conversation_members as come
-                       join conversation as co
-                        on co.conversation_id = come.conversation_id
-                       join message as me
-                        on co.conversation_id = me.conversation_id
-                       where come.user_id = ?;
-                    """;
+               select me.content, me.date, me.sender, co.conversation_title
+               from conversation_members as come
+               join conversation as co
+                on co.conversation_id = come.conversation_id
+               join message as me
+                on co.conversation_id = me.conversation_id
+               where come.user_id = ?;
+            """;
+
     public List<Conversation> retrieveAllConversationsByUserId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
-                    SELECT Conversation.conversation_id, Conversation.conversation_title
-                    FROM Conversation
+                    SELECT Conversations.conversation_id, Conversations.conversation_title
+                    FROM Conversations
                     JOIN Conversation_members
-                        ON Conversation.conversation_id = Conversation_members.conversation_id
+                        ON Conversations.conversation_id = Conversation_members.conversation_id
                     JOIN Users
                         ON Conversation_members.user_id = Users.user_id
                     where Users.user_id = ?;

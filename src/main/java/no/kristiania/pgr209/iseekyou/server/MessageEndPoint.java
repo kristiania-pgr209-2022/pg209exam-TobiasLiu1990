@@ -43,7 +43,7 @@ public class MessageEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
-        return conversationDao.retrieveAllConversationsByUserId(1);
+        return conversationDao.retrieveAllConversationsByUserId(userId);
     }
 
 

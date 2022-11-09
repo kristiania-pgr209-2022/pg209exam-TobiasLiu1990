@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 /*
     -list users
         -show conversation titles
-            - show messages in converastion
+            - show messages in conversation
             - write new message
     -user settings
     -new conversation for user
@@ -34,7 +34,7 @@ function ListUsers() {
         // setUserId(() => parseInt(e.target.value));
     }
 
-    //the empty <option></option> works as placeholder. Also so anything below can be picked.
+    //the empty <option></option> works as placeholder. Also, so anything below can be picked.
     return (
         <>
             <div id="show-users-drop-list">
@@ -65,7 +65,7 @@ function ShowConversationForUser(userId) {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/user/inbox?id=" + userId.id);
+            const res = await fetch("/api/user/inbox?userId=" + userId.id);
             setConversation(await res.json());
             setLoading(false);
         })();
@@ -82,7 +82,6 @@ function ShowConversationForUser(userId) {
                 {conversation.map((c) => (
                     <li key={c.id}>{c.id} - {c.conversationTitle}</li>
                 ))}
-                <ShowMessageBox/>
             </ul>
         </div>
     );
@@ -97,7 +96,6 @@ function ShowMessageBox() {
 function App() {
     return (
         <div className="App">
-
             <h1 id="app-title">I Seek You</h1>
 
             <ListUsers/>
