@@ -23,7 +23,7 @@ function ListUsers() {
 
         if (userId) {
             console.log("User id: " + userId);
-
+            showConversationForUser(userId)
         } else {
             console.log("Just for testing: User does not exist if gets here. Should not happen");
         }
@@ -43,6 +43,15 @@ function ListUsers() {
             </select>
         </div>
     );
+}
+
+//New GET method to get all conversations to show for this user.
+function showConversationForUser(userId) {
+    const [loading, setLoading] = useState(true);
+    const [conversation, setConversation] = useState([]);
+
+
+    console.log(userId);
 }
 
 function App() {

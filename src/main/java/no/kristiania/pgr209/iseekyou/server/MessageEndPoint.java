@@ -17,6 +17,7 @@ public class MessageEndPoint {
     @Inject
     public UserDao userDao;
 
+    @Inject
     public ConversationDao conversationDao;
 
     @Path("/user")
@@ -36,7 +37,7 @@ public class MessageEndPoint {
          */
     }
 
-    @Path("/{user_id}/inbox")
+    @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> userMessages(@PathParam("user_id") int id) throws SQLException {
