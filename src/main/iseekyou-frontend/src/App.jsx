@@ -63,7 +63,7 @@ function ShowConversationForUser(userId) {
     }, []);
 
     if (loading) {
-        return <div>Loading user...</div>
+        return <div>Loading conversations...</div>
     }
 
     if (userId === "") {
