@@ -25,6 +25,7 @@ public class MessageEndPoint {
     @Inject
     public MessageDao messageDao;
 
+    //Lists all users for drop-down menu in front-end
     @Path("/user")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +33,15 @@ public class MessageEndPoint {
         return userDao.listAll();
     }
 
+    //Runs after above method. This is to get the user again to change font color based on user selected.
+    @Path("/api/user/color")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> findUser(@QueryParam("userColor") int id) throws SQLException {
+        return List.of(userDao.retrieve(id));
+    }
 
+    //Should show a settings window when a user is selected in drop-down menu. Can then change user settings.
     @Path("/user/settings")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -43,7 +52,7 @@ public class MessageEndPoint {
          */
     }
 
-
+    //Shows all conversations when a user is selected in drop-down menu.
     @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,12 +60,14 @@ public class MessageEndPoint {
         return conversationDao.retrieveAllConversationsByUserId(userId);
     }
 
+    //Shows all messages in a conversation when a conversation is clicked.
     @Path("user/inbox/messages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
+
 
     /*
     @Path

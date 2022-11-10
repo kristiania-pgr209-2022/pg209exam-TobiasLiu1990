@@ -10,7 +10,6 @@ import React, {useEffect, useState} from "react";
     -new conversation for user
  */
 
-
 //Shows all users
 function ListUsers() {
     const [loading, setLoading] = useState(true);
@@ -31,7 +30,6 @@ function ListUsers() {
 
     function handleChange(e) {
         setUserId(parseInt(e.target.value));
-        // setUserId(() => parseInt(e.target.value));
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -39,7 +37,7 @@ function ListUsers() {
         <>
             <div id="show-users-drop-list">
                 <h2>User list</h2>
-                <h5>User Id: {userId}</h5>
+                <h5 id="selected-user">User Id: {userId}</h5>
 
                 <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
@@ -50,11 +48,39 @@ function ListUsers() {
                 </select>
             </div>
 
+            <div>
+                <SetUsersFavoriteColor id={userId}/>
+            </div>
+
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
             </div>
         </>
     );
+}
+
+function SetUsersFavoriteColor(userId) {
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetch("/api/user/color?userColor=" + userId.id);
+            setUser(await res.json());
+            setLoading(false);
+        })();
+    }, [userId]);
+
+    console.log("aaaaaaaaaaaaaa" + user.id)
+
+    if (loading) {
+        return <div>asdasdasdaksodkasodk</div>
+    } else {
+        document.getElementById("selected-user").innerHTML = user.fullName;
+        document.getElementById("app-title").style.background = 'red';   //Should be users color.
+
+    }
+    return;
 }
 
 //Get all conversations for user.
