@@ -35,7 +35,7 @@ public class MessageDao {
 
     public List<Message> retrieveAllMessagesByConversationId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from messages where conversation_id = ? order by date"; //Add time later
+            String query = "select * from messages where conversation_id = ? order by date desc";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {

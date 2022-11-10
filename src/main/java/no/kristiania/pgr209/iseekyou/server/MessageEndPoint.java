@@ -4,8 +4,10 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.pgr209.iseekyou.Conversation;
+import no.kristiania.pgr209.iseekyou.Message;
 import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.database.ConversationDao;
+import no.kristiania.pgr209.iseekyou.database.MessageDao;
 import no.kristiania.pgr209.iseekyou.database.UserDao;
 
 import java.sql.SQLException;
@@ -19,6 +21,9 @@ public class MessageEndPoint {
 
     @Inject
     public ConversationDao conversationDao;
+
+    @Inject
+    public MessageDao messageDao;
 
     @Path("/user")
     @GET
@@ -47,7 +52,11 @@ public class MessageEndPoint {
     }
 
     @Path("user/inbox/messages")
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId){
+        return messageDao.retrieveAllMessagesByConversationId();
+    }
 
     /*
     @Path

@@ -61,6 +61,7 @@ function ListUsers() {
 function ShowConversationForUser(userId) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
+    const [conversationId, setConversationId] = useState(0);
     console.log("Conversation id for user: " + userId.id);  //Remove after just for testing
 
     useEffect(() => {
@@ -75,13 +76,19 @@ function ShowConversationForUser(userId) {
         return <div>Loading conversations...</div>
     }
 
+    function handleClick(e) {
+        setConversationId(parseInt(e.target.value));
+        console.log("This is conversation ID " + conversationId);
+        ShowMessageBox(conversationId)
+    }
+
     return (
         <div>
             <h2>Conversations</h2>
 
             {conversation.map((c) => (
                 <div>
-                    <button key={c.id}>{c.id} - {c.conversationTitle}</button>
+                    <button key={c.id} onClick={handleClick} value={c.id} >{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
             <ShowMessageBox id={{userId}}/>
@@ -90,7 +97,7 @@ function ShowConversationForUser(userId) {
 }
 
 //Should show chat messages in a conversation
-function ShowMessageBox(userId) {
+function ShowMessageBox(conversationId) {
         const [loading, setLoading] = useState(true);
         const [messages, setMessages] = useState([]);
 
