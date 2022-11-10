@@ -17,7 +17,7 @@ public class MessageDao {
 
     public void save(Message message, String fullName, int conversationId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into message (sender, date, content, conversation_id) values (?, ?, ?, ?) ";
+            String query = "insert into messages (sender, date, content, conversation_id) values (?, ?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, fullName);
                 stmt.setDate(2, message.getMessageDate());
@@ -33,9 +33,9 @@ public class MessageDao {
         }
     }
 
-    public List<Message> retrieveAllByConversationId(int id) throws SQLException {
+    public List<Message> retrieveAllMessagesByConversationId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from message where conversation_id = ? order by date"; //Add time later
+            String query = "select * from messages where conversation_id = ? order by date"; //Add time later
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {

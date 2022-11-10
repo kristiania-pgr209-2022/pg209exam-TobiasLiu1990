@@ -78,17 +78,24 @@ function ShowConversationForUser(userId) {
     return (
         <div>
             <h2>Conversations</h2>
-            <ul>
-                {conversation.map((c) => (
-                    <li key={c.id}>{c.id} - {c.conversationTitle}</li>
-                ))}
-            </ul>
+
+            {conversation.map((c) => (
+                <div>
+                    <button key={c.id}>{c.id} - {c.conversationTitle}</button>
+                </div>
+            ))}
+            <ShowMessageBox id={{userId}}/>
         </div>
     );
 }
 
 //Should show chat messages in a conversation
-function ShowMessageBox() {
+function ShowMessageBox(userId) {
+        const [loading, setLoading] = useState(true);
+        const [messages, setMessages] = useState([]);
+
+
+
     return null;
 }
 

@@ -46,6 +46,8 @@ public class MessageEndPoint {
         return conversationDao.retrieveAllConversationsByUserId(userId);
     }
 
+    @Path("user/inbox/messages")
+
 
     /*
     @Path
