@@ -69,10 +69,10 @@ INSERT INTO messages (sender_id, content, conversation_id)
 VALUES(3, 'I cost 100 thousand kronor, no pruting allowed!', 4);
 
 INSERT INTO messages (sender_id, content, conversation_id)
-VALUES('Snorre Snorreson', 'That is alot of money, I cost a baconpölse and 2 coca colas!', 4);
+VALUES(2, 'That is alot of money, I cost a baconpölse and 2 coca colas!', 4);
 
 INSERT INTO messages (sender_id, content, conversation_id)
-VALUES('Elon Musk', 'Alright Snorre, you are now my property and I will turn you into a vaccum-cleaner.', 4);
+VALUES(4, 'Alright Snorre, you are now my property and I will turn you into a vaccum-cleaner.', 4);
 
 INSERT INTO messages (sender_id, content, conversation_id)
-VALUES('Elon Musk', '... And I will use you for.. Vaccum cleaning.. of course!', 4);
+VALUES(4, '... And I will use you for.. Vaccum cleaning.. of course!', 4);

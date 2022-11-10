@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.User;
 
 import javax.sql.DataSource;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,10 +22,11 @@ public class UserDao {
 
     public void save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into users (full_name, email_address) values (?, ?)";
+            String query = "insert into users (full_name, email_address, favorite_color) values (?, ?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
                 stmt.setString(2, user.getEmail());
+                stmt.setString(3, String.valueOf(user.getColor()));
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -70,6 +72,7 @@ public class UserDao {
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email_address"));
+        user.setColor(Color.decode(resultSet.getString("favorite_color")));
         return user;
     }
 }
