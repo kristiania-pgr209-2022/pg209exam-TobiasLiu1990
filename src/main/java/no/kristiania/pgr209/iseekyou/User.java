@@ -4,17 +4,27 @@ public class User {
 
     private int id;
     private String fullName;
-    private String eMail;
+    private String email;
+    private String color;
 
     public User() {
     }
 
-    public User(int id, String fullName, String eMail) {
+    public User(int id, String fullName, String email, String color) {
         this.id = id;
         this.fullName = fullName;
-        this.eMail = eMail;
+        this.email = email;
+        this.color = color;
     }
 
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public int getId() {
         return id;
@@ -32,11 +42,11 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

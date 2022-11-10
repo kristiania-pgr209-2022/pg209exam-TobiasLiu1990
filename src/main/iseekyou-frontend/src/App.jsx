@@ -31,7 +31,7 @@ function ListUsers() {
 
     function handleChange(e) {
         setUserId(parseInt(e.target.value));
-        // setUserId(() => parseInt(e.target.value));
+
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -39,21 +39,89 @@ function ListUsers() {
         <>
             <div id="show-users-drop-list">
                 <h2>User list</h2>
-                <h5>User Id: {userId}</h5>
+                <h5 id="selected-user"> Username </h5>
 
                 <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
 
                     {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.eMail}</option>
+                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
 
+            <div><SetUsersFavoriteColor id={userId}/></div>
+
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
             </div>
+
+            <div id="user-settings">
+                <UserSettings id={userId}/>
+            </div>
         </>
+    );
+}
+
+function SetUsersFavoriteColor(userId) {
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (userId.id === 0) {
+                return;
+            }
+            const res = await fetch("/api/user/color?userColor=" + userId.id);
+            setUser(await res.json());
+            setLoading(false);
+        })();
+    }, [userId]);
+
+    if (loading) {
+        return <div>Logo-color should change soon.......</div>
+    } else {
+        document.getElementById("selected-user").innerHTML = user.map(u => u.fullName);
+        document.getElementById("app-title").style.color = user.map(u => u.color);
+    }
+}
+
+function UserSettings(userId) {
+    const [fullName, setFullName] = useState("");
+    //const [favoriteColor, setFavoriteColor] = useState([]);
+    //const [emailAddress, setEmailAddress] = useState([]);
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        // if (userId.id === 0) {
+        //     return;
+        // }
+
+        await fetch("/api/user/settings/changename?userId=" + userId.id, {
+            method: "post",
+            body: JSON.stringify({fullName}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    New name:{" "}
+                    <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                    />
+                </label>
+                <button>Submit</button>
+            </form>
+        </div>
     );
 }
 
@@ -65,6 +133,11 @@ function ShowConversationForUser(userId) {
     console.log("Conversation id for user: " + userId.id);  //Remove after just for testing
 
     useEffect(() => {
+
+        if (userId.id === 0) {
+            return;
+        }
+
         (async () => {
             const res = await fetch("/api/user/inbox?userId=" + userId.id);
             setConversation(await res.json());
@@ -92,6 +165,7 @@ function ShowConversationForUser(userId) {
             <div id="show-messages">
                 <ShowMessageBox id={conversationId}/>
             </div>
+
         </div>
     );
 }
@@ -117,7 +191,7 @@ function ShowMessageBox(conversationId) {
         <div>
             {messages.map((m) => (
                 <>
-                    <h4>{m.sender} - {m.messageDate}</h4>
+                    <h4>{m.senderName} - {m.messageDate}</h4>
                     <p>{m.messageText}</p>
                 </>
             ))}

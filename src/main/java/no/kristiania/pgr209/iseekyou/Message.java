@@ -6,15 +6,17 @@ import java.time.LocalDate;
 public class Message {
 
     private int id;
-    private String sender;
+    private int sender;
+    private String senderName;
     private String messageText;
     private Date messageDate;
 
     public Message() {
     }
 
-    public Message(String sender, String messageText) {
+    public Message(int sender, String senderName, String messageText) {
         this.sender = sender;
+        this.senderName = senderName;
         this.messageText = messageText;
         this.messageDate = Date.valueOf(LocalDate.now());
     }
@@ -44,11 +46,19 @@ public class Message {
         this.messageDate = messageDate;
     }
 
-    public String getSender() {
+    public int getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(int sender) {
         this.sender = sender;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 }

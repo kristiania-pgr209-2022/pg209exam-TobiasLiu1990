@@ -1,8 +1,10 @@
 #app-title {
-  transform: translateX(-50%);
   position: absolute;
   top: 0;
-  background: red;
+}
+
+#user-settings {
+  left: 5%;
 }
 
 #show-users-drop-list {
@@ -14,7 +16,7 @@
 
 #conversations {
   position: absolute;
-  left: 25%;
+  left: 30%;
   top: 20%;
 }
 

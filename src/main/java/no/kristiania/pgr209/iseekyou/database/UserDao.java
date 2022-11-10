@@ -2,8 +2,10 @@ package no.kristiania.pgr209.iseekyou.database;
 
 import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.User;
+import no.kristiania.pgr209.iseekyou.UserColor;
 
 import javax.sql.DataSource;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,10 +23,11 @@ public class UserDao {
 
     public void save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into users (full_name, email_address) values (?, ?)";
+            String query = "insert into users (full_name, email_address, favorite_color) values (?, ?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
-                stmt.setString(2, user.geteMail());
+                stmt.setString(2, user.getEmail());
+                stmt.setString(3, user.getColor().toString());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -50,6 +53,18 @@ public class UserDao {
         }
     }
 
+    public void updateUserName(User user, int id) throws SQLException {
+        String username = user.getFullName();
+        try(var connection = dataSource.getConnection()) {
+            String query = "update users set full_name = ? where user_id = ?";
+            try(var stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, id);
+                stmt.executeUpdate();
+            }
+        }
+    }
+
     public List<User> listAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users";
@@ -69,7 +84,10 @@ public class UserDao {
         var user = new User();
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
-        user.seteMail(resultSet.getString("email_address"));
+        user.setEmail(resultSet.getString("email_address"));
+        user.setColor(resultSet.getString("favorite_color"));
+//        UserColor color = UserColor.valueOf(resultSet.getString("favorite_color").toUpperCase());
+//        user.setColor(color);
         return user;
     }
 }
