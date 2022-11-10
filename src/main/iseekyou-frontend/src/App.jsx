@@ -117,7 +117,7 @@ function ShowMessageBox(conversationId) {
         <div>
             {messages.map((m) => (
                 <>
-                    <h4>{m.sender} - {m.messageDate}</h4>
+                    <h4>{m.senderName} - {m.messageDate}</h4>
                     <p>{m.messageText}</p>
                 </>
             ))}

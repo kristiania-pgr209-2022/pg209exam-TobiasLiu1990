@@ -5,12 +5,12 @@ public class User {
     private int id;
     private String fullName;
     private String email;
-    private UserColor color;
+    private String color;
 
     public User() {
     }
 
-    public User(int id, String fullName, String email, UserColor color) {
+    public User(int id, String fullName, String email, String color) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -18,11 +18,11 @@ public class User {
     }
 
 
-    public UserColor getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(UserColor color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

@@ -73,9 +73,9 @@ public class UserDao {
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email_address"));
-        UserColor color = UserColor.valueOf(resultSet.getString("favorite_color").toUpperCase());
-        user.setColor(color);
-
+        user.setColor(resultSet.getString("favorite_color"));
+//        UserColor color = UserColor.valueOf(resultSet.getString("favorite_color").toUpperCase());
+//        user.setColor(color);
         return user;
     }
 }
