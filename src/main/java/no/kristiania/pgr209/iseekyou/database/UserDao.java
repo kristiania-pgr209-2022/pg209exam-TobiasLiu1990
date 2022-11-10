@@ -26,7 +26,7 @@ public class UserDao {
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
                 stmt.setString(2, user.getEmail());
-                stmt.setString(3, String.valueOf(user.getColor()));
+                stmt.setString(3, user.getColor().toString());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -72,7 +72,7 @@ public class UserDao {
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email_address"));
-        user.setColor(Color.decode(resultSet.getString("favorite_color")));
+        user.setColor(Color.getColor(resultSet.getString("favorite_color")));
         return user;
     }
 }

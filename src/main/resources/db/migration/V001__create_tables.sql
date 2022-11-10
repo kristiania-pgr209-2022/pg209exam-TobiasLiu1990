@@ -12,13 +12,14 @@ CREATE TABLE conversations (
 
 CREATE TABLE messages (
     message_id INT IDENTITY PRIMARY KEY,
-    sender_id int FOREIGN KEY REFERENCES users(user_id),
+    sender_id int CONSTRAINT fk_sender_user_id FOREIGN KEY REFERENCES users(user_id),
     date SMALLDATETIME DEFAULT GETUTCDATE(),
     content VARCHAR(4000),
     conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id)
 )
 
 CREATE TABLE conversation_members (
-    user_id INT FOREIGN KEY REFERENCES users(user_id) ,
-    conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id)
+    user_id INT CONSTRAINT fk_conversation_user_id FOREIGN KEY REFERENCES users(user_id),
+    conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id),
+
 )
