@@ -10,6 +10,7 @@ import React, {useEffect, useState} from "react";
     -new conversation for user
  */
 
+
 //Shows all users
 function ListUsers() {
     const [loading, setLoading] = useState(true);
@@ -48,8 +49,10 @@ function ListUsers() {
                 </select>
             </div>
 
-            <div>
-                <SetUsersFavoriteColor id={userId}/>
+            <div><SetUsersFavoriteColor id={userId}/></div>
+
+            <div id="user-settings">
+                <UserSettings id={userId}/>
             </div>
 
             <div id="conversations">
@@ -80,6 +83,12 @@ function SetUsersFavoriteColor(userId) {
         document.getElementById("selected-user").innerHTML = user.map(u => u.fullName);
         document.getElementById("app-title").style.color = user.map(u => u.color);
     }
+}
+
+function UserSettings() {
+
+
+    return null;
 }
 
 //Get all conversations for user.
