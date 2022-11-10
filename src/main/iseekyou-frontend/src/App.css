@@ -3,6 +3,10 @@
   top: 0;
 }
 
+#user-settings {
+  left: 5%;
+}
+
 #show-users-drop-list {
   position: absolute;
   left: 0;

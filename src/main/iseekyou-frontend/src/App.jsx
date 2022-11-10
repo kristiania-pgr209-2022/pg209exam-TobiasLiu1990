@@ -31,6 +31,7 @@ function ListUsers() {
 
     function handleChange(e) {
         setUserId(parseInt(e.target.value));
+
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -51,12 +52,12 @@ function ListUsers() {
 
             <div><SetUsersFavoriteColor id={userId}/></div>
 
-            <div id="user-settings">
-                <UserSettings id={userId}/>
-            </div>
-
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
+            </div>
+
+            <div id="user-settings">
+                <UserSettings id={userId}/>
             </div>
         </>
     );
@@ -85,10 +86,43 @@ function SetUsersFavoriteColor(userId) {
     }
 }
 
-function UserSettings() {
+function UserSettings(userId) {
+    const [fullName, setFullName] = useState("");
+    //const [favoriteColor, setFavoriteColor] = useState([]);
+    //const [emailAddress, setEmailAddress] = useState([]);
 
 
-    return null;
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        // if (userId.id === 0) {
+        //     return;
+        // }
+
+        await fetch(("/user/settings/changename?userId=" + 1), {
+            method: "post",
+            body: JSON.stringify({fullName}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    New name:{" "}
+                    <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                    />
+                </label>
+                <button>Submit</button>
+            </form>
+        </div>
+    );
 }
 
 //Get all conversations for user.
@@ -99,6 +133,11 @@ function ShowConversationForUser(userId) {
     console.log("Conversation id for user: " + userId.id);  //Remove after just for testing
 
     useEffect(() => {
+
+        if (userId.id === 0) {
+            return;
+        }
+
         (async () => {
             const res = await fetch("/api/user/inbox?userId=" + userId.id);
             setConversation(await res.json());
@@ -126,6 +165,7 @@ function ShowConversationForUser(userId) {
             <div id="show-messages">
                 <ShowMessageBox id={conversationId}/>
             </div>
+
         </div>
     );
 }
