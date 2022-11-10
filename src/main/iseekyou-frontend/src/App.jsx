@@ -99,7 +99,7 @@ function UserSettings(userId) {
         //     return;
         // }
 
-        await fetch(("/user/settings/changename?userId=" + 1), {
+        await fetch("/api/user/settings/changename?userId=" + userId.id, {
             method: "post",
             body: JSON.stringify({fullName}),
             headers: {
