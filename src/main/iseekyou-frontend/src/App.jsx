@@ -86,18 +86,20 @@ function ShowConversationForUser(userId) {
 
             {conversation.map((c) => (
                 <div>
-                    <button key={c.id} onClick={handleClick} value={c.id} >{c.id} - {c.conversationTitle}</button>
+                    <button key={c.id} onClick={handleClick} value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
-            <ShowMessageBox id={conversationId}/>
+            <div id="show-messages">
+                <ShowMessageBox id={conversationId}/>
+            </div>
         </div>
     );
 }
 
 //Should show chat messages in a conversation
 function ShowMessageBox(conversationId) {
-        const [loading, setLoading] = useState(true);
-        const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -114,9 +116,10 @@ function ShowMessageBox(conversationId) {
     return (
         <div>
             {messages.map((m) => (
-                <div>
-                   <div>{m.messageText}</div>
-                </div>
+                <>
+                    <h4>{m.sender} - {m.messageDate}</h4>
+                    <p>{m.messageText}</p>
+                </>
             ))}
         </div>
     );

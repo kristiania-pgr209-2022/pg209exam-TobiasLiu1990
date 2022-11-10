@@ -45,6 +45,7 @@ public class MessageDao {
                     while (resultSet.next()) {
                         Message message = new Message();
                         message.setId(resultSet.getInt("message_id"));
+                        message.setSender(resultSet.getString("sender"));
                         message.setMessageText(resultSet.getString("content"));
                         message.setMessageDate(resultSet.getDate("date"));
                         conversationMessages.add(message);

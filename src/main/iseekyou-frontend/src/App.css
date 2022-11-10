@@ -14,8 +14,14 @@
 
 #conversations {
   position: absolute;
-  transform: translateX(-50%);
+  left: 25%;
   top: 20%;
+}
+
+#show-messages {
+  position: absolute;
+  left: 120%;
+  top: 30%;
 }
 
 #first-option {
