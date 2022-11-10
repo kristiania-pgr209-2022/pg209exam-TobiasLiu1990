@@ -1,5 +1,6 @@
 package no.kristiania.pgr209.iseekyou.database;
 
+import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.Message;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ public class MessageDao {
 
     private DataSource dataSource;
 
+    @Inject
     public MessageDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -42,9 +44,9 @@ public class MessageDao {
                     List<Message> conversationMessages = new ArrayList<>();
                     while (resultSet.next()) {
                         Message message = new Message();
-                        message.setId(resultSet.getInt(1));
-                        message.setMessageText(resultSet.getString(2));
-                        message.setMessageDate(resultSet.getDate(3));
+                        message.setId(resultSet.getInt("message_id"));
+                        message.setMessageText(resultSet.getString("content"));
+                        message.setMessageDate(resultSet.getDate("date"));
                         conversationMessages.add(message);
                     }
                     return conversationMessages;

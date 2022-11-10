@@ -54,8 +54,8 @@ public class MessageEndPoint {
     @Path("user/inbox/messages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId){
-        return messageDao.retrieveAllMessagesByConversationId();
+    public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
+        return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
 
     /*
