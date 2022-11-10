@@ -45,7 +45,7 @@ function ListUsers() {
                     <option id="first-option">Select a user to view conversation and messages</option>
 
                     {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.email} {u.favorite_color}</option>
+                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
