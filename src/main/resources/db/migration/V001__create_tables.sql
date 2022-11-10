@@ -1,6 +1,7 @@
 CREATE TABLE users (
     user_id INT IDENTITY PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
+    favorite_color VARCHAR(100) NOT NULL DEFAULT 'black',
     email_address VARCHAR(100) NOT NULL
 )
 
@@ -11,8 +12,8 @@ CREATE TABLE conversations (
 
 CREATE TABLE messages (
     message_id INT IDENTITY PRIMARY KEY,
-    sender VARCHAR(100) NOT NULL,
-    date SMALLDATETIME default GETUTCDATE(),
+    sender_id int FOREIGN KEY REFERENCES users(user_id),
+    date SMALLDATETIME DEFAULT GETUTCDATE(),
     content VARCHAR(4000),
     conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id)
 )

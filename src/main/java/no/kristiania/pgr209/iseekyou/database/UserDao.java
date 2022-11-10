@@ -24,7 +24,7 @@ public class UserDao {
             String query = "insert into users (full_name, email_address) values (?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
-                stmt.setString(2, user.geteMail());
+                stmt.setString(2, user.getEmail());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -69,7 +69,7 @@ public class UserDao {
         var user = new User();
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
-        user.seteMail(resultSet.getString("email_address"));
+        user.setEmail(resultSet.getString("email_address"));
         return user;
     }
 }
