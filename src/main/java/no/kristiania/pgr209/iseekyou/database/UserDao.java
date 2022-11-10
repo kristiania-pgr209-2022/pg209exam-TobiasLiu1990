@@ -53,6 +53,18 @@ public class UserDao {
         }
     }
 
+    public void updateUserName(User user, int id) throws SQLException {
+        String username = user.getFullName();
+        try(var connection = dataSource.getConnection()) {
+            String query = "update users set full_name = ? where user_id = ?";
+            try(var stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, id);
+                stmt.executeUpdate();
+            }
+        }
+    }
+
     public List<User> listAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users";

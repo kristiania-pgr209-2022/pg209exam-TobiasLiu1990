@@ -42,10 +42,11 @@ public class MessageEndPoint {
     }
 
     //Should show a settings window when a user is selected in drop-down menu. Can then change user settings.
-    @Path("/user/settings")
+    @Path("/user/settings/changename")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettings(int userId) {
+    public void userSettings(@QueryParam("userId") int id, User user) throws SQLException {
+        userDao.updateUserName(user, id);
         /*
             POST - allow for editing of user settings.
                    Need to update run queries to update database
