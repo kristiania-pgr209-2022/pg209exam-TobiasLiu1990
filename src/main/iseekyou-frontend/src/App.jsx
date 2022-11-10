@@ -78,8 +78,6 @@ function ShowConversationForUser(userId) {
 
     function handleClick(e) {
         setConversationId(parseInt(e.target.value));
-        console.log("This is conversation ID " + conversationId);
-        ShowMessageBox(conversationId)
     }
 
     return (
@@ -91,7 +89,7 @@ function ShowConversationForUser(userId) {
                     <button key={c.id} onClick={handleClick} value={c.id} >{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
-            <ShowMessageBox id={{userId}}/>
+            <ShowMessageBox id={conversationId}/>
         </div>
     );
 }
@@ -101,9 +99,27 @@ function ShowMessageBox(conversationId) {
         const [loading, setLoading] = useState(true);
         const [messages, setMessages] = useState([]);
 
+    useEffect(() => {
+        (async () => {
+            const res = await fetch("/api/user/inbox/messages?conversationId=" + conversationId.id);
+            setMessages(await res.json());
+            setLoading(false);
+        })();
+    }, [conversationId]);
 
+    if (loading) {
+        return <div>Loading messages...</div>
+    }
 
-    return null;
+    return (
+        <div>
+            {messages.map((m) => (
+                <div>
+                   <div>{m.messageText}</div>
+                </div>
+            ))}
+        </div>
+    );
 }
 
 
