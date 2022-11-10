@@ -2,6 +2,7 @@ package no.kristiania.pgr209.iseekyou.database;
 
 import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.User;
+import no.kristiania.pgr209.iseekyou.UserColor;
 
 import javax.sql.DataSource;
 import java.awt.*;
@@ -72,7 +73,9 @@ public class UserDao {
         user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email_address"));
-        user.setColor(Color.getColor(resultSet.getString("favorite_color")));
+        UserColor color = UserColor.valueOf(resultSet.getString("favorite_color").toUpperCase());
+        user.setColor(color);
+
         return user;
     }
 }

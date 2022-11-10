@@ -1,29 +1,28 @@
 package no.kristiania.pgr209.iseekyou;
 
-import java.awt.*;
-
 public class User {
 
     private int id;
     private String fullName;
     private String email;
-    private Color color;
+    private UserColor color;
 
     public User() {
     }
 
-    public User(int id, String fullName, String email, Color color) {
-        this.color = color;
+    public User(int id, String fullName, String email, UserColor color) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
+        this.color = color;
     }
 
-    public Color getColor() {
+
+    public UserColor getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(UserColor color) {
         this.color = color;
     }
 
