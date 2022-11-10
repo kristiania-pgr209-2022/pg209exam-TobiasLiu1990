@@ -34,7 +34,7 @@ public class MessageEndPoint {
     }
 
     //Runs after above method. This is to get the user again to change font color based on user selected.
-    @Path("/api/user/color")
+    @Path("/user/color")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> findUser(@QueryParam("userColor") int id) throws SQLException {

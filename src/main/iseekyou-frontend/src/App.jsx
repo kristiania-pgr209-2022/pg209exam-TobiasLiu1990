@@ -37,7 +37,7 @@ function ListUsers() {
         <>
             <div id="show-users-drop-list">
                 <h2>User list</h2>
-                <h5 id="selected-user">User Id: {userId}</h5>
+                <h5 id="selected-user"> Username </h5>
 
                 <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
@@ -65,22 +65,21 @@ function SetUsersFavoriteColor(userId) {
 
     useEffect(() => {
         (async () => {
+            if (userId.id === 0) {
+                return;
+            }
             const res = await fetch("/api/user/color?userColor=" + userId.id);
             setUser(await res.json());
             setLoading(false);
         })();
     }, [userId]);
 
-    console.log("aaaaaaaaaaaaaa" + user.id)
-
     if (loading) {
-        return <div>asdasdasdaksodkasodk</div>
+        return <div>Logo-color should change soon.......</div>
     } else {
-        document.getElementById("selected-user").innerHTML = user.fullName;
-        document.getElementById("app-title").style.background = 'red';   //Should be users color.
-
+        document.getElementById("selected-user").innerHTML = user.map(u => u.fullName);
+        document.getElementById("app-title").style.color = user.map(u => u.color);
     }
-    return;
 }
 
 //Get all conversations for user.
