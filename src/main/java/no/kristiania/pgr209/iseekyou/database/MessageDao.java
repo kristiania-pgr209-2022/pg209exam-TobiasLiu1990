@@ -37,14 +37,11 @@ public class MessageDao {
 
     public List<Message> retrieveAllMessagesByConversationId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-//            String query = "select * from messages where conversation_id = ? order by date desc";
             String query = """
-                    SELECT Users.full_name, Messages.message_id, Messages.sender_id, Messages.date, Messages.content
-                    FROM Users
-                    JOIN Messages
-                        ON Users.user_id = Messages.sender_id
-                    WHERE conversation_id = ?
-                    ORDER BY date DESC
+                    select u.full_name as sender, m.date, m.content
+                    from users as u
+                    join messages as m on u.user_id = m.sender_id
+                    where conversation_id = ?;
                     """;
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
@@ -52,9 +49,7 @@ public class MessageDao {
                     List<Message> conversationMessages = new ArrayList<>();
                     while (resultSet.next()) {
                         Message message = new Message();
-//                        message.setId(resultSet.getInt("message_id"));
-                        message.setSenderName(resultSet.getString("full_name"));
-//                        message.setSender(resultSet.getInt("sender_id"));
+                        message.setSenderName(resultSet.getString("sender"));
                         message.setMessageText(resultSet.getString("content"));
                         message.setMessageDate(resultSet.getDate("date"));
                         conversationMessages.add(message);
