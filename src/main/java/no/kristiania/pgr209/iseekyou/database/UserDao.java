@@ -77,7 +77,17 @@ public class UserDao {
         }
     }
 
-    public void updateFavoriteColor(User user, int id) {
+    public void updateFavoriteColor(User user, int id) throws SQLException {
+        String favoriteColor = user.getEmail();
+        try (var connection = dataSource.getConnection()) {
+            String query = "update users set favorite_color = ? where user_id = ?";
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, favoriteColor);
+                stmt.setInt(2, id);
+                stmt.executeUpdate();
+            }
+        }
+
     }
 
     public List<User> listAll() throws SQLException {
