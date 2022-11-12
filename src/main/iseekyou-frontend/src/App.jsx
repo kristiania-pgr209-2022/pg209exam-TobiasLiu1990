@@ -22,6 +22,7 @@ function ListUsers() {
             const res = await fetch("/api/user");
             setUsers(await res.json());
             setLoading(false);
+
         })();
     }, []);
 
@@ -56,8 +57,10 @@ function ListUsers() {
                 <ShowConversationForUser id={userId}/>
             </div>
 
-            <div id="user-settings">
-                <UserSettings id={userId}/>
+            <div id="user-settings" style={{visibility: 'hidden'}}>
+                <UserSettingsName id={userId}/>
+                <UserSettingsEmail id={userId}/>
+                <UserSettingsFavoriteColor id={userId}/>
             </div>
         </>
     );
@@ -72,7 +75,7 @@ function SetUsersFavoriteColor(userId) {
             if (userId.id === 0) {
                 return;
             }
-            const res = await fetch("/api/user/color?userColor=" + userId.id);
+            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
             setUser(await res.json());
             setLoading(false);
         })();
@@ -83,22 +86,21 @@ function SetUsersFavoriteColor(userId) {
     } else {
         document.getElementById("selected-user").innerHTML = user.map(u => u.fullName);
         document.getElementById("app-title").style.color = user.map(u => u.color);
+
+        //Set settings to visible again
+        document.getElementById("user-settings").style.visibility = 'visible';
     }
 }
 
-function UserSettings(userId) {
+function UserSettingsName(userId) {
     const [fullName, setFullName] = useState("");
-    //const [favoriteColor, setFavoriteColor] = useState([]);
-    //const [emailAddress, setEmailAddress] = useState([]);
-
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        // if (userId.id === 0) {
-        //     return;
-        // }
-
+        if (userId.id === 0) {
+            return;
+        }
         await fetch("/api/user/settings/changename?userId=" + userId.id, {
             method: "post",
             body: JSON.stringify({fullName}),
@@ -117,6 +119,76 @@ function UserSettings(userId) {
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
+                    />
+                </label>
+                <button>Submit</button>
+            </form>
+        </div>
+    );
+}
+
+function UserSettingsEmail(userId) {
+    const [email, setEmail] = useState("");
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (userId.id === 0) {
+            return;
+        }
+        await fetch("/api/user/settings/changeemail?userId=" + userId.id, {
+            method: "post",
+            body: JSON.stringify({email}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    New E-mail Address:{" "}
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+                <button>Submit</button>
+            </form>
+        </div>
+    );
+}
+
+function UserSettingsFavoriteColor(userId) {
+    const [color, setColor] = useState("");
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (userId.id === 0) {
+            return;
+        }
+        await fetch("/api/user/settings/changecolor?userId=" + userId.id, {
+            method: "post",
+            body: JSON.stringify({color}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    New favorite color:{" "}
+                    <input
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
                     />
                 </label>
                 <button>Submit</button>
