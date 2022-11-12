@@ -237,6 +237,9 @@ function ShowConversationForUser(userId) {
                 <ShowMessageBox id={conversationId}/>
             </div>
 
+            <div>
+                <CreateNewConversation/>
+            </div>
         </div>
     );
 }
@@ -293,7 +296,7 @@ function FindNewConversationId() {
     return id;
 }
 
-// Get all except current user for conversation.
+// Get all except current user
 function FindConversationUsers(userId) {
     const [users, setUsers] = useState([]); //All users except current
 
