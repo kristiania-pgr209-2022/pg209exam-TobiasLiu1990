@@ -60,6 +60,7 @@ function ListUsers() {
             <div id="user-settings" style={{visibility: 'hidden'}}>
                 <UserSettingsName id={userId}/>
                 <UserSettingsEmail id={userId}/>
+                <UserSettingsFavoriteColor id={userId}/>
             </div>
         </>
     );
@@ -153,6 +154,41 @@ function UserSettingsEmail(userId) {
                         type="text"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+                <button>Submit</button>
+            </form>
+        </div>
+    );
+}
+
+function UserSettingsFavoriteColor(userId) {
+    const [color, setColor] = useState("");
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (userId.id === 0) {
+            return;
+        }
+        await fetch("/api/user/settings/changecolor?userId=" + userId.id, {
+            method: "post",
+            body: JSON.stringify({color}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    New favorite color:{" "}
+                    <input
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
                     />
                 </label>
                 <button>Submit</button>
