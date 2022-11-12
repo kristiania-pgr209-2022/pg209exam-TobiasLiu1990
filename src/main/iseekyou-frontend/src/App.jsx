@@ -75,7 +75,7 @@ function SetUsersFavoriteColor(userId) {
             if (userId.id === 0) {
                 return;
             }
-            const res = await fetch("/api/user/color?userColor=" + userId.id);
+            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
             setUser(await res.json());
             setLoading(false);
         })();

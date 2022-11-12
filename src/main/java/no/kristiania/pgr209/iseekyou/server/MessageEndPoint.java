@@ -34,7 +34,7 @@ public class MessageEndPoint {
     }
 
     //Runs after above method. This is to get the user again to change font color based on user selected.
-    @Path("/user/color")
+    @Path("/user/setcolor")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> findUser(@QueryParam("userColor") int id) throws SQLException {
@@ -80,6 +80,14 @@ public class MessageEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
+    }
+
+    //Create new conversation
+    @Path("user/inbox/new")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<Conversation> newConversation(@QueryParam("newConversation") int userId) {
+        return null;
     }
 
 
