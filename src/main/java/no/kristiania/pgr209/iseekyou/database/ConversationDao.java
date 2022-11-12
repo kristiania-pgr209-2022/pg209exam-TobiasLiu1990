@@ -68,4 +68,22 @@ public class ConversationDao {
             }
         }
     }
+
+    public Conversation retrieveLastConversation() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT MAX(conversation_id) as conversation_id FROM Conversations";
+            try (var stmt = connection.prepareStatement(query)) {
+                try (var resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        Conversation conversation = new Conversation();
+                        conversation.setId(resultSet.getInt("conversation_id"));
+                        return conversation;
+                    }
+                }
+            }
+
+        }
+        return null;
+    }
+
 }

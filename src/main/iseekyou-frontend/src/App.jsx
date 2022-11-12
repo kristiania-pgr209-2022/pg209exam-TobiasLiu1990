@@ -55,6 +55,7 @@ function ListUsers() {
 
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
+                <FindConversationUsers id={userId}/>
             </div>
 
             <div id="user-settings" style={{visibility: 'hidden'}}>
@@ -202,10 +203,8 @@ function ShowConversationForUser(userId) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
-    console.log("Conversation id for user: " + userId.id);  //Remove after just for testing
 
     useEffect(() => {
-
         if (userId.id === 0) {
             return;
         }
@@ -241,6 +240,93 @@ function ShowConversationForUser(userId) {
         </div>
     );
 }
+
+
+
+//Create new conversation
+function CreateNewConversation() {
+    const [conversationTitle, setConversationTitle] = useState("");
+
+    const setId = FindNewConversationId();
+    console.log("Id from another method: " + setId.id)
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        await fetch("api/user/inbox/new", {
+            method: "post",
+            body: JSON.stringify({conversationTitle}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div> New conversation
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Conversation title:
+                    <input type="text"
+                           value={conversationTitle}
+                           onChange={(e) => setConversationTitle(e.target.value)}
+                    />
+                </label>
+                <button>Submit conv</button>
+            </form>
+        </div>
+    )
+}
+
+//Get the newest conversation - used for adding a new conversation.
+function FindNewConversationId() {
+    const [id, setId] = useState(0);
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetch("/api/user/inbox/new/conversationId");
+            setId(await res.json());
+
+        })();
+    }, []);
+
+    return id;
+}
+
+// Get all except current user for conversation.
+function FindConversationUsers(userId) {
+    const [users, setUsers] = useState([]); //All users except current
+
+    useEffect(() => {
+        if (userId.id === 0) {
+            return;
+        }
+        (async () => {
+            const res = await fetch("/api/inbox/new?userId=" + userId.id);
+            setUsers(await res.json());
+        })();
+    }, []);
+
+    return users;
+}
+
+
+// function AddConversationMembers(users, conversationId) {
+//     console.log("Conv id: " + conversationId.id)
+//
+//     //////
+//     //Now get the Id of the conversation from db
+//     if (conversationTitle === "") {
+//         return;
+//     } else {
+//         useEffect(() => {
+//             (async () => {
+//                 const res = await fetch("/api/user/inbox/new/conversationId");
+//                 setId(await res.json());
+//             })();
+//         }, [conversationTitle]);
+//     }
+// }
 
 //Should show chat messages in a conversation
 function ShowMessageBox(conversationId) {

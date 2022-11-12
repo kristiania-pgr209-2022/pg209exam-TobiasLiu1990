@@ -1,6 +1,7 @@
 package no.kristiania.pgr209.iseekyou.database;
 
 import jakarta.inject.Inject;
+import no.kristiania.pgr209.iseekyou.Conversation;
 import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.UserColor;
 
@@ -116,4 +117,44 @@ public class UserDao {
     }
 
 
+    public List<User> getAllUsersExceptSender(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "select * from users where user_id != ?";
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, userId);
+                try (var resultSet = stmt.executeQuery()) {
+                    List<User> userList = new ArrayList<>();
+                    while (resultSet.next()) {
+                        userList.add(mapFromResultSet(resultSet));
+                    }
+                    return userList;
+                }
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

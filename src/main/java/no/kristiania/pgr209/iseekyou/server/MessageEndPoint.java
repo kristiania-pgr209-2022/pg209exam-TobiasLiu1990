@@ -82,13 +82,37 @@ public class MessageEndPoint {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
 
+
+
     //Create new conversation
     @Path("user/inbox/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Conversation> newConversation(@QueryParam("newConversation") int userId) {
-        return null;
+    public void newConversation(Conversation conversation) throws SQLException {
+        conversationDao.save(conversation);
     }
+
+    //Find the newest id for conversation created
+    @Path("user/inbox/new/conversationId")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Conversation findLatestConversation() throws SQLException {
+        return conversationDao.retrieveLastConversation();
+    }
+
+    //Find all users except current
+    @Path("user/inbox/new/conversationMembers")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<User> newConversationUsers(@QueryParam("userId") int userId) throws SQLException {
+        return userDao.getAllUsersExceptSender(userId);
+    }
+
+
+
+
+
+
 
 
     /*
