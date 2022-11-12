@@ -10,6 +10,34 @@ import React, {useEffect, useState} from "react";
     -new conversation for user
  */
 
+function ListAllUsers() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetch("/api/user");
+            setUsers(await res.json());
+
+        })();
+    }, []);
+
+    return (
+        <>
+            {users.map(u => <UserCard key={u.id} u={u}/>)}
+        </>
+    )
+}
+
+//Show a user
+function UserCard({user}) {
+    const {id, fullName, email} = user
+
+    return (
+      <>
+          {id}. {fullName} - {email}
+      </>
+    );
+}
 
 //Shows all users
 function ListUsers() {
