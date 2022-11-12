@@ -41,17 +41,30 @@ public class MessageEndPoint {
         return List.of(userDao.retrieve(id));
     }
 
-    //Should show a settings window when a user is selected in drop-down menu. Can then change user settings.
+    //Should let user change username
     @Path("/user/settings/changename")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettings(@QueryParam("userId") int id, User user) throws SQLException {
+    public void userSettingsForName(@QueryParam("userId") int id, User user) throws SQLException {
         userDao.updateUserName(user, id);
-        /*
-            POST - allow for editing of user settings.
-                   Need to update run queries to update database
-         */
     }
+
+    //Should let user change email
+    @Path("/user/settings/email")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void userSettingsForEmail(@QueryParam("userId") int id, User user) throws SQLException {
+        userDao.updateEmail(user, id);
+    }
+
+    //Should let user change favorite color
+    @Path("/user/settings/color")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {
+        userDao.updateFavoriteColor(user, id);
+    }
+
 
     //Shows all conversations when a user is selected in drop-down menu.
     @Path("/user/inbox")
