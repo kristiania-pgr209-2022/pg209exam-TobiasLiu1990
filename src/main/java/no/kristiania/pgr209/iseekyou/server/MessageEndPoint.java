@@ -50,7 +50,7 @@ public class MessageEndPoint {
     }
 
     //Should let user change email
-    @Path("/user/settings/email")
+    @Path("/user/settings/changeemail")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void userSettingsForEmail(@QueryParam("userId") int id, User user) throws SQLException {
@@ -58,7 +58,7 @@ public class MessageEndPoint {
     }
 
     //Should let user change favorite color
-    @Path("/user/settings/color")
+    @Path("/user/settings/changecolor")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {

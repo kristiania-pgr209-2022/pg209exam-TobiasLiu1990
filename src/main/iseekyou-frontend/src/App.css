@@ -4,7 +4,9 @@
 }
 
 #user-settings {
-  left: 5%;
+  position: absolute;
+  margin: 2em;
+  left: 0%;
 }
 
 #show-users-drop-list {
