@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumSet;
+import java.util.Optional;
 
 public class MessageServer {
 
@@ -91,8 +92,11 @@ public class MessageServer {
     }
 
     public static void main(String[] args) throws Exception {
-        //Forgot to handle azure PORT. Add later
-        var server = new MessageServer(8080, Database.getDatasource());
-        server.start();
+        //Let azure choose port if exists.
+        int port = Optional.ofNullable(System.getenv("HTTP_PLATFORM_PORT"))
+                .map(Integer::parseInt)
+                .orElse(8080);
+
+        new MessageServer(port, Database.getDatasource()).start();
     }
 }
