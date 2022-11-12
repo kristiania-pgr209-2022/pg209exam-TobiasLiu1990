@@ -10,7 +10,8 @@ public class InMemoryDataSource {
     public static DataSource createDataSource() {
         var dataSource = new JdbcDataSource();
         dataSource.setUrl("jdbc:h2:mem:testDatabase;DB_CLOSE_DELAY=-1;MODE=LEGACY");
-        Flyway.configure().dataSource(dataSource).load().migrate();
+        var flyway = Flyway.configure().dataSource(dataSource).load();
+        flyway.migrate();
         return dataSource;
     }
 }

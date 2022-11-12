@@ -1,7 +1,7 @@
 CREATE TABLE users (
     user_id INT IDENTITY PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
-    favorite_color VARCHAR(100) NOT NULL DEFAULT 'black',
+    favorite_color VARCHAR(100) NOT NULL,
     email_address VARCHAR(100) NOT NULL
 )
 
@@ -20,6 +20,5 @@ CREATE TABLE messages (
 
 CREATE TABLE conversation_members (
     user_id INT CONSTRAINT fk_conversation_user_id FOREIGN KEY REFERENCES users(user_id),
-    conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id),
-
+    conversation_id INT FOREIGN KEY REFERENCES conversations(conversation_id)
 )
