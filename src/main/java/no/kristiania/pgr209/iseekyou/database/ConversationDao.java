@@ -17,7 +17,8 @@ public class ConversationDao {
         this.dataSource = dataSource;
     }
 
-    public void save(Conversation conversation) throws SQLException {
+    //Saves a new conversation and also returns the object.
+    public int save(Conversation conversation) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into conversations (conversation_title) values (?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -26,6 +27,7 @@ public class ConversationDao {
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
                     conversation.setId(generatedKeys.getInt(1));
+                    return conversation.getId();
                 }
             }
         }
@@ -81,7 +83,6 @@ public class ConversationDao {
                     }
                 }
             }
-
         }
         return null;
     }

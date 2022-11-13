@@ -82,20 +82,22 @@ public class MessageEndPoint {
     }
 
     //Create new conversation
+    //Will return the id of created conversation.
+    //To avoid if many uses/posts new conversations, ID could otherwise be wrong if fetched in different method
     @Path("user/inbox/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void newConversation(Conversation conversation) throws SQLException {
-        conversationDao.save(conversation);
+    public int newConversation(Conversation conversation) throws SQLException {
+        return conversationDao.save(conversation);
     }
 
-    //Find the newest id for conversation created
-    @Path("user/inbox/new/conversationId")
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Conversation findLatestConversation() throws SQLException {
-        return conversationDao.retrieveLastConversation();
-    }
+//    //Find the newest id for conversation created
+//    @Path("user/inbox/new/conversationId")
+//    @GET
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Conversation findLatestConversation() throws SQLException {
+//        return conversationDao.retrieveLastConversation();
+//    }
 
     //Find all users except current
     @Path("user/inbox/new/conversationMembers")

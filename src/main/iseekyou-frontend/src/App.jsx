@@ -18,7 +18,7 @@ let currentUserId = 0;
 function ListUsers() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
-    const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
+    const [fake, setFake] = useState(0);    //Used to pass user id to ShowConversationForUser()
 
     useEffect(() => {
         (async () => {
@@ -43,7 +43,7 @@ function ListUsers() {
         document.getElementById("user-settings").style.visibility = 'visible';
 
         //Not used - crash if deleted????
-        setUserId(currentUser.id);
+        setFake(currentUser.id);
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -245,66 +245,108 @@ function ShowConversationForUser() {
             </div>
 
             <div id="new-conversation">
-                <CreateConversationTitle/>
+                <CreateNewConversation/>
             </div>
         </div>
     );
 }
 
-// function CreateNewConversation() {
-//     CreateConversationTitle()
-//     FindNewConversationId()
-//     FindConversationUsers()
-// }
 
-//Create new conversation - WORK
-function CreateConversationTitle() {
+/*
+    1. Table Conversation
+        Title finished in CreateConversationTitle
+    2. Need to POST:
+        Table Conversation_members:
+            Newest conversation ID
+            user ID
+    3. Need to POST:
+        Table Messages:
+            conversation_id (fk)
+            sender_id (user_id)
+            date (auto)
+            content = message
+
+ */
+
+function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+    AddConversationMembers();
 
-        await fetch("api/user/inbox/new", {
+    const conversationId = CreateNewConversationTitle(conversationTitle);
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        setConversationTitle(e.target.value);
+
+        //2 + 3
+    }
+
+    return (
+        <div>
+            <h2>New conversation</h2>
+
+            <div id="new-conversation-div">
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Conversation title:
+                        <input type="text"
+                               value={conversationTitle}
+                               onChange={(e) => setConversationTitle(e.target.value)}
+                        />
+                    </label>
+                    <button>Submit conv</button>
+                </form>
+            </div>
+
+        </div>
+    )
+}
+
+//Create new conversation - WORK
+async function CreateNewConversationTitle(conversationTitle) {
+    const [conversationId, setConversationId] = useState("");
+    const [check, setCheck] = useState(true);
+
+    console.log("Created a new conversation with title: " + conversationTitle);
+
+    if (check) {
+        const res = await fetch("api/user/inbox/new", {
             method: "post",
             body: JSON.stringify({conversationTitle}),
             headers: {
                 "Content-Type": "application/json",
             },
-        });
+        })
+        setConversationId(await res.json());
+        setCheck(!check);
     }
-    return (
-        <div id="new-conversation-div"> New conversation
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Conversation title:
-                    <input type="text"
-                           value={conversationTitle}
-                           onChange={(e) => setConversationTitle(e.target.value)}
-                    />
-                </label>
-                <button>Submit conv</button>
-            </form>
-            <AddConversationMembers/>
-        </div>
-    )
+
+    // .then(response => response.json())
+    // .then(conversation => setConversationId(conversation.id))
+
+
+    console.log('RESULT', conversationId)
+    return conversationId;
 }
 
 //Get the newest conversation ID - used for adding a new conversation - WORKS.
-function FindNewConversationId() {
-    const [id, setId] = useState(0);
+// function        FindNewConversationId() {
+//     const [id, setId] = useState(0);
+//
+//     useEffect(() => {
+//         (async () => {
+//             const res = await fetch("/api/user/inbox/new/conversationId");
+//             setId(await res.json());
+//
+//         })();
+//     }, []);
+//
+//     return id.id;
+// }
 
-    useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/user/inbox/new/conversationId");
-            setId(await res.json());
 
-        })();
-    }, []);
-
-    return id.id;
-}
-
-// Get all except current user - WORKS
+// Find all except current user - WORKS
 function FindConversationUsers() {
     const [users, setUsers] = useState([]); //All users except current
 
@@ -328,19 +370,18 @@ function FindConversationUsers() {
     return users;
 }
 
+// Add users to array
 let recipientList = [];
 
 function AddConversationMembers() {
-    const [show, setShow] = useState(true);
-    let id = FindNewConversationId();
     let users = FindConversationUsers();
-
 
     function handleClick(e) {
         document.getElementById(e.target.value).style.visibility = 'hidden';
         recipientList.push(e.target.value);
         console.log("recipientList: " + recipientList)
     }
+
     return (
         <div>
             {users.map((u) => (
@@ -351,13 +392,15 @@ function AddConversationMembers() {
 }
 
 function CreateMessage() {
- return (
-     <label type="TextBox"></label>
- )
+    return (
+        <label>
+            Message:
+            <input type="text">
+
+            </input>
+        </label>
+    )
 }
-
-
-
 
 
 //Should show chat messages in a conversation
