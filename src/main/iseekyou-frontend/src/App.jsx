@@ -1,5 +1,6 @@
 import './App.css'
-import React, {useEffect, useState} from "react";
+import * as React from "react";
+import {useEffect, useState} from "react";
 
 /*
     -list users
@@ -34,7 +35,6 @@ function ListUsers() {
     function handleChange(e) {
         setUserId(parseInt(e.target.value));
         currentUserId = userId;
-        console.log(userId);
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -53,7 +53,7 @@ function ListUsers() {
                 </select>
             </div>
 
-            <div><SetUsersFavoriteColor id={userId}/></div>
+            <div><SetUsersFavoriteColor/></div>
 
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
@@ -69,20 +69,20 @@ function ListUsers() {
     );
 }
 
-function SetUsersFavoriteColor(userId) {
+function SetUsersFavoriteColor() {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({});
 
     useEffect(() => {
         (async () => {
-            if (userId.id === 0) {
+            if (currentUserId === 0) {
                 return;
             }
-            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
+            const res = await fetch("/api/user/setcolor?userColor=" + currentUserId);
             setUser(await res.json());
             setLoading(false);
         })();
-    }, [userId]);
+    }, [currentUserId]);
 
     if (loading) {
         return <div>Logo-color should change soon.......</div>
@@ -251,7 +251,7 @@ function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
 
     const setId = FindNewConversationId();
-    console.log("Id from another method: " + setId.id)
+    // console.log("CreateNewConversation() - Id from another method: " + setId.id)
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -282,7 +282,7 @@ function CreateNewConversation() {
     )
 }
 
-//Get the newest conversation - used for adding a new conversation.
+//Get the newest conversation - used for adding a new conversation - WORKS.
 function FindNewConversationId() {
     const [id, setId] = useState(0);
 
@@ -294,7 +294,8 @@ function FindNewConversationId() {
         })();
     }, []);
 
-    return id;
+    console.log("FindNewConversationId() - Should return ID for newest conversation:" + id.id);
+    return id.id;
 }
 
 // Get all except current user
@@ -305,18 +306,33 @@ function FindConversationUsers(userId) {
         if (userId.id === 0) {
             return;
         }
-        (async () => {
+
+        const fetchUsers = async () => {
             const res = await fetch("/api/inbox/new?userId=" + userId.id);
             setUsers(await res.json());
-        })();
+
+            // console.log("FindConversationUsers() - Should show list of users: " +);
+            // return users;
+
+        }
+        fetchUsers()
+            .catch(console.error);
+
     }, []);
 
-    return users;
+    return (
+        <div>
+            {users.map((u) =>
+                (
+                <h2>{u.email}</h2>
+            ))}
+        </div>
+    )
 }
 
-
 function AddConversationMembers(users, conversationId) {
-    console.log("Conv id: " + conversationId.id)
+    const [checked, setChecked] = useState(false);
+    // console.log("AddConversationMembers() - Conv id: " + conversationId.id)
 
     let userIds = [];
     //////
@@ -332,21 +348,36 @@ function AddConversationMembers(users, conversationId) {
     //     }, [conversationTitle]);
     // }
 
-    return (
-        <div>
-            <div>
-                {users.map((u) => (
-                   <Checkbox
-                    label={u.email}
-                    value={checked}
-                    onChange={handleChange}
-                   />
+    function handleChange(e) {
+        setChecked(!checked);
+        if (checked) {
+            console.log("AddConversationMembers() - should show mail: ", e.target.value);
+        }
+    }
 
-                ))}
-            </div>
-        </div>
-    )
+    // return (
+    //     <div>
+    //         {users.map((u) => (
+    //             <Checkbox
+    //                 label={u.email}
+    //                 value={checked}
+    //                 onChange={handleChange}
+    //             />
+    //
+    //         ))}
+    //     </div>
+    // )
 }
+
+const Checkbox = ({label, value, onChange}) => {
+    return (
+        <label>
+            <input type="checkbox" checked={value} onChange={onChange}/>
+            {label}
+        </label>
+    );
+};
+
 
 //Should show chat messages in a conversation
 function ShowMessageBox(conversationId) {
