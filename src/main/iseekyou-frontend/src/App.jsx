@@ -36,11 +36,8 @@ function ListUsers() {
         let currentUser = JSON.parse(e.target.value);
         currentUserId = currentUser.id;
 
-        document.getElementById("selected-user").innerHTML = currentUser.fullName;
-        document.getElementById("app-title").style.color = currentUser.color;
-
-        // Set settings to visible again
-        document.getElementById("user-settings").style.visibility = 'visible';
+        //Set user settings + show user settings
+        SetUserSettings(currentUser.fullName, currentUser.color)
 
         //Not used - crash if deleted????
         setFake(currentUser.id);
@@ -75,30 +72,11 @@ function ListUsers() {
     );
 }
 
-// function SetUsersFavoriteColor() {
-//     const [loading, setLoading] = useState(true);
-//     const [user, setUser] = useState({});
-//
-//     useEffect(() => {
-//         (async () => {
-//             if (currentUserId === 0) {
-//                 return;
-//             }
-//             const res = await fetch("/api/user/setcolor?userColor=" + currentUserId);
-//             setUser(await res.json());
-//             setLoading(false);
-//         })();
-//     }, [currentUserId]);
-//
-//     if (loading) {
-//         return <div>Logo-color should change soon.......</div>
-//     } else {
-//
-//
-//         //Set settings to visible again
-//         document.getElementById("user-settings").style.visibility = 'visible';
-//     }
-// }
+function SetUserSettings(name, color) {
+    let userName = document.getElementById("selected-user").innerHTML = name;
+    let userColor = document.getElementById("app-title").style.color = color;
+    document.getElementById("user-settings").style.visibility = 'visible';
+}
 
 function UserSettingsName() {
     const [fullName, setFullName] = useState("");
@@ -269,33 +247,30 @@ function ShowConversationForUser() {
  */
 
 function CreateNewConversation() {
-    const [conversationTitle, setConversationTitle] = useState("");
-
     let members = FindConversationUsers();
-    const conversationId = CreateNewConversationTitle(conversationTitle);
+    const conversationId = CreateNewConversationTitle();
     console.log("Conversation ID after method call: " + conversationId)
 
-    //This should be to handle a conversation title
-    async function handleSubmit(e) {
-        e.preventDefault()
-        setConversationTitle(e.target.value);
-        console.log("Current conversation title: " + conversationTitle)
-
-        //2 + 3
-    }
+    // This should be to handle a conversation title
+    // async function handleSubmit(e) {
+    //     e.preventDefault()
+    //     setConversationTitle(e.target.value);
+    //     console.log("Current conversation title: " + conversationTitle)
+    //
+    //     //2 + 3
+    // }
 
     //This should be for handling who to add to a conversation
-    function handleClick(e) {
-        e.preventDefault()
-        recipientList
-    }
+    // function handleClick(e) {
+    //     e.preventDefault()
+    //     // recipientList
+    // }
 
     return (
         <div>
             <h2>New conversation</h2>
+            <div>
 
-            <div id="new-conversation-div">
-                <CreateNewConversationTitle/>
             </div>
 
             <div>
@@ -312,11 +287,11 @@ function CreateNewConversation() {
 //Create new conversation - WORK
 async function CreateNewConversationTitle() {
     const [conversationTitle, setConversationTitle] = useState("");
-
     const [conversationId, setConversationId] = useState(0);
-    const [check, setCheck] = useState(true);
 
-    if (check) {
+    async function handleSubmit(e) {
+        e.preventDefault();
+
         const res = await fetch("api/user/inbox/new", {
             method: "post",
             body: JSON.stringify({conversationTitle}),
@@ -325,16 +300,14 @@ async function CreateNewConversationTitle() {
             },
         })
         setConversationId(await res.json());
-        setCheck(!check);
         console.log("New conversation title as parameter: " + conversationTitle);
-        return conversationId;
     }
+
     // .then(response => response.json())
     // .then(conversation => setConversationId(conversation.id))
     console.log("Current conversation id: " + conversationId)
-
     return (
-        <>
+        <div id="new-conversation-div">
             <form onSubmit={handleSubmit}>
                 <label>
                     Conversation title:
@@ -345,7 +318,7 @@ async function CreateNewConversationTitle() {
                 </label>
                 <button>Submit conv</button>
             </form>
-        </>
+        </div>
     )
 }
 
