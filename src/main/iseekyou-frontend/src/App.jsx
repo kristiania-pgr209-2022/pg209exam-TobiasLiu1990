@@ -10,6 +10,8 @@ import React, {useEffect, useState} from "react";
     -new conversation for user
  */
 
+let currentUserId = 0;
+
 function ListAllUsers() {
     const [users, setUsers] = useState([]);
 
@@ -44,6 +46,7 @@ function ListUsers() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         (async () => {
@@ -60,7 +63,8 @@ function ListUsers() {
 
     function handleChange(e) {
         setUserId(parseInt(e.target.value));
-
+        currentUserId = userId;
+        console.log(userId);
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -96,7 +100,7 @@ function ListUsers() {
 
 function SetUsersFavoriteColor(userId) {
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         (async () => {
@@ -112,8 +116,8 @@ function SetUsersFavoriteColor(userId) {
     if (loading) {
         return <div>Logo-color should change soon.......</div>
     } else {
-        document.getElementById("selected-user").innerHTML = user.map(u => u.fullName);
-        document.getElementById("app-title").style.color = user.map(u => u.color);
+        document.getElementById("selected-user").innerHTML = user.fullName;
+        document.getElementById("app-title").style.color = user.color;
 
         //Set settings to visible again
         document.getElementById("user-settings").style.visibility = 'visible';

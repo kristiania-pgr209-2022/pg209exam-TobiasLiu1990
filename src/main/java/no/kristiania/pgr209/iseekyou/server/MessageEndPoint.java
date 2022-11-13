@@ -37,8 +37,8 @@ public class MessageEndPoint {
     @Path("/user/setcolor")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> findUser(@QueryParam("userColor") int id) throws SQLException {
-        return List.of(userDao.retrieve(id));
+    public User findUser(@QueryParam("userColor") int id) throws SQLException {
+        return userDao.retrieve(id);
     }
 
     //Should let user change username
@@ -64,7 +64,6 @@ public class MessageEndPoint {
     public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {
         userDao.updateFavoriteColor(user, id);
     }
-
 
     //Shows all conversations when a user is selected in drop-down menu.
     @Path("/user/inbox")
