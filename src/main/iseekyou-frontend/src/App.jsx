@@ -45,6 +45,7 @@ function ListUsers() {
         //Not used - crash if deleted????
         setUserId(currentUser.id);
     }
+
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
     return (
         <>
@@ -56,7 +57,7 @@ function ListUsers() {
                     <option id="first-option">Select a user to view conversation and messages</option>
 
                     {users.map((u) => (
-                        <option key={u.id} value={JSON.stringify(u)} >{u.id} {u.fullName} {u.email}</option>
+                        <option key={u.id} value={JSON.stringify(u)}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
@@ -243,19 +244,22 @@ function ShowConversationForUser() {
                 <ShowMessageBox id={conversationId}/>
             </div>
 
-            <div>
-                <CreateNewConversation/>
+            <div id="new-conversation">
+                <CreateConversationTitle/>
             </div>
         </div>
     );
 }
 
-//Create new conversation - WORK
-function CreateNewConversation() {
-    const [conversationTitle, setConversationTitle] = useState("");
+// function CreateNewConversation() {
+//     CreateConversationTitle()
+//     FindNewConversationId()
+//     FindConversationUsers()
+// }
 
-    const setId = FindNewConversationId();
-    // console.log("CreateNewConversation() - Id from another method: " + setId.id)
+//Create new conversation - WORK
+function CreateConversationTitle() {
+    const [conversationTitle, setConversationTitle] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -268,7 +272,6 @@ function CreateNewConversation() {
             },
         });
     }
-
     return (
         <div id="new-conversation-div"> New conversation
             <form onSubmit={handleSubmit}>
@@ -300,31 +303,30 @@ function FindNewConversationId() {
 
     console.log("FindNewConversationId() - Should return ID for newest conversation:" + id.id);
     return (
-        <>
-            <FindConversationUsers id={id}/>
-        </>
-    )
+        FindConversationUsers()
+    );
 }
 
-// Get all except current user
-function FindConversationUsers(userId) {
+// Get all except current user - WORKS
+function FindConversationUsers() {
     const [users, setUsers] = useState([]); //All users except current
 
     useEffect(() => {
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
 
         const fetchUsers = async () => {
-            const res = await fetch("/api/inbox/new?userId=" + userId.id);
+            const res = await fetch("/api/user/inbox/new/conversationMembers?userId=" + currentUserId);
             setUsers(await res.json());
 
             // console.log("FindConversationUsers() - Should show list of users: " +);
             // return users;
-
         }
         fetchUsers()
             .catch(console.error);
+
+        console.log(fetchUsers());
 
     }, []);
 
@@ -332,11 +334,17 @@ function FindConversationUsers(userId) {
         <div>
             {users.map((u) =>
                 (
-                <h2>{u.email}</h2>
-            ))}
+                    <h2>{u.email}</h2>
+                ))}
         </div>
     )
 }
+
+
+function CreateMessage() {
+
+}
+
 
 function AddConversationMembers(users, conversationId) {
     const [checked, setChecked] = useState(false);
