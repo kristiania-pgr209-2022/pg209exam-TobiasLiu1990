@@ -101,7 +101,15 @@ public class MessageEndPoint {
     @Path("user/inbox/new/conversationMembers")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<User> newConversationUsers(@QueryParam("userId") int userId) throws SQLException {
+    public List<User> getConversationUsers(@QueryParam("userId") int userId) throws SQLException {
+        return userDao.getAllUsersExceptSender(userId);
+    }
+
+    //Find all users except current
+    @Path("user/inbox/new/conversationMembers")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> addConversationUsers(@QueryParam("userId") int userId) throws SQLException {
         return userDao.getAllUsersExceptSender(userId);
     }
 

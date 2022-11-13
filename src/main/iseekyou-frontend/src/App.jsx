@@ -284,7 +284,7 @@ function CreateConversationTitle() {
                 </label>
                 <button>Submit conv</button>
             </form>
-            <FindNewConversationId/>
+            <AddConversationMembers/>
         </div>
     )
 }
@@ -301,10 +301,7 @@ function FindNewConversationId() {
         })();
     }, []);
 
-    console.log("FindNewConversationId() - Should return ID for newest conversation:" + id.id);
-    return (
-        FindConversationUsers()
-    );
+    return id.id;
 }
 
 // Get all except current user - WORKS
@@ -325,74 +322,42 @@ function FindConversationUsers() {
         }
         fetchUsers()
             .catch(console.error);
-
         console.log(fetchUsers());
-
     }, []);
 
+    return users;
+}
+
+let recipientList = [];
+
+function AddConversationMembers() {
+    const [show, setShow] = useState(true);
+    let id = FindNewConversationId();
+    let users = FindConversationUsers();
+
+
+    function handleClick(e) {
+        document.getElementById(e.target.value).style.visibility = 'hidden';
+        recipientList.push(e.target.value);
+        console.log("recipientList: " + recipientList)
+    }
     return (
         <div>
-            {users.map((u) =>
-                (
-                    <h2>{u.email}</h2>
-                ))}
+            {users.map((u) => (
+                <button id={u.id} value={u.id} onClick={handleClick}>{u.email}</button>
+            ))}
         </div>
     )
 }
 
-
 function CreateMessage() {
-
+ return (
+     <label type="TextBox"></label>
+ )
 }
 
 
-function AddConversationMembers(users, conversationId) {
-    const [checked, setChecked] = useState(false);
-    // console.log("AddConversationMembers() - Conv id: " + conversationId.id)
 
-    let userIds = [];
-    //////
-    //Now get the Id of the conversation from db
-    // if (conversationTitle === "") {
-    //     return;
-    // } else {
-    //     useEffect(() => {
-    //         (async () => {
-    //             const res = await fetch("/api/user/inbox/new/conversationId");
-    //             setId(await res.json());
-    //         })();
-    //     }, [conversationTitle]);
-    // }
-
-    function handleChange(e) {
-        setChecked(!checked);
-        if (checked) {
-            console.log("AddConversationMembers() - should show mail: ", e.target.value);
-        }
-    }
-
-    // return (
-    //     <div>
-    //         {users.map((u) => (
-    //             <Checkbox
-    //                 label={u.email}
-    //                 value={checked}
-    //                 onChange={handleChange}
-    //             />
-    //
-    //         ))}
-    //     </div>
-    // )
-}
-
-const Checkbox = ({label, value, onChange}) => {
-    return (
-        <label>
-            <input type="checkbox" checked={value} onChange={onChange}/>
-            {label}
-        </label>
-    );
-};
 
 
 //Should show chat messages in a conversation
