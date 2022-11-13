@@ -81,8 +81,6 @@ public class MessageEndPoint {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
 
-
-
     //Create new conversation
     @Path("user/inbox/new")
     @POST

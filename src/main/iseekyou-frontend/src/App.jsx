@@ -12,41 +12,11 @@ import React, {useEffect, useState} from "react";
 
 let currentUserId = 0;
 
-function ListAllUsers() {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/user");
-            setUsers(await res.json());
-
-        })();
-    }, []);
-
-    return (
-        <>
-            {users.map(u => <UserCard key={u.id} u={u}/>)}
-        </>
-    )
-}
-
-//Show a user
-function UserCard({user}) {
-    const {id, fullName, email} = user
-
-    return (
-      <>
-          {id}. {fullName} - {email}
-      </>
-    );
-}
-
 //Shows all users
 function ListUsers() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
-    const [user, setUser] = useState({});
 
     useEffect(() => {
         (async () => {
@@ -276,8 +246,6 @@ function ShowConversationForUser(userId) {
     );
 }
 
-
-
 //Create new conversation
 function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
@@ -298,7 +266,7 @@ function CreateNewConversation() {
     }
 
     return (
-        <div> New conversation
+        <div id="new-conversation-div"> New conversation
             <form onSubmit={handleSubmit}>
                 <label>
                     Conversation title:
@@ -309,6 +277,7 @@ function CreateNewConversation() {
                 </label>
                 <button>Submit conv</button>
             </form>
+
         </div>
     )
 }
@@ -346,22 +315,38 @@ function FindConversationUsers(userId) {
 }
 
 
-// function AddConversationMembers(users, conversationId) {
-//     console.log("Conv id: " + conversationId.id)
-//
-//     //////
-//     //Now get the Id of the conversation from db
-//     if (conversationTitle === "") {
-//         return;
-//     } else {
-//         useEffect(() => {
-//             (async () => {
-//                 const res = await fetch("/api/user/inbox/new/conversationId");
-//                 setId(await res.json());
-//             })();
-//         }, [conversationTitle]);
-//     }
-// }
+function AddConversationMembers(users, conversationId) {
+    console.log("Conv id: " + conversationId.id)
+
+    let userIds = [];
+    //////
+    //Now get the Id of the conversation from db
+    // if (conversationTitle === "") {
+    //     return;
+    // } else {
+    //     useEffect(() => {
+    //         (async () => {
+    //             const res = await fetch("/api/user/inbox/new/conversationId");
+    //             setId(await res.json());
+    //         })();
+    //     }, [conversationTitle]);
+    // }
+
+    return (
+        <div>
+            <div>
+                {users.map((u) => (
+                   <Checkbox
+                    label={u.email}
+                    value={checked}
+                    onChange={handleChange}
+                   />
+
+                ))}
+            </div>
+        </div>
+    )
+}
 
 //Should show chat messages in a conversation
 function ShowMessageBox(conversationId) {
