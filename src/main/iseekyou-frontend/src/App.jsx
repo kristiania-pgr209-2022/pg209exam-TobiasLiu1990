@@ -13,11 +13,13 @@ import {useEffect, useState} from "react";
 
 let currentUserId = 0;
 
+
 //Shows all users
 function ListUsers() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
+
 
     useEffect(() => {
         (async () => {
@@ -33,8 +35,13 @@ function ListUsers() {
     }
 
     function handleChange(e) {
-        setUserId(parseInt(e.target.value));
-        currentUserId = userId;
+        let currentUser = JSON.parse(e.target.value);
+        currentUserId = currentUser.id;
+
+        console.log("Global:" + currentUserId);
+
+        // setUserId(parseInt(id));
+        // currentUserId = userId;
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -48,16 +55,15 @@ function ListUsers() {
                     <option id="first-option">Select a user to view conversation and messages</option>
 
                     {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.email}</option>
+                        <option key={u.id} value={JSON.stringify(u)} >{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
 
-            <div><SetUsersFavoriteColor/></div>
+            <div><SetUsersFavoriteColor id={userId}/></div>
 
             <div id="conversations">
                 <ShowConversationForUser id={userId}/>
-                <FindConversationUsers id={userId}/>
             </div>
 
             <div id="user-settings" style={{visibility: 'hidden'}}>
@@ -69,20 +75,20 @@ function ListUsers() {
     );
 }
 
-function SetUsersFavoriteColor() {
+function SetUsersFavoriteColor(userId) {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState({});
 
     useEffect(() => {
         (async () => {
-            if (currentUserId === 0) {
+            if (userId.id === 0) {
                 return;
             }
-            const res = await fetch("/api/user/setcolor?userColor=" + currentUserId);
+            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
             setUser(await res.json());
             setLoading(false);
         })();
-    }, [currentUserId]);
+    }, [userId]);
 
     if (loading) {
         return <div>Logo-color should change soon.......</div>
@@ -246,7 +252,7 @@ function ShowConversationForUser(userId) {
     );
 }
 
-//Create new conversation
+//Create new conversation - WORK
 function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
 
@@ -277,12 +283,12 @@ function CreateNewConversation() {
                 </label>
                 <button>Submit conv</button>
             </form>
-
+            <FindNewConversationId/>
         </div>
     )
 }
 
-//Get the newest conversation - used for adding a new conversation - WORKS.
+//Get the newest conversation ID - used for adding a new conversation - WORKS.
 function FindNewConversationId() {
     const [id, setId] = useState(0);
 
@@ -295,7 +301,11 @@ function FindNewConversationId() {
     }, []);
 
     console.log("FindNewConversationId() - Should return ID for newest conversation:" + id.id);
-    return id.id;
+    return (
+        <>
+            <FindConversationUsers id={id}/>
+        </>
+    )
 }
 
 // Get all except current user
