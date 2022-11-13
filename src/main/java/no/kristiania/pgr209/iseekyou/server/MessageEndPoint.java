@@ -91,13 +91,6 @@ public class MessageEndPoint {
         return conversationDao.save(conversation);
     }
 
-//    //Find the newest id for conversation created
-//    @Path("user/inbox/new/conversationId")
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Conversation findLatestConversation() throws SQLException {
-//        return conversationDao.retrieveLastConversation();
-//    }
 
     //Find all users except current
     @Path("user/inbox/new/conversationMembers")

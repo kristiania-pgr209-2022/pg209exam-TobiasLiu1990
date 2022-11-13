@@ -39,7 +39,7 @@
 
 #new-conversation {
   position: absolute;
-  transform: translateX(170%);
+  transform: translateX(110%);
   top: 0;
   right: 0;
   font-size: 11px;

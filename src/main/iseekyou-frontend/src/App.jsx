@@ -271,15 +271,23 @@ function ShowConversationForUser() {
 function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
 
-    AddConversationMembers();
-
+    let members = FindConversationUsers();
     const conversationId = CreateNewConversationTitle(conversationTitle);
+    console.log("Conversation ID after method call: " + conversationId)
 
-    function handleSubmit(e) {
+    //This should be to handle a conversation title
+    async function handleSubmit(e) {
         e.preventDefault()
         setConversationTitle(e.target.value);
+        console.log("Current conversation title: " + conversationTitle)
 
         //2 + 3
+    }
+
+    //This should be for handling who to add to a conversation
+    function handleClick(e) {
+        e.preventDefault()
+        recipientList
     }
 
     return (
@@ -287,16 +295,14 @@ function CreateNewConversation() {
             <h2>New conversation</h2>
 
             <div id="new-conversation-div">
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Conversation title:
-                        <input type="text"
-                               value={conversationTitle}
-                               onChange={(e) => setConversationTitle(e.target.value)}
-                        />
-                    </label>
-                    <button>Submit conv</button>
-                </form>
+                <CreateNewConversationTitle/>
+            </div>
+
+            <div>
+                <label>
+                    Recipients:
+                    <AddConversationMembers/>
+                </label>
             </div>
 
         </div>
@@ -304,11 +310,11 @@ function CreateNewConversation() {
 }
 
 //Create new conversation - WORK
-async function CreateNewConversationTitle(conversationTitle) {
-    const [conversationId, setConversationId] = useState("");
-    const [check, setCheck] = useState(true);
+async function CreateNewConversationTitle() {
+    const [conversationTitle, setConversationTitle] = useState("");
 
-    console.log("Created a new conversation with title: " + conversationTitle);
+    const [conversationId, setConversationId] = useState(0);
+    const [check, setCheck] = useState(true);
 
     if (check) {
         const res = await fetch("api/user/inbox/new", {
@@ -320,30 +326,28 @@ async function CreateNewConversationTitle(conversationTitle) {
         })
         setConversationId(await res.json());
         setCheck(!check);
+        console.log("New conversation title as parameter: " + conversationTitle);
+        return conversationId;
     }
-
     // .then(response => response.json())
     // .then(conversation => setConversationId(conversation.id))
+    console.log("Current conversation id: " + conversationId)
 
-
-    console.log('RESULT', conversationId)
-    return conversationId;
+    return (
+        <>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Conversation title:
+                    <input type="text"
+                           value={conversationTitle}
+                           onChange={(e) => setConversationTitle(e.target.value)}
+                    />
+                </label>
+                <button>Submit conv</button>
+            </form>
+        </>
+    )
 }
-
-//Get the newest conversation ID - used for adding a new conversation - WORKS.
-// function        FindNewConversationId() {
-//     const [id, setId] = useState(0);
-//
-//     useEffect(() => {
-//         (async () => {
-//             const res = await fetch("/api/user/inbox/new/conversationId");
-//             setId(await res.json());
-//
-//         })();
-//     }, []);
-//
-//     return id.id;
-// }
 
 
 // Find all except current user - WORKS
@@ -369,6 +373,7 @@ function FindConversationUsers() {
 
     return users;
 }
+
 
 // Add users to array
 let recipientList = [];
