@@ -11,8 +11,8 @@ import {useEffect, useState} from "react";
     -new conversation for user
  */
 
+//Global use to easily track current user logged in.
 let currentUserId = 0;
-
 
 //Shows all users
 function ListUsers() {
@@ -20,13 +20,11 @@ function ListUsers() {
     const [users, setUsers] = useState([]);
     const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
 
-
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/user");
             setUsers(await res.json());
             setLoading(false);
-
         })();
     }, []);
 
@@ -38,12 +36,15 @@ function ListUsers() {
         let currentUser = JSON.parse(e.target.value);
         currentUserId = currentUser.id;
 
-        console.log("Global:" + currentUserId);
+        document.getElementById("selected-user").innerHTML = currentUser.fullName;
+        document.getElementById("app-title").style.color = currentUser.color;
 
-        // setUserId(parseInt(id));
-        // currentUserId = userId;
+        // Set settings to visible again
+        document.getElementById("user-settings").style.visibility = 'visible';
+
+        //Not used - crash if deleted????
+        setUserId(currentUser.id);
     }
-
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
     return (
         <>
@@ -60,57 +61,54 @@ function ListUsers() {
                 </select>
             </div>
 
-            <div><SetUsersFavoriteColor id={userId}/></div>
-
             <div id="conversations">
-                <ShowConversationForUser id={userId}/>
+                <ShowConversationForUser/>
             </div>
 
             <div id="user-settings" style={{visibility: 'hidden'}}>
-                <UserSettingsName id={userId}/>
-                <UserSettingsEmail id={userId}/>
-                <UserSettingsFavoriteColor id={userId}/>
+                <UserSettingsName/>
+                <UserSettingsEmail/>
+                <UserSettingsFavoriteColor/>
             </div>
         </>
     );
 }
 
-function SetUsersFavoriteColor(userId) {
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState({});
+// function SetUsersFavoriteColor() {
+//     const [loading, setLoading] = useState(true);
+//     const [user, setUser] = useState({});
+//
+//     useEffect(() => {
+//         (async () => {
+//             if (currentUserId === 0) {
+//                 return;
+//             }
+//             const res = await fetch("/api/user/setcolor?userColor=" + currentUserId);
+//             setUser(await res.json());
+//             setLoading(false);
+//         })();
+//     }, [currentUserId]);
+//
+//     if (loading) {
+//         return <div>Logo-color should change soon.......</div>
+//     } else {
+//
+//
+//         //Set settings to visible again
+//         document.getElementById("user-settings").style.visibility = 'visible';
+//     }
+// }
 
-    useEffect(() => {
-        (async () => {
-            if (userId.id === 0) {
-                return;
-            }
-            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
-            setUser(await res.json());
-            setLoading(false);
-        })();
-    }, [userId]);
-
-    if (loading) {
-        return <div>Logo-color should change soon.......</div>
-    } else {
-        document.getElementById("selected-user").innerHTML = user.fullName;
-        document.getElementById("app-title").style.color = user.color;
-
-        //Set settings to visible again
-        document.getElementById("user-settings").style.visibility = 'visible';
-    }
-}
-
-function UserSettingsName(userId) {
+function UserSettingsName() {
     const [fullName, setFullName] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
-        await fetch("/api/user/settings/changename?userId=" + userId.id, {
+        await fetch("/api/user/settings/changename?userId=" + currentUserId, {
             method: "post",
             body: JSON.stringify({fullName}),
             headers: {
@@ -136,16 +134,16 @@ function UserSettingsName(userId) {
     );
 }
 
-function UserSettingsEmail(userId) {
+function UserSettingsEmail() {
     const [email, setEmail] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
-        await fetch("/api/user/settings/changeemail?userId=" + userId.id, {
+        await fetch("/api/user/settings/changeemail?userId=" + currentUserId, {
             method: "post",
             body: JSON.stringify({email}),
             headers: {
@@ -171,16 +169,16 @@ function UserSettingsEmail(userId) {
     );
 }
 
-function UserSettingsFavoriteColor(userId) {
+function UserSettingsFavoriteColor() {
     const [color, setColor] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
-        await fetch("/api/user/settings/changecolor?userId=" + userId.id, {
+        await fetch("/api/user/settings/changecolor?userId=" + currentUserId, {
             method: "post",
             body: JSON.stringify({color}),
             headers: {
@@ -207,22 +205,22 @@ function UserSettingsFavoriteColor(userId) {
 }
 
 //Get all conversations for user.
-function ShowConversationForUser(userId) {
+function ShowConversationForUser() {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
 
     useEffect(() => {
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
 
         (async () => {
-            const res = await fetch("/api/user/inbox?userId=" + userId.id);
+            const res = await fetch("/api/user/inbox?userId=" + currentUserId);
             setConversation(await res.json());
             setLoading(false);
         })();
-    }, [userId]);
+    }, [currentUserId]);
 
     if (loading) {
         return <div>Loading conversations...</div>
