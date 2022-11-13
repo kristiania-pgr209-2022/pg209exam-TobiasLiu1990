@@ -37,7 +37,7 @@ function ListUsers() {
         currentUserId = currentUser.id;
 
         //Set user settings + show user settings
-        SetUserSettings(currentUser.fullName, currentUser.color)
+        ApplyUserSettings(currentUser.fullName, currentUser.color)
 
         //Not used - crash if deleted????
         setFake(currentUser.id);
@@ -72,10 +72,14 @@ function ListUsers() {
     );
 }
 
-function SetUserSettings(name, color) {
+function ApplyUserSettings(name, color) {
     let userName = document.getElementById("selected-user").innerHTML = name;
     let userColor = document.getElementById("app-title").style.color = color;
     document.getElementById("user-settings").style.visibility = 'visible';
+}
+
+function UpdateUserSettings() {
+
 }
 
 function UserSettingsName() {
