@@ -64,9 +64,11 @@ function ListUsers() {
             </div>
 
             <div id="user-settings" style={{visibility: 'hidden'}}>
-                <UserSettingsName/>
-                <UserSettingsEmail/>
-                <UserSettingsFavoriteColor/>
+                <UpdateUserSettings/>
+
+                {/*<UserSettingsName/>*/}
+                {/*<UserSettingsEmail/>*/}
+                {/*<UserSettingsFavoriteColor/>*/}
             </div>
         </>
     );
@@ -79,7 +81,62 @@ function ApplyUserSettings(name, color) {
 }
 
 function UpdateUserSettings() {
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [color, setColor] = useState("");
 
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (currentUserId === 0) {
+            return
+        }
+        await fetch("/api/user/settings?userId=" + currentUserId, {
+            method: "post",
+            body: JSON.stringify({fullName, email, color}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>
+                        New name:{" "}
+                        <input
+                            type="test"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        New E-mail address:{" "}
+                        <input
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        New favorite color:{" "}
+                        <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <button>Apply changes</button>
+            </form>
+        </div>
+    )
 }
 
 function UserSettingsName() {

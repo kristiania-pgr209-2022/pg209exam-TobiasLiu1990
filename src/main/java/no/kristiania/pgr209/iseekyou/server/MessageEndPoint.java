@@ -41,29 +41,47 @@ public class MessageEndPoint {
         return userDao.retrieve(id);
     }
 
+    //Updates user settings if changed fields are not empty.
+    @Path("/user/settings")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateUserSettings(@QueryParam("userId") int id, User user) throws SQLException {
+        //Maybe fet user to compare if changes are made first as well?
+
+        if (!user.getFullName().equals("")) {
+            userDao.updateUserName(user, id);
+        }
+        if (!user.getEmail().equals("")) {
+            userDao.updateEmail(user, id);
+        }
+        if (!user.getColor().equals("")) {
+            userDao.updateFavoriteColor(user, id);
+        }
+    }
+
     //Should let user change username
-    @Path("/user/settings/changename")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettingsForName(@QueryParam("userId") int id, User user) throws SQLException {
-        userDao.updateUserName(user, id);
-    }
-
-    //Should let user change email
-    @Path("/user/settings/changeemail")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettingsForEmail(@QueryParam("userId") int id, User user) throws SQLException {
-        userDao.updateEmail(user, id);
-    }
-
-    //Should let user change favorite color
-    @Path("/user/settings/changecolor")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {
-        userDao.updateFavoriteColor(user, id);
-    }
+//    @Path("/user/settings/changename")
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public void userSettingsForName(@QueryParam("userId") int id, User user) throws SQLException {
+//        userDao.updateUserName(user, id);
+//    }
+//
+//    //Should let user change email
+//    @Path("/user/settings/changeemail")
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public void userSettingsForEmail(@QueryParam("userId") int id, User user) throws SQLException {
+//        userDao.updateEmail(user, id);
+//    }
+//
+//    //Should let user change favorite color
+//    @Path("/user/settings/changecolor")
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {
+//        userDao.updateFavoriteColor(user, id);
+//    }
 
     //Shows all conversations when a user is selected in drop-down menu.
     @Path("/user/inbox")
