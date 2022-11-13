@@ -139,110 +139,110 @@ function UpdateUserSettings() {
     )
 }
 
-function UserSettingsName() {
-    const [fullName, setFullName] = useState("");
+// function UserSettingsName() {
+//     const [fullName, setFullName] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changename?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({fullName}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New name:{" "}
+//                     <input
+//                         type="text"
+//                         value={fullName}
+//                         onChange={(e) => setFullName(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+// function UserSettingsEmail() {
+//     const [email, setEmail] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changeemail?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({email}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New E-mail Address:{" "}
+//                     <input
+//                         type="text"
+//                         value={email}
+//                         onChange={(e) => setEmail(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
 
-        if (currentUserId === 0) {
-            return;
-        }
-        await fetch("/api/user/settings/changename?userId=" + currentUserId, {
-            method: "post",
-            body: JSON.stringify({fullName}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    New name:{" "}
-                    <input
-                        type="text"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
-            </form>
-        </div>
-    );
-}
-
-function UserSettingsEmail() {
-    const [email, setEmail] = useState("");
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if (currentUserId === 0) {
-            return;
-        }
-        await fetch("/api/user/settings/changeemail?userId=" + currentUserId, {
-            method: "post",
-            body: JSON.stringify({email}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    New E-mail Address:{" "}
-                    <input
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
-            </form>
-        </div>
-    );
-}
-
-function UserSettingsFavoriteColor() {
-    const [color, setColor] = useState("");
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if (currentUserId === 0) {
-            return;
-        }
-        await fetch("/api/user/settings/changecolor?userId=" + currentUserId, {
-            method: "post",
-            body: JSON.stringify({color}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    New favorite color:{" "}
-                    <input
-                        type="text"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
-            </form>
-        </div>
-    );
-}
+// function UserSettingsFavoriteColor() {
+//     const [color, setColor] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changecolor?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({color}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New favorite color:{" "}
+//                     <input
+//                         type="text"
+//                         value={color}
+//                         onChange={(e) => setColor(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
 
 //Get all conversations for user.
 function ShowConversationForUser() {
@@ -290,7 +290,6 @@ function ShowConversationForUser() {
     );
 }
 
-
 /*
     1. Table Conversation
         Title finished in CreateConversationTitle
@@ -304,53 +303,15 @@ function ShowConversationForUser() {
             sender_id (user_id)
             date (auto)
             content = message
-
  */
 
 function CreateNewConversation() {
-    let members = FindConversationUsers();
-    const conversationId = CreateNewConversationTitle();
-    console.log("Conversation ID after method call: " + conversationId)
-
-    // This should be to handle a conversation title
-    // async function handleSubmit(e) {
-    //     e.preventDefault()
-    //     setConversationTitle(e.target.value);
-    //     console.log("Current conversation title: " + conversationTitle)
-    //
-    //     //2 + 3
-    // }
-
-    //This should be for handling who to add to a conversation
-    // function handleClick(e) {
-    //     e.preventDefault()
-    //     // recipientList
-    // }
-
-    return (
-        <div>
-            <h2>New conversation</h2>
-            <div>
-
-            </div>
-
-            <div>
-                <label>
-                    Recipients:
-                    <AddConversationMembers/>
-                </label>
-            </div>
-
-        </div>
-    )
-}
-
-//Create new conversation - WORK
-async function CreateNewConversationTitle() {
     const [conversationTitle, setConversationTitle] = useState("");
     const [conversationId, setConversationId] = useState(0);
 
-    async function handleSubmit(e) {
+    //Should POST a conversation object (title)
+    //Method does also return id.
+    async function handleSubmitConversationTitle(e) {
         e.preventDefault();
 
         const res = await fetch("api/user/inbox/new", {
@@ -364,24 +325,94 @@ async function CreateNewConversationTitle() {
         console.log("New conversation title as parameter: " + conversationTitle);
     }
 
-    // .then(response => response.json())
-    // .then(conversation => setConversationId(conversation.id))
-    console.log("Current conversation id: " + conversationId)
+    // This should be for handling who to add to a conversation
+    // Use the recipientList
+    //POST recipients
+    function handleSubmitRecipients(e) {
+        e.preventDefault()
+
+    }
+
+    //For message
+    //Post message
+    function handleSubmitMessage(e) {
+        e.preventDefault();
+
+    }
+
     return (
-        <div id="new-conversation-div">
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Conversation title:
-                    <input type="text"
-                           value={conversationTitle}
-                           onChange={(e) => setConversationTitle(e.target.value)}
-                    />
-                </label>
-                <button>Submit conv</button>
-            </form>
+        <div>
+            <h2>New conversation</h2>
+
+            <div id="new-conversation-div">
+                <form onSubmit={handleSubmitConversationTitle}>
+                    <label>
+                        Conversation title:
+                        <input type="text"
+                               value={conversationTitle}
+                               onChange={(e) => setConversationTitle(e.target.value)}
+                        />
+                    </label>
+                    <button>Submit conv</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitRecipients}>
+                    <AddConversationMembers/>
+                    <button>Submit recipients</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitMessage}>
+                    <CreateMessage/>
+                    <button>Submit message</button>
+                </form>
+            </div>
+
         </div>
     )
 }
+
+//Create new conversation - WORK
+// async function CreateNewConversationTitle() {
+//     const [conversationTitle, setConversationTitle] = useState("");
+//     const [conversationId, setConversationId] = useState(0);
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         const res = await fetch("api/user/inbox/new", {
+//             method: "post",
+//             body: JSON.stringify({conversationTitle}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         })
+//         setConversationId(await res.json());
+//         console.log("New conversation title as parameter: " + conversationTitle);
+//     }
+//     // .then(response => response.json())
+//     // .then(conversation => setConversationId(conversation.id))
+//
+//     return (
+//         <div id="new-conversation-div">
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     Conversation title:
+//                     <input type="text"
+//                            value={conversationTitle}
+//                            onChange={(e) => setConversationTitle(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit conv</button>
+//             </form>
+//         </div>
+//     )
+// }
 
 
 // Find all except current user - WORKS
@@ -423,6 +454,8 @@ function AddConversationMembers() {
 
     return (
         <div>
+            <h4>Recipients: </h4>
+
             {users.map((u) => (
                 <button id={u.id} value={u.id} onClick={handleClick}>{u.email}</button>
             ))}
