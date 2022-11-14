@@ -4,9 +4,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.pgr209.iseekyou.Conversation;
+import no.kristiania.pgr209.iseekyou.ConversationMembers;
 import no.kristiania.pgr209.iseekyou.Message;
 import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.database.ConversationDao;
+import no.kristiania.pgr209.iseekyou.database.ConversationMembersDao;
 import no.kristiania.pgr209.iseekyou.database.MessageDao;
 import no.kristiania.pgr209.iseekyou.database.UserDao;
 
@@ -24,6 +26,9 @@ public class MessageEndPoint {
 
     @Inject
     public MessageDao messageDao;
+
+    @Inject
+    public ConversationMembersDao conversationMembersDao;
 
     //Lists all users for drop-down menu in front-end
     @Path("/user")
@@ -92,7 +97,7 @@ public class MessageEndPoint {
     }
 
     //Shows all messages in a conversation when a conversation is clicked.
-    @Path("user/inbox/messages")
+    @Path("/user/inbox/messages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
@@ -102,51 +107,38 @@ public class MessageEndPoint {
     //Create new conversation
     //Will return the id of created conversation.
     //To avoid if many uses/posts new conversations, ID could otherwise be wrong if fetched in different method
-    @Path("user/inbox/new")
+    @Path("/user/inbox/new/conversation")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public int newConversation(Conversation conversation) throws SQLException {
         return conversationDao.save(conversation);
     }
 
-
-    //Find all users except current
-    @Path("user/inbox/new/conversationMembers")
+    //Find all recipients except current
+    @Path("/user/inbox/new/conversationRecipients")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     public List<User> getConversationUsers(@QueryParam("userId") int userId) throws SQLException {
         return userDao.getAllUsersExceptSender(userId);
     }
 
-    //Find all users except current
-    @Path("user/inbox/new/conversationMembers")
+    //ADD recipients for new conversation
+    @Path("/user/inbox/new/conversation/addRecipients")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> addConversationUsers(@QueryParam("userId") int userId) throws SQLException {
-        return userDao.getAllUsersExceptSender(userId);
+    public void addConversationUsers(ConversationMembers recipient) throws SQLException {
+        System.out.println("Conversation ID: " + recipient.getConversationId());
+        System.out.println("Recipients ID: " + recipient.getRecipientId());
+
+        //Query to add to Conversation_Members table
     }
 
-
-
-
-
-
-
-
-    /*
-    @Path
-    // Method should be able to handle new message
-     */
-
-    /*
-    @Path
-    // Method should be able to reply to an existing thread
-     */
-
-
-
-
-
+    @Path("/user/inbox/new/conversation/message")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public void addConversationMessage(Message message) {
+        //Add message to DB
+    }
 
 
 

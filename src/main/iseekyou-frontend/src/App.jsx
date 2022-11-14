@@ -314,7 +314,7 @@ function CreateNewConversation() {
     async function handleSubmitConversationTitle(e) {
         e.preventDefault();
 
-        const res = await fetch("api/user/inbox/new", {
+        const res = await fetch("/api/user/inbox/new/conversation", {
             method: "post",
             body: JSON.stringify({conversationTitle}),
             headers: {
@@ -322,15 +322,23 @@ function CreateNewConversation() {
             },
         })
         setConversationId(await res.json());
-        console.log("New conversation title as parameter: " + conversationTitle);
+        console.log("New conversation title: " + conversationTitle);
     }
 
     // This should be for handling who to add to a conversation
     // Use the recipientList
     //POST recipients
-    function handleSubmitRecipients(e) {
+    async function handleSubmitRecipients(e) {
         e.preventDefault()
 
+        await fetch("api/user/inbox/new/conversation/addRecipients", {
+            method: "post",
+            body: JSON.stringify({conversationId, recipientId}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log("New conversation Id: " + conversationId);
     }
 
     //For message
@@ -415,7 +423,7 @@ function CreateNewConversation() {
 // }
 
 
-// Find all except current user - WORKS
+// Function only finds all users except current user - WORKS
 function FindConversationUsers() {
     const [users, setUsers] = useState([]); //All users except current
 
@@ -425,7 +433,7 @@ function FindConversationUsers() {
         }
 
         const fetchUsers = async () => {
-            const res = await fetch("/api/user/inbox/new/conversationMembers?userId=" + currentUserId);
+            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + currentUserId);
             setUsers(await res.json());
 
             // console.log("FindConversationUsers() - Should show list of users: " +);
@@ -439,17 +447,18 @@ function FindConversationUsers() {
     return users;
 }
 
-
 // Add users to array
-let recipientList = [];
+let recipientId;
 
 function AddConversationMembers() {
     let users = FindConversationUsers();
 
+    //Should add objects to recipientList (ConversationMembers objects)
     function handleClick(e) {
+        recipientId = (e.target.value);
         document.getElementById(e.target.value).style.visibility = 'hidden';
-        recipientList.push(e.target.value);
-        console.log("recipientList: " + recipientList)
+
+        console.log("recipientList: " + recipientId)
     }
 
     return (
@@ -468,7 +477,6 @@ function CreateMessage() {
         <label>
             Message:
             <input type="text">
-
             </input>
         </label>
     )
