@@ -5,18 +5,20 @@ import no.kristiania.pgr209.iseekyou.ConversationMembers;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.List;
 
-public class ConversationMembersDao {
+public class ConversationMembersDao extends AbstractDao<ConversationMembers> {
 
-    private final DataSource dataSource;
-
-    @Inject
     public ConversationMembersDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
-    //Save
-    public void save(ConversationMembers recipients) throws SQLException {
+    @Override
+    public List<ConversationMembers> listAll() throws SQLException {
+        return null;
+    }
+
+    public int save(ConversationMembers recipients) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "";
             try (var stmt = connection.prepareStatement(query)) {
@@ -26,6 +28,4 @@ public class ConversationMembersDao {
             }
         }
     }
-
-
 }
