@@ -10,13 +10,11 @@ public class User {
     public User() {
     }
 
-    public User(int id, String fullName, String email, String color) {
-        this.id = id;
+    public User(String fullName, String email, String color) {
         this.fullName = fullName;
         this.email = email;
         this.color = color;
     }
-
 
     public String getColor() {
         return color;
