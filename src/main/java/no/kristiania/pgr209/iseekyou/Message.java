@@ -12,7 +12,6 @@ public class Message {
     private String messageText;
     private Date messageDate;
 
-
     public Message() {
     }
 

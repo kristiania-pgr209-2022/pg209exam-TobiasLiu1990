@@ -133,7 +133,7 @@ public class MessageEndPoint {
     @Path("/user/inbox/new/conversation/message")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public void addConversationMessage(Message message) {
-        //Add message to DB
+    public void addConversationMessage(Message message) throws SQLException {
+        messageDao.save(message);
     }
 }
