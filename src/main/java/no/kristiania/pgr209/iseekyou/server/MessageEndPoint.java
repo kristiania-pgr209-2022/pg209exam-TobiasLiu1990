@@ -47,17 +47,17 @@ public class MessageEndPoint {
     @Path("/user/settings")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUserSettings(@QueryParam("userId") int id, User user) throws SQLException {
+    public void updateUserSettings(User user) throws SQLException {
         //Maybe fet user to compare if changes are made first as well?
 
         if (!user.getFullName().equals("")) {
-            userDao.updateUserName(user, id);
+            userDao.updateUserName(user);
         }
         if (!user.getEmail().equals("")) {
-            userDao.updateEmail(user, id);
+            userDao.updateEmail(user);
         }
         if (!user.getColor().equals("")) {
-            userDao.updateFavoriteColor(user, id);
+            userDao.updateFavoriteColor(user);
         }
     }
 
@@ -109,7 +109,7 @@ public class MessageEndPoint {
     @Path("/user/inbox/new/conversation/message")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public void addConversationMessage(Message message) {
-        //Add message to DB
+    public void addConversationMessage(Message message) throws SQLException {
+        messageDao.save(message);
     }
 }

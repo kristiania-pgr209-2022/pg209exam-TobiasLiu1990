@@ -51,37 +51,34 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    public void updateUserName(User user, int id) throws SQLException {
-        String username = user.getFullName();
+    public void updateUserName(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "update users set full_name = ? where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, username);
-                stmt.setInt(2, id);
+                stmt.setString(1, user.getFullName());
+                stmt.setInt(2, user.getId());
                 stmt.executeUpdate();
             }
         }
     }
 
-    public void updateEmail(User user, int id) throws SQLException {
-        String email = user.getEmail();
+    public void updateEmail(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "update users set email_address = ? where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, email);
-                stmt.setInt(2, id);
+                stmt.setString(1, user.getEmail());
+                stmt.setInt(2, user.getId());
                 stmt.executeUpdate();
             }
         }
     }
 
-    public void updateFavoriteColor(User user, int id) throws SQLException {
-        String favoriteColor = user.getColor();
+    public void updateFavoriteColor(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "update users set favorite_color = ? where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, favoriteColor);
-                stmt.setInt(2, id);
+                stmt.setString(1, user.getColor());
+                stmt.setInt(2, user.getId());
                 stmt.executeUpdate();
             }
         }

@@ -7,6 +7,7 @@ public class Message {
 
     private int id;
     private int senderId;
+    private int conversationId;
     private String senderName;
     private String messageText;
     private Date messageDate;
@@ -58,5 +59,13 @@ public class Message {
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
+    }
+
+    public int getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(int conversationId) {
+        this.conversationId = conversationId;
     }
 }

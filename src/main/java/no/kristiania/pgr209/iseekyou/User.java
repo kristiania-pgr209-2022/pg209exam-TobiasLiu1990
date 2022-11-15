@@ -17,7 +17,6 @@ public class User {
         this.color = color;
     }
 
-
     public String getColor() {
         return color;
     }

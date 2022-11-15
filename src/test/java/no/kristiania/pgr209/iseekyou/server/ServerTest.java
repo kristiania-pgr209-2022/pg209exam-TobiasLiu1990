@@ -36,6 +36,18 @@ public class ServerTest {
                 .contains("<title>I Seek You</title>");
     }
 
+    @Test
+    void shouldListUsers() throws IOException {
+        var connection = openConnection("/api/user");
+
+        assertThat(connection.getResponseCode())
+                .as(connection.getResponseMessage() + " for " + connection.getURL())
+                .isEqualTo(200);
+
+        assertThat(connection.getInputStream())
+                .asString(StandardCharsets.UTF_8)
+                .contains(",\"fullName\":\"Ola Nordman\",\"id\":1},{\"color\":\"black\",\"email\":\"snorre");
+    }
 
     private HttpURLConnection openConnection(String path) throws IOException {
         return (HttpURLConnection) new URL(server.getURL(), path).openConnection();
