@@ -1,8 +1,3 @@
-div {
-  border: solid black 1px;
-}
-
-
 #app-title {
   position: absolute;
   text-align: center;
@@ -18,8 +13,39 @@ div {
   top: 0;
 }
 
+/* For new conversation window */
 #new-conversation-div {
+  border: solid black 1px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 17em;
+  height: 100%;
+}
 
+#new-conversation-title-div {
+  position: absolute;
+
+
+}
+
+#new-recipients-div {
+  position: absolute;
+  transform: translateY(60%);
+  right: 0;
+  font-size: 10px;
+}
+
+#new-message-div {
+  position: absolute;
+  transform: translateY(300%);
+
+  top: 30%;
+  right: 0;
+}
+
+#message-input {
+  height: 20%;
 }
 
 #user-settings {
@@ -38,18 +64,10 @@ div {
   top: 10%;
 }
 
-#show-messages {
+#show-messages-div {
   position: absolute;
   font-size: 12px;
   background: lightgray;
-}
-
-#new-conversation {
-  position: absolute;
-  transform: translateX(110%);
-  top: 0;
-  right: 0;
-  font-size: 11px;
 }
 
 

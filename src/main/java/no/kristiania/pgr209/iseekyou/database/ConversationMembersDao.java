@@ -18,7 +18,7 @@ public class ConversationMembersDao extends AbstractDao<ConversationMembers> {
 
     public int save(ConversationMembers recipients) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "";
+            String query = "INSERT INTO conversation_members (user_id, conversation_id) VALUES (?, ?)";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, recipients.getRecipientId());
                 stmt.setInt(2, recipients.getConversationId());
