@@ -64,7 +64,7 @@ public class MessageEndPoint {
     @Path("/user/inbox/conversation/members")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> conversationParticipants(@QueryParam("userId") int userId, int conversationId) throws SQLException {
+    public List<String> conversationParticipants(@QueryParam("userId") int userId, @QueryParam("cId") int conversationId) throws SQLException {
         return userDao.getConversationParticipants(userId, conversationId);
     }
 

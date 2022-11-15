@@ -97,6 +97,7 @@ function UpdateUserSettings({user}) {
         </div>
     )
 }
+
 /*
     !!!!
     NEED TO SHOW WHO IS IN THE CONVERSATION
@@ -124,10 +125,12 @@ function ShowConversationForUser({user, messages, setMessages}) {
     //Show all participants in each conversation
     useEffect(() => {
         (async () => {
-            const res2 = await fetch("/api/user/inbox/conversation/members?userId=" + user.id);
-            setParticipants(await res2.json());
+            const res = await fetch(
+                "/api/user/inbox/conversation/members?userId=" + user.id +
+                "&cId=" + conversationId);
+            setParticipants(await res.json());
         })();
-    },  [user.id])
+    }, [conversationId])
 
     if (loading) {
         return <div>Loading conversations...</div>
@@ -136,10 +139,9 @@ function ShowConversationForUser({user, messages, setMessages}) {
     return (
         <div>
             <h2>Conversations</h2>
+            <h5>Members in each conversation</h5>
 
-            {participants.map((p) => (
-                <div>{p.fullName}</div>
-            ))}
+            {participants.map((p) => (<div>{p}</div>))}
 
             {conversation.map((c) => (
                 <div>
@@ -147,6 +149,18 @@ function ShowConversationForUser({user, messages, setMessages}) {
                             value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
+
+
+            {/*{participants.map((p) => (*/}
+            {/*    <div>{p}</div>*/}
+            {/*))}*/}
+
+            {/*{conversation.map((c) => (*/}
+            {/*    <div>*/}
+            {/*        <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}*/}
+            {/*                value={c.id}>{c.id} - {c.conversationTitle}</button>*/}
+            {/*    </div>*/}
+            {/*))}*/}
             <div id="show-messages-div">
                 <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
             </div>
