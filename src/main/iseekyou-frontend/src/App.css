@@ -1,32 +1,50 @@
 #app-title {
   position: absolute;
+  text-align: center;
+  top: 0;
+  transform: translateX(-100%);
+}
+
+#show-users-drop-list {
+  position: absolute;
+  font-size: 14px;
+  background: red;
+  left: 0;
   top: 0;
 }
 
 #user-settings {
   position: absolute;
-  margin: 2em;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
   left: 0;
-}
-
-#show-users-drop-list {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: red;
+  bottom: 20%;
 }
 
 #conversations {
   position: absolute;
+  font-size: 12px;
   left: 30%;
   top: 20%;
 }
 
 #show-messages {
   position: absolute;
-  left: 120%;
-  top: 30%;
+  font-size: 12px;
+  background: lightgray;
+  width: 130%;
+
 }
+
+#new-conversation {
+  position: absolute;
+  transform: translateX(110%);
+  top: 0;
+  right: 0;
+  font-size: 11px;
+}
+
 
 #first-option {
   font-weight: bold;

@@ -1,5 +1,6 @@
 import './App.css'
-import React, {useEffect, useState} from "react";
+import * as React from "react";
+import {useEffect, useState} from "react";
 
 /*
     -list users
@@ -10,50 +11,20 @@ import React, {useEffect, useState} from "react";
     -new conversation for user
  */
 
+//Global use to easily track current user logged in.
 let currentUserId = 0;
-
-function ListAllUsers() {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/user");
-            setUsers(await res.json());
-
-        })();
-    }, []);
-
-    return (
-        <>
-            {users.map(u => <UserCard key={u.id} u={u}/>)}
-        </>
-    )
-}
-
-//Show a user
-function UserCard({user}) {
-    const {id, fullName, email} = user
-
-    return (
-      <>
-          {id}. {fullName} - {email}
-      </>
-    );
-}
 
 //Shows all users
 function ListUsers() {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
-    const [userId, setUserId] = useState(0);    //Used to pass user id to ShowConversationForUser()
-    const [user, setUser] = useState({});
+    const [fake, setFake] = useState(0);    //Used to pass user id to ShowConversationForUser()
 
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/user");
             setUsers(await res.json());
             setLoading(false);
-
         })();
     }, []);
 
@@ -62,9 +33,14 @@ function ListUsers() {
     }
 
     function handleChange(e) {
-        setUserId(parseInt(e.target.value));
-        currentUserId = userId;
-        console.log(userId);
+        let currentUser = JSON.parse(e.target.value);
+        currentUserId = currentUser.id;
+
+        //Set user settings + show user settings
+        ApplyUserSettings(currentUser.fullName, currentUser.color)
+
+        //Not used - crash if deleted????
+        setFake(currentUser.id);
     }
 
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
@@ -78,135 +54,46 @@ function ListUsers() {
                     <option id="first-option">Select a user to view conversation and messages</option>
 
                     {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.id} {u.fullName} {u.email}</option>
+                        <option key={u.id} value={JSON.stringify(u)}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
 
-            <div><SetUsersFavoriteColor id={userId}/></div>
-
             <div id="conversations">
-                <ShowConversationForUser id={userId}/>
-                <FindConversationUsers id={userId}/>
+                <ShowConversationForUser/>
             </div>
 
             <div id="user-settings" style={{visibility: 'hidden'}}>
-                <UserSettingsName id={userId}/>
-                <UserSettingsEmail id={userId}/>
-                <UserSettingsFavoriteColor id={userId}/>
+                <UpdateUserSettings/>
+
+                {/*<UserSettingsName/>*/}
+                {/*<UserSettingsEmail/>*/}
+                {/*<UserSettingsFavoriteColor/>*/}
             </div>
         </>
     );
 }
 
-function SetUsersFavoriteColor(userId) {
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState({});
-
-    useEffect(() => {
-        (async () => {
-            if (userId.id === 0) {
-                return;
-            }
-            const res = await fetch("/api/user/setcolor?userColor=" + userId.id);
-            setUser(await res.json());
-            setLoading(false);
-        })();
-    }, [userId]);
-
-    if (loading) {
-        return <div>Logo-color should change soon.......</div>
-    } else {
-        document.getElementById("selected-user").innerHTML = user.fullName;
-        document.getElementById("app-title").style.color = user.color;
-
-        //Set settings to visible again
-        document.getElementById("user-settings").style.visibility = 'visible';
-    }
+function ApplyUserSettings(name, color) {
+    let userName = document.getElementById("selected-user").innerHTML = name;
+    let userColor = document.getElementById("app-title").style.color = color;
+    document.getElementById("user-settings").style.visibility = 'visible';
 }
 
-function UserSettingsName(userId) {
+function UpdateUserSettings() {
     const [fullName, setFullName] = useState("");
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if (userId.id === 0) {
-            return;
-        }
-        await fetch("/api/user/settings/changename?userId=" + userId.id, {
-            method: "post",
-            body: JSON.stringify({fullName}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    New name:{" "}
-                    <input
-                        type="text"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
-            </form>
-        </div>
-    );
-}
-
-function UserSettingsEmail(userId) {
     const [email, setEmail] = useState("");
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if (userId.id === 0) {
-            return;
-        }
-        await fetch("/api/user/settings/changeemail?userId=" + userId.id, {
-            method: "post",
-            body: JSON.stringify({email}),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    New E-mail Address:{" "}
-                    <input
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
-            </form>
-        </div>
-    );
-}
-
-function UserSettingsFavoriteColor(userId) {
     const [color, setColor] = useState("");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (userId.id === 0) {
-            return;
+        if (currentUserId === 0) {
+            return
         }
-        await fetch("/api/user/settings/changecolor?userId=" + userId.id, {
+        await fetch("/api/user/settings?userId=" + currentUserId, {
             method: "post",
-            body: JSON.stringify({color}),
+            body: JSON.stringify({fullName, email, color}),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -216,37 +103,164 @@ function UserSettingsFavoriteColor(userId) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label>
-                    New favorite color:{" "}
-                    <input
-                        type="text"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                    />
-                </label>
-                <button>Submit</button>
+                <div>
+                    <label>
+                        New name:{" "}
+                        <input
+                            type="test"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        New E-mail address:{" "}
+                        <input
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        New favorite color:{" "}
+                        <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                        />
+                    </label>
+                </div>
+                <button>Apply changes</button>
             </form>
         </div>
-    );
+    )
 }
 
+// function UserSettingsName() {
+//     const [fullName, setFullName] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changename?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({fullName}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New name:{" "}
+//                     <input
+//                         type="text"
+//                         value={fullName}
+//                         onChange={(e) => setFullName(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
+
+// function UserSettingsEmail() {
+//     const [email, setEmail] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changeemail?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({email}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New E-mail Address:{" "}
+//                     <input
+//                         type="text"
+//                         value={email}
+//                         onChange={(e) => setEmail(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
+
+// function UserSettingsFavoriteColor() {
+//     const [color, setColor] = useState("");
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         if (currentUserId === 0) {
+//             return;
+//         }
+//         await fetch("/api/user/settings/changecolor?userId=" + currentUserId, {
+//             method: "post",
+//             body: JSON.stringify({color}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         });
+//     }
+//
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     New favorite color:{" "}
+//                     <input
+//                         type="text"
+//                         value={color}
+//                         onChange={(e) => setColor(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit</button>
+//             </form>
+//         </div>
+//     );
+// }
+
 //Get all conversations for user.
-function ShowConversationForUser(userId) {
+function ShowConversationForUser() {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
 
     useEffect(() => {
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
 
         (async () => {
-            const res = await fetch("/api/user/inbox?userId=" + userId.id);
+            const res = await fetch("/api/user/inbox?userId=" + currentUserId);
             setConversation(await res.json());
             setLoading(false);
         })();
-    }, [userId]);
+    }, [currentUserId]);
 
     if (loading) {
         return <div>Loading conversations...</div>
@@ -269,99 +283,205 @@ function ShowConversationForUser(userId) {
                 <ShowMessageBox id={conversationId}/>
             </div>
 
-            <div>
+            <div id="new-conversation">
                 <CreateNewConversation/>
             </div>
         </div>
     );
 }
 
+/*
+    1. Table Conversation
+        Title finished in CreateConversationTitle
+    2. Need to POST:
+        Table Conversation_members:
+            Newest conversation ID
+            user ID
+    3. Need to POST:
+        Table Messages:
+            conversation_id (fk)
+            sender_id (user_id)
+            date (auto)
+            content = message
+ */
 
-
-//Create new conversation
 function CreateNewConversation() {
     const [conversationTitle, setConversationTitle] = useState("");
+    const [conversationId, setConversationId] = useState(0);
 
-    const setId = FindNewConversationId();
-    console.log("Id from another method: " + setId.id)
-
-    async function handleSubmit(e) {
+    //Should POST a conversation object (title)
+    //Method does also return id.
+    async function handleSubmitConversationTitle(e) {
         e.preventDefault();
 
-        await fetch("api/user/inbox/new", {
+        const res = await fetch("/api/user/inbox/new/conversation", {
             method: "post",
             body: JSON.stringify({conversationTitle}),
             headers: {
                 "Content-Type": "application/json",
             },
+        })
+        setConversationId(await res.json());
+        console.log("New conversation title: " + conversationTitle);
+    }
+
+    // This should be for handling who to add to a conversation
+    // Use the recipientList
+    //POST recipients
+    async function handleSubmitRecipients(e) {
+        e.preventDefault()
+
+        await fetch("api/user/inbox/new/conversation/addRecipients", {
+            method: "post",
+            body: JSON.stringify({conversationId, recipientId}),
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
+        console.log("New conversation Id: " + conversationId);
+    }
+
+    //For message
+    //Post message
+    function handleSubmitMessage(e) {
+        e.preventDefault();
+
     }
 
     return (
-        <div> New conversation
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Conversation title:
-                    <input type="text"
-                           value={conversationTitle}
-                           onChange={(e) => setConversationTitle(e.target.value)}
-                    />
-                </label>
-                <button>Submit conv</button>
-            </form>
+        <div>
+            <h2>New conversation</h2>
+
+            <div id="new-conversation-div">
+                <form onSubmit={handleSubmitConversationTitle}>
+                    <label>
+                        Conversation title:
+                        <input type="text"
+                               value={conversationTitle}
+                               onChange={(e) => setConversationTitle(e.target.value)}
+                        />
+                    </label>
+                    <button>Submit conv</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitRecipients}>
+                    <AddConversationMembers/>
+                    <button>Submit recipients</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitMessage}>
+                    <CreateMessage/>
+                    <button>Submit message</button>
+                </form>
+            </div>
+
         </div>
     )
 }
 
-//Get the newest conversation - used for adding a new conversation.
-function FindNewConversationId() {
-    const [id, setId] = useState(0);
+//Create new conversation - WORK
+// async function CreateNewConversationTitle() {
+//     const [conversationTitle, setConversationTitle] = useState("");
+//     const [conversationId, setConversationId] = useState(0);
+//
+//     async function handleSubmit(e) {
+//         e.preventDefault();
+//
+//         const res = await fetch("api/user/inbox/new", {
+//             method: "post",
+//             body: JSON.stringify({conversationTitle}),
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//         })
+//         setConversationId(await res.json());
+//         console.log("New conversation title as parameter: " + conversationTitle);
+//     }
+//     // .then(response => response.json())
+//     // .then(conversation => setConversationId(conversation.id))
+//
+//     return (
+//         <div id="new-conversation-div">
+//             <form onSubmit={handleSubmit}>
+//                 <label>
+//                     Conversation title:
+//                     <input type="text"
+//                            value={conversationTitle}
+//                            onChange={(e) => setConversationTitle(e.target.value)}
+//                     />
+//                 </label>
+//                 <button>Submit conv</button>
+//             </form>
+//         </div>
+//     )
+// }
 
-    useEffect(() => {
-        (async () => {
-            const res = await fetch("/api/user/inbox/new/conversationId");
-            setId(await res.json());
 
-        })();
-    }, []);
-
-    return id;
-}
-
-// Get all except current user
-function FindConversationUsers(userId) {
+// Function only finds all users except current user - WORKS
+function FindConversationUsers() {
     const [users, setUsers] = useState([]); //All users except current
 
     useEffect(() => {
-        if (userId.id === 0) {
+        if (currentUserId === 0) {
             return;
         }
-        (async () => {
-            const res = await fetch("/api/inbox/new?userId=" + userId.id);
+
+        const fetchUsers = async () => {
+            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + currentUserId);
             setUsers(await res.json());
-        })();
+
+            // console.log("FindConversationUsers() - Should show list of users: " +);
+            // return users;
+        }
+        fetchUsers()
+            .catch(console.error);
+        console.log(fetchUsers());
     }, []);
 
     return users;
 }
 
+// Add users to array
+let recipientId;
 
-// function AddConversationMembers(users, conversationId) {
-//     console.log("Conv id: " + conversationId.id)
-//
-//     //////
-//     //Now get the Id of the conversation from db
-//     if (conversationTitle === "") {
-//         return;
-//     } else {
-//         useEffect(() => {
-//             (async () => {
-//                 const res = await fetch("/api/user/inbox/new/conversationId");
-//                 setId(await res.json());
-//             })();
-//         }, [conversationTitle]);
-//     }
-// }
+function AddConversationMembers() {
+    let users = FindConversationUsers();
+
+    //Should add objects to recipientList (ConversationMembers objects)
+    function handleClick(e) {
+        recipientId = (e.target.value);
+        document.getElementById(e.target.value).style.visibility = 'hidden';
+
+        console.log("recipientList: " + recipientId)
+    }
+
+    return (
+        <div>
+            <h4>Recipients: </h4>
+
+            {users.map((u) => (
+                <button id={u.id} value={u.id} onClick={handleClick}>{u.email}</button>
+            ))}
+        </div>
+    )
+}
+
+function CreateMessage() {
+    return (
+        <label>
+            Message:
+            <input type="text">
+            </input>
+        </label>
+    )
+}
+
 
 //Should show chat messages in a conversation
 function ShowMessageBox(conversationId) {
