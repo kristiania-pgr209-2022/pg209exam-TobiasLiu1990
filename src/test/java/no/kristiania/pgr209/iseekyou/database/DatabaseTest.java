@@ -35,7 +35,6 @@ public class DatabaseTest {
                 .usingRecursiveComparison()
                 .isEqualTo(jacob);
 
-        // var jacobsPreferredNewName = new User("Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");;
         jacob.setFullName("Jacobs NewName");
         userDao.updateUserName(jacob);
 
@@ -48,22 +47,40 @@ public class DatabaseTest {
 
     @Test
     void shouldUpdateEmail() throws SQLException {
-        var jacob = new User(0,"Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");
-        userDao.save(jacob);
-        assertThat(userDao.retrieve(jacob.getId()))
+        var david = new User(0,"David Needs A New Email", "CrashTestDummy@Junit.tst", "Yellow");
+        userDao.save(david);
+        assertThat(userDao.retrieve(david.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(jacob);
+                .isEqualTo(david);
 
-        // var jacobsPreferredNewName = new User("Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");;
-        jacob.setEmail("MmmmMmmmMmmm@Junit.tst");
-        userDao.updateEmail(jacob);
+        david.setEmail("MmmmMmmmMmmm@Junit.tst");
+        userDao.updateEmail(david);
 
-        assertThat(userDao.retrieve(jacob.getId()))
+        assertThat(userDao.retrieve(david.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(jacob)
-                .isNotSameAs(jacob);
+                .isEqualTo(david)
+                .isNotSameAs(david);
+    }
+
+    @Test
+    void shouldUpdateFavoriteColor() throws SQLException {
+        var wrongColor = new User(0,"Mr Blue Sky", "ELO@Junit.tst", "Green");
+        userDao.save(wrongColor);
+        assertThat(userDao.retrieve(wrongColor.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(wrongColor);
+
+        wrongColor.setColor("Blue");
+        userDao.updateFavoriteColor(wrongColor);
+
+        assertThat(userDao.retrieve(wrongColor.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(wrongColor)
+                .isNotSameAs(wrongColor);
     }
 
 }
