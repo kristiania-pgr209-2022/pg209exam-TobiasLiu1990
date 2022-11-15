@@ -22,7 +22,7 @@ public class MessageDao extends AbstractDao<Message> {
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setInt(1, message.getSenderId());
                 stmt.setString(2, message.getContent());
-                stmt.setInt(3, message.getId());
+                stmt.setInt(3, message.getConversationId());
                 stmt.executeUpdate();
 
                 try (var generatedKeys = stmt.getGeneratedKeys()) {

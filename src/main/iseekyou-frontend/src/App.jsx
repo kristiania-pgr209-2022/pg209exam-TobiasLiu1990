@@ -157,7 +157,7 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
             {messages.map((m) => (
                 <>
                     <h4>{m.senderName} - {m.messageDate}</h4>
-                    <p>{m.messageText}</p>
+                    <p>{m.content}</p>
                 </>
             ))}
         </div>
