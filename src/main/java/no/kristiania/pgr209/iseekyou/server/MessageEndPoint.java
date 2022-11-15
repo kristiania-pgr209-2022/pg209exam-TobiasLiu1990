@@ -61,30 +61,6 @@ public class MessageEndPoint {
         }
     }
 
-    //Should let user change username
-//    @Path("/user/settings/changename")
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void userSettingsForName(@QueryParam("userId") int id, User user) throws SQLException {
-//        userDao.updateUserName(user, id);
-//    }
-//
-//    //Should let user change email
-//    @Path("/user/settings/changeemail")
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void userSettingsForEmail(@QueryParam("userId") int id, User user) throws SQLException {
-//        userDao.updateEmail(user, id);
-//    }
-//
-//    //Should let user change favorite color
-//    @Path("/user/settings/changecolor")
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void userSettingsForFavoriteColor(@QueryParam("userId") int id, User user) throws SQLException {
-//        userDao.updateFavoriteColor(user, id);
-//    }
-
     //Shows all conversations when a user is selected in drop-down menu.
     @Path("/user/inbox")
     @GET
