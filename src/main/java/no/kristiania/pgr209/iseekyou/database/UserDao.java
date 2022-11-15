@@ -4,9 +4,7 @@ import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.User;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class UserDao extends AbstractDao<User> {
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
                 stmt.setString(2, user.getEmail());
-                stmt.setString(3, user.getColor().toString());
+                stmt.setString(3, user.getColor());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -122,5 +120,30 @@ public class UserDao extends AbstractDao<User> {
         user.setEmail(resultSet.getString("email_address"));
         user.setColor(resultSet.getString("favorite_color"));
         return user;
+    }
+
+    public List<String> getConversationParticipants(int userId, int conversationId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = """
+                    SELECT DISTINCT(Users.full_name)
+                    FROM Users
+                    JOIN Conversation_members
+                        ON Users.user_id = Conversation_members.user_id
+                    JOIN Conversations
+                        ON Conversation_members.conversation_id = Conversations.conversation_id
+                    WHERE Users.user_id != ? AND conversation_members.conversation_id = ?;
+                    """;
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, userId);
+                stmt.setInt(2, conversationId);
+                try (var resultSet = stmt.executeQuery()) {
+                    List<String> conversationParticipants = new ArrayList<>();
+                    while (resultSet.next()) {
+                        conversationParticipants.add(resultSet.getString("full_name"));
+                    }
+                    return conversationParticipants;
+                }
+            }
+        }
     }
 }

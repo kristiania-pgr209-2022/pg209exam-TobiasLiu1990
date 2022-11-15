@@ -98,13 +98,22 @@ function UpdateUserSettings({user}) {
     )
 }
 
+/*
+    !!!!
+    NEED TO SHOW WHO IS IN THE CONVERSATION
+    !!!!
+    new query to show whose in the current thread for user.
+
+ */
 //Get all conversations for user.
 //Takes in messages + setMessages state to pass to ShowMessageBox.
 function ShowConversationForUser({user, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
+    const [participants, setParticipants] = useState([]);
 
+    //Show all conversations for current user
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/user/inbox?userId=" + user.id);
@@ -113,6 +122,16 @@ function ShowConversationForUser({user, messages, setMessages}) {
         })();
     }, [user.id]);
 
+    //Show all participants in each conversation
+    useEffect(() => {
+        (async () => {
+            const res = await fetch(
+                "/api/user/inbox/conversation/members?userId=" + user.id +
+                "&cId=" + conversationId);
+            setParticipants(await res.json());
+        })();
+    }, [conversationId])
+
     if (loading) {
         return <div>Loading conversations...</div>
     }
@@ -120,6 +139,9 @@ function ShowConversationForUser({user, messages, setMessages}) {
     return (
         <div>
             <h2>Conversations</h2>
+            <h5>Members in each conversation</h5>
+
+            {participants.map((p) => (<div>{p}</div>))}
 
             {conversation.map((c) => (
                 <div>
@@ -127,6 +149,18 @@ function ShowConversationForUser({user, messages, setMessages}) {
                             value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
+
+
+            {/*{participants.map((p) => (*/}
+            {/*    <div>{p}</div>*/}
+            {/*))}*/}
+
+            {/*{conversation.map((c) => (*/}
+            {/*    <div>*/}
+            {/*        <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}*/}
+            {/*                value={c.id}>{c.id} - {c.conversationTitle}</button>*/}
+            {/*    </div>*/}
+            {/*))}*/}
             <div id="show-messages-div">
                 <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
             </div>
@@ -137,7 +171,6 @@ function ShowConversationForUser({user, messages, setMessages}) {
 //Should show chat messages in a conversation
 function ShowMessageBox({conversationId, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
-    // const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -150,7 +183,6 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
     if (loading) {
         return <div>Loading messages...</div>
     }
-
 
     return (
         <div>
