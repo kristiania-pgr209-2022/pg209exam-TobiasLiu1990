@@ -7,10 +7,7 @@ import no.kristiania.pgr209.iseekyou.Conversation;
 import no.kristiania.pgr209.iseekyou.ConversationMembers;
 import no.kristiania.pgr209.iseekyou.Message;
 import no.kristiania.pgr209.iseekyou.User;
-import no.kristiania.pgr209.iseekyou.database.ConversationDao;
-import no.kristiania.pgr209.iseekyou.database.ConversationMembersDao;
-import no.kristiania.pgr209.iseekyou.database.MessageDao;
-import no.kristiania.pgr209.iseekyou.database.UserDao;
+import no.kristiania.pgr209.iseekyou.database.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,8 +24,8 @@ public class MessageEndPoint {
     @Inject
     public MessageDao messageDao;
 
-    @Inject
-    public ConversationMembersDao conversationMembersDao;
+    //@Inject
+    //public ConversationMembersDao conversationMembersDao;
 
     //Lists all users for drop-down menu in front-end
     @Path("/user")
@@ -48,7 +45,7 @@ public class MessageEndPoint {
 
     //Updates user settings if changed fields are not empty.
     @Path("/user/settings")
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUserSettings(@QueryParam("userId") int id, User user) throws SQLException {
         //Maybe fet user to compare if changes are made first as well?

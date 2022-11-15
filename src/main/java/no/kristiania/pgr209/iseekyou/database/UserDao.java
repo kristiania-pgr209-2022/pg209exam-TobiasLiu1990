@@ -1,25 +1,18 @@
 package no.kristiania.pgr209.iseekyou.database;
 
-import jakarta.inject.Inject;
-import no.kristiania.pgr209.iseekyou.Conversation;
 import no.kristiania.pgr209.iseekyou.User;
-import no.kristiania.pgr209.iseekyou.UserColor;
 
 import javax.sql.DataSource;
-import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao {
+public class UserDao extends AbstractDao<User> {
 
-    private final DataSource dataSource;
-
-    @Inject
     public UserDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
     public void save(User user) throws SQLException {
