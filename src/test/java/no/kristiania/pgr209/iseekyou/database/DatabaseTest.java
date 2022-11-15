@@ -82,5 +82,4 @@ public class DatabaseTest {
                 .isEqualTo(wrongColor)
                 .isNotSameAs(wrongColor);
     }
-
 }
