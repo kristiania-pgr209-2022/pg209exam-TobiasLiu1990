@@ -45,6 +45,24 @@ public class DatabaseTest {
                 .isNotSameAs(jacob);
     }
 
+    @Test
+    void shouldUpdateEmail() throws SQLException {
+        var jacob = new User("Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");
+        userDao.save(jacob);
+        assertThat(userDao.retrieve(jacob.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(jacob);
 
+        // var jacobsPreferredNewName = new User("Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");;
+        jacob.setEmail("MmmmMmmmMmmm@Junit.tst");
+        userDao.updateEmail(jacob, jacob.getId());
+
+        assertThat(userDao.retrieve(jacob.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(jacob)
+                .isNotSameAs(jacob);
+    }
 
 }
