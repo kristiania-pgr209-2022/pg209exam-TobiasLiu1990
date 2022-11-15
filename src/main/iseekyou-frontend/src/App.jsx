@@ -11,9 +11,6 @@ import {useEffect, useState} from "react";
     -new conversation for user
  */
 
-//Global use to easily track current user logged in.
-let currentUserId = 0;
-
 //Shows all users
 function ListUsers({user, setUser}) {
     const [loading, setLoading] = useState(true);
@@ -57,23 +54,18 @@ function UpdateUserSettings({user}) {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (currentUserId === 0) {
-            return
-        }
-        const res = await fetch("/api/user/settings?userId=" + currentUserId, {
+        const res = await fetch("/api/user/settings?userId=" + user.id, {
             method: "put",
             body: JSON.stringify({fullName, email, color}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
-
-        if(res.ok){
-           user.color = color;
-           user.email = email;
-           user.fullName = fullName;
+        if (res.ok) {
+            user.color = color;
+            user.email = email;
+            user.fullName = fullName;
         }
-
     }
 
     return (
@@ -115,7 +107,6 @@ function UpdateUserSettings({user}) {
     )
 }
 
-
 //Get all conversations for user.
 function ShowConversationForUser({user}) {
     const [loading, setLoading] = useState(true);
@@ -140,16 +131,13 @@ function ShowConversationForUser({user}) {
 
             {conversation.map((c) => (
                 <div>
-                    <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))} value={c.id}>{c.id} - {c.conversationTitle}</button>
+                    <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}
+                            value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
             <div id="show-messages">
                 <ShowMessageBox id={conversationId}/>
             </div>
-
-            {/*<div id="new-conversation">*/}
-            {/*    <CreateNewConversation/>*/}
-            {/*</div>*/}
         </div>
     );
 }
@@ -169,87 +157,91 @@ function ShowConversationForUser({user}) {
             content = message
  */
 
-// function CreateNewConversation() {
-//     const [conversationTitle, setConversationTitle] = useState("");
-//     const [conversationId, setConversationId] = useState(0);
-//
-//     //Should POST a conversation object (title)
-//     //Method does also return id.
-//     async function handleSubmitConversationTitle(e) {
-//         e.preventDefault();
-//
-//         const res = await fetch("/api/user/inbox/new/conversation", {
-//             method: "post",
-//             body: JSON.stringify({conversationTitle}),
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         })
-//         setConversationId(await res.json());
-//         console.log("New conversation title: " + conversationTitle);
-//     }
-//
-//     // This should be for handling who to add to a conversation
-//     // Use the recipientList
-//     //POST recipients
-//     async function handleSubmitRecipients(e) {
-//         e.preventDefault()
-//
-//         await fetch("api/user/inbox/new/conversation/addRecipients", {
-//             method: "post",
-//             body: JSON.stringify({conversationId, recipientId}),
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         });
-//         console.log("New conversation Id: " + conversationId);
-//     }
-//
-//     //For message
-//     //Post message
-//     function handleSubmitMessage(e) {
-//         e.preventDefault();
-//
-//     }
-//
-//     return (
-//         <div>
-//             <h2>New conversation</h2>
-//
-//             <div id="new-conversation-div">
-//                 <form onSubmit={handleSubmitConversationTitle}>
-//                     <label>
-//                         Conversation title:
-//                         <input type="text"
-//                                value={conversationTitle}
-//                                onChange={(e) => setConversationTitle(e.target.value)}
-//                         />
-//                     </label>
-//                     <button>Submit conv</button>
-//                 </form>
-//             </div>
-//             <hr></hr>
-//
-//             <div>
-//                 <form onSubmit={handleSubmitRecipients}>
-//                     <AddConversationMembers/>
-//                     <button>Submit recipients</button>
-//                 </form>
-//             </div>
-//             <hr></hr>
-//
-//             <div>
-//                 <form onSubmit={handleSubmitMessage}>
-//                     <CreateMessage/>
-//                     <button>Submit message</button>
-//                 </form>
-//             </div>
-//
-//         </div>
-//     )
-// }
+function CreateNewConversation(recipients) {
+    const [conversationTitle, setConversationTitle] = useState("");
+    const [conversationId, setConversationId] = useState(0);
 
-//Create new conversation - WORK
+    //Should POST a conversation object (title)
+    //Method does also return id.
+    async function handleSubmitConversationTitle(e) {
+        e.preventDefault();
+
+        const res = await fetch("/api/user/inbox/new/conversation", {
+            method: "post",
+            body: JSON.stringify({conversationTitle}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        setConversationId(await res.json());
+        console.log("New conversation title: " + conversationTitle);
+    }
+
+    // This should be for handling who to add to a conversation
+    // Use the recipientList
+    //POST recipients
+    async function handleSubmitRecipients(e) {
+        e.preventDefault()
+
+        await fetch("api/user/inbox/new/conversation/addRecipients", {
+            method: "post",
+            body: JSON.stringify({conversationId, recipientId}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        console.log("New conversation Id: " + conversationId);
+    }
+
+    //For message
+    //Post message
+    function handleSubmitMessage(e) {
+        e.preventDefault();
+
+    }
+
+    return (
+        <div>
+            <h2>New conversation</h2>
+
+            <div id="new-conversation-div">
+                <form onSubmit={handleSubmitConversationTitle}>
+                    <label>
+                        Conversation title:
+                        <input type="text"
+                               value={conversationTitle}
+                               onChange={(e) => setConversationTitle(e.target.value)}
+                        />
+                    </label>
+                    <button>Submit conv</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitRecipients}>
+                    <h4>Recipients: </h4>
+
+                    {recipients.map((u) => (
+                        <button id={u.id} value={u.id}>{u.email}</button>
+                    ))}
+                    <button>Submit recipients</button>
+                </form>
+            </div>
+            <hr></hr>
+
+            <div>
+                <form onSubmit={handleSubmitMessage}>
+                    <CreateMessage/>
+                    <button>Submit message</button>
+                </form>
+            </div>
+
+        </div>
+    )
+}
+
+// Create new conversation - WORK
 // async function CreateNewConversationTitle() {
 //     const [conversationTitle, setConversationTitle] = useState("");
 //     const [conversationId, setConversationId] = useState(0);
@@ -288,66 +280,56 @@ function ShowConversationForUser({user}) {
 
 
 // Function only finds all users except current user - WORKS
-function FindConversationUsers() {
-    const [users, setUsers] = useState([]); //All users except current
+// function FindConversationUsers(id) {
+//     const [recipients, setRecipients] = useState([]); //All users except current
+//
+//     useEffect(() => {
+//         const fetchUsers = async () => {
+//             const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + id);
+//             setRecipients(await res.json());
+//
+//             // console.log("FindConversationUsers() - Should show list of users: " +);
+//             // return users;
+//         }
+//         fetchUsers()
+//             .catch(console.error);
+//         console.log(fetchUsers());
+//     }, []);
+//
+//     return recipient;
+// }
+
+// Add users to array
+let recipientId;
+
+function FindRecipientsToAdd({user, recipients, setRecipients}) {
 
     useEffect(() => {
-        if (currentUserId === 0) {
-            return;
-        }
-
         const fetchUsers = async () => {
-            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + currentUserId);
-            setUsers(await res.json());
-
-            // console.log("FindConversationUsers() - Should show list of users: " +);
-            // return users;
+            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + user.id);
+            setRecipients(await res.json());
         }
         fetchUsers()
             .catch(console.error);
         console.log(fetchUsers());
     }, []);
 
-    return users;
-}
-
-// Add users to array
-let recipientId;
-
-function AddConversationMembers() {
-    let users = FindConversationUsers();
-
-    //Should add objects to recipientList (ConversationMembers objects)
-    function handleClick(e) {
-        recipientId = (e.target.value);
-        document.getElementById(e.target.value).style.visibility = 'hidden';
-
-        console.log("recipientList: " + recipientId)
-    }
-
-    return (
-        <div>
-            <h4>Recipients: </h4>
-
-            {users.map((u) => (
-                <button id={u.id} value={u.id} onClick={handleClick}>{u.email}</button>
-            ))}
-        </div>
-    )
+    return recipients;
 }
 
 function CreateMessage({setMessages}) {
     async function handleSubmit(e) {
-        e.preventDefault;
+        e.preventDefault();
+
         const res = await fetch("api/newMessage");
         //Append new message to the messages state
-        setMessages(    (oldMessages) => [...oldMessages, res.json()]       );
+        setMessages((oldMessages) => [...oldMessages, res.json()]);
     }
+
     return (
         <label>
             Message:
-            <input type="text">
-            </input>
+            <input type="text" id="message"></input>
         </label>
     )
 }
@@ -357,8 +339,6 @@ function CreateMessage({setMessages}) {
 function ShowMessageBox(conversationId) {
     const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([]);
-
-
 
     useEffect(() => {
         (async () => {
@@ -387,14 +367,17 @@ function ShowMessageBox(conversationId) {
 
 function App() {
     const [user, setUser] = useState();
+    const [recipients, setRecipients] = useState();
 
     return (
         <div className="App">
-            <h1 id="app-title" >I Seek You</h1>
+            <h1 id="app-title">I Seek You</h1>
 
             <ListUsers user={user} setUser={setUser}/>
             {user && <UpdateUserSettings user={user}/>}
             {user && <ShowConversationForUser user={user}/>}
+            {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
+            {user && <CreateNewConversation recipients={recipients}/>}
         </div>
     );
 }

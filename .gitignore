@@ -3,3 +3,4 @@
 *.iml
 /src/main/resources/webapp
 /application.properties
+/docker-compose.yml
