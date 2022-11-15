@@ -69,7 +69,7 @@ function UpdateUserSettings({user}) {
     }
 
     return (
-        <div>
+        <div id="user-settings">
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
@@ -157,9 +157,10 @@ function ShowConversationForUser({user}) {
             content = message
  */
 
-function CreateNewConversation(recipients) {
+function CreateNewConversation({recipients}) {
     const [conversationTitle, setConversationTitle] = useState("");
     const [conversationId, setConversationId] = useState(0);
+    const [recipientId, setRecipientId] = useState("");
 
     //Should POST a conversation object (title)
     //Method does also return id.
@@ -175,6 +176,8 @@ function CreateNewConversation(recipients) {
         })
         setConversationId(await res.json());
         console.log("New conversation title: " + conversationTitle);
+        console.log("New conversation Id: " + conversationId);
+
     }
 
     // This should be for handling who to add to a conversation
@@ -182,6 +185,8 @@ function CreateNewConversation(recipients) {
     //POST recipients
     async function handleSubmitRecipients(e) {
         e.preventDefault()
+        setRecipientId(e.target.value);
+        console.log("Recipient Id: " + recipientId);
 
         await fetch("api/user/inbox/new/conversation/addRecipients", {
             method: "post",
@@ -190,7 +195,6 @@ function CreateNewConversation(recipients) {
                 "Content-Type": "application/json",
             },
         });
-        console.log("New conversation Id: " + conversationId);
     }
 
     //For message
@@ -216,18 +220,17 @@ function CreateNewConversation(recipients) {
                     <button>Submit conv</button>
                 </form>
             </div>
+
             <hr></hr>
 
             <div>
-                <form onSubmit={handleSubmitRecipients}>
-                    <h4>Recipients: </h4>
-
-                    {recipients.map((u) => (
-                        <button id={u.id} value={u.id}>{u.email}</button>
-                    ))}
-                    <button>Submit recipients</button>
-                </form>
+                <h4>Recipients: </h4>
+                {recipients.map((r) => (
+                    <button id={r.id} value={r.id} onClick={handleSubmitRecipients}>{r.id} - {r.email}</button>
+                ))}
+                <button>Submit recipients</button>
             </div>
+
             <hr></hr>
 
             <div>
@@ -236,7 +239,6 @@ function CreateNewConversation(recipients) {
                     <button>Submit message</button>
                 </form>
             </div>
-
         </div>
     )
 }
@@ -341,6 +343,10 @@ function ShowMessageBox(conversationId) {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
+        if (conversationId === 0) {
+            return;
+        }
+
         (async () => {
             const res = await fetch("/api/user/inbox/messages?conversationId=" + conversationId.id);
             setMessages(await res.json());
@@ -367,7 +373,7 @@ function ShowMessageBox(conversationId) {
 
 function App() {
     const [user, setUser] = useState();
-    const [recipients, setRecipients] = useState();
+    const [recipients, setRecipients] = useState([]);
 
     return (
         <div className="App">

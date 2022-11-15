@@ -18,7 +18,7 @@ public class MessageDao extends AbstractDao<Message> {
     @Override
     public int save(Message message) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into messages (sender_id, date, content, conversation_id) values (?, ?, ?, ?) ";
+            String query = "insert into messages (sender_id, created, content, conversation_id) values (?, ?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setInt(1, message.getSenderId());
                 stmt.setDate(2, message.getMessageDate());
@@ -38,12 +38,12 @@ public class MessageDao extends AbstractDao<Message> {
     public List<Message> retrieveAllMessagesByConversationId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
-                    SELECT Users.full_name, Messages.message_id, Messages.sender_id, Messages.date, Messages.content
+                    SELECT Users.full_name, Messages.created, Messages.content
                     FROM Users
                     JOIN Messages
                         ON Users.user_id = Messages.sender_id
                     WHERE conversation_id = ?
-                    ORDER BY date DESC
+                    ORDER BY created DESC
                     """;
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
@@ -53,7 +53,7 @@ public class MessageDao extends AbstractDao<Message> {
                         Message message = new Message();
                         message.setSenderName(resultSet.getString("full_name"));
                         message.setMessageText(resultSet.getString("content"));
-                        message.setMessageDate(resultSet.getDate("date"));
+                        message.setMessageDate(resultSet.getDate("created"));
                         conversationMessages.add(message);
                     }
                     return conversationMessages;

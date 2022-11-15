@@ -1,8 +1,13 @@
+div {
+  border: solid black 1px;
+}
+
+
 #app-title {
   position: absolute;
   text-align: center;
   top: 0;
-  transform: translateX(-100%);
+  transform: translateX(0);
 }
 
 #show-users-drop-list {
@@ -29,16 +34,14 @@
 #conversations {
   position: absolute;
   font-size: 12px;
-  left: 30%;
-  top: 20%;
+  left: 20%;
+  top: 10%;
 }
 
 #show-messages {
   position: absolute;
   font-size: 12px;
   background: lightgray;
-  width: 130%;
-
 }
 
 #new-conversation {
