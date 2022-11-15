@@ -9,15 +9,15 @@ public class Message {
     private int senderId;
     private int conversationId;
     private String senderName;
-    private String messageText;
+    private String content;
     private Date messageDate;
 
     public Message() {
     }
 
-    public Message(int sender, String messageText) {
+    public Message(int sender, String content) {
         this.senderId = sender;
-        this.messageText = messageText;
+        this.content = content;
         this.messageDate = Date.valueOf(LocalDate.now());
     }
 
@@ -29,12 +29,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getMessageText() {
-        return messageText;
+    public String getContent() {
+        return content;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Date getMessageDate() {

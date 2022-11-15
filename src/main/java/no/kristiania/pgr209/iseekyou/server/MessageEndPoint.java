@@ -35,14 +35,6 @@ public class MessageEndPoint {
         return userDao.listAll();
     }
 
-    //Runs after above method. This is to get the user again to change font color based on user selected.
-    @Path("/user/setcolor")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public User findUser(@QueryParam("userColor") int id) throws SQLException {
-        return userDao.retrieve(id);
-    }
-
     //Updates user settings if changed fields are not empty.
     @Path("/user/settings")
     @PUT

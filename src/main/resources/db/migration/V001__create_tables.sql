@@ -16,13 +16,12 @@ CREATE TABLE messages (
     CONSTRAINT fk_sender_user_id FOREIGN KEY(sender_id) REFERENCES users(user_id),
     created SMALLDATETIME DEFAULT GETDATE(),
     content VARCHAR(4000),
-    conversation_id INT,
-    FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id)
+    conversation_id INT CONSTRAINT fk_messages_conversation FOREIGN KEY REFERENCES conversations(conversation_id)
 );
 
 CREATE TABLE conversation_members (
     user_id INT,
     CONSTRAINT fk_conversation_user_id FOREIGN KEY(user_id) REFERENCES users(user_id),
     conversation_id INT,
-    FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id)
+    CONSTRAINT fk_conversation_member FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id)
 );

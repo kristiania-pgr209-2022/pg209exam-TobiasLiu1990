@@ -181,7 +181,7 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
 
 //1st param: user - is passed to the CreateMessage component.
 //2nd param: recipients - is a list of the people you can send to.
-function CreateNewConversation({user, recipients, setMessages}) {
+function CreateNewConversation({user, recipients}) {
     const [conversationTitle, setConversationTitle] = useState("");
     const [conversationId, setConversationId] = useState(0);
     let recipientId = 0;
@@ -198,7 +198,7 @@ function CreateNewConversation({user, recipients, setMessages}) {
             },
         });
         if (res.ok) {
-            document.getElementById("new-conversation-div").style.visibility = 'hidden';
+            document.getElementById("new-conversation-title-div").style.visibility = 'hidden';
             setConversationId(await res.json());
         }
         console.log("New conversation title: " + conversationTitle);
@@ -222,9 +222,6 @@ function CreateNewConversation({user, recipients, setMessages}) {
 
     //For message
     //Post message
-    function handleSubmitMessage(e) {
-        e.preventDefault();
-    }
 
     return (
         <div id="new-conversation-div">
@@ -253,7 +250,7 @@ function CreateNewConversation({user, recipients, setMessages}) {
             </div>
 
             <div id="new-message-div">
-                <CreateMessage setMessages={setMessages} conversationId={conversationId} userId={user.id}/>
+                <CreateMessage conversationId={conversationId} userId={user.id}/>
             </div>
         </div>
     )
@@ -274,28 +271,40 @@ function FindRecipientsToAdd({user, recipients, setRecipients}) {
     return recipients;
 }
 
-//sender_id (usern), content, conversation_id
-function CreateMessage({setMessages, conversationId, userId}) {
+//sender_id (usern), content, conversation_id. senderId = userId
+function CreateMessage({conversationId, userId}) {
+    const [content, setContent] = useState("");
+    let senderId = userId;
+
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setContent(e.target.value);
+        console.log("Sender id: " + senderId)
+        console.log("Content to send: " + content)
+        console.log("Conversion Id: " + conversationId)
 
         const res = await fetch("api/user/inbox/new/conversation/message", {
             method: "post",
-            body: JSON.stringify({userId, setMessages, conversationId}),
+            body: JSON.stringify({senderId, content, conversationId}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
         //Append new message to the messages state
-        setMessages((oldMessages) => [...oldMessages, res.json()]);
+        // setMessages((oldMessages) => [...oldMessages, res.json()]);
     }
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
                 <label>
                     Message:
-                    <input type="text" id="message-input"></input>
+                    <input
+                        type="text"
+                        value={content}
+                        id="message-input"
+                        onChange={(e) => setContent(e.target.value)}></input>
                 </label>
                 <button>Submit message</button>
             </form>
@@ -317,7 +326,7 @@ function App() {
             {user && <UpdateUserSettings user={user}/>}
             {user && <ShowConversationForUser user={user} messages={messages} setMessages={setMessages}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
-            {user && <CreateNewConversation user={user} recipients={recipients} setMessages={setMessages}/>}
+            {user && <CreateNewConversation user={user} recipients={recipients}/>}
         </div>
     );
 }

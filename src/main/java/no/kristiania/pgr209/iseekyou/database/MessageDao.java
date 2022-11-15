@@ -18,12 +18,11 @@ public class MessageDao extends AbstractDao<Message> {
     @Override
     public int save(Message message) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into messages (sender_id, created, content, conversation_id) values (?, ?, ?, ?) ";
+            String query = "insert into messages (sender_id, content, conversation_id) values (?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setInt(1, message.getSenderId());
-                stmt.setDate(2, message.getMessageDate());
-                stmt.setString(3, message.getMessageText());
-                stmt.setInt(4, message.getId());
+                stmt.setString(2, message.getContent());
+                stmt.setInt(3, message.getId());
                 stmt.executeUpdate();
 
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
@@ -52,7 +51,7 @@ public class MessageDao extends AbstractDao<Message> {
                     while (resultSet.next()) {
                         Message message = new Message();
                         message.setSenderName(resultSet.getString("full_name"));
-                        message.setMessageText(resultSet.getString("content"));
+                        message.setContent(resultSet.getString("content"));
                         message.setMessageDate(resultSet.getDate("created"));
                         conversationMessages.add(message);
                     }
