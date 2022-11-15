@@ -10,7 +10,8 @@ public class User {
     public User() {
     }
 
-    public User(String fullName, String email, String color) {
+    public User(int id, String fullName, String email, String color) {
+        this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.color = color;
