@@ -16,7 +16,8 @@ CREATE TABLE messages (
     CONSTRAINT fk_sender_user_id FOREIGN KEY(sender_id) REFERENCES users(user_id),
     created SMALLDATETIME DEFAULT GETDATE(),
     content VARCHAR(4000),
-    conversation_id INT CONSTRAINT fk_messages_conversation FOREIGN KEY REFERENCES conversations(conversation_id)
+    conversation_id INT,
+    CONSTRAINT fk_messages_conversation FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id)
 );
 
 CREATE TABLE conversation_members (
