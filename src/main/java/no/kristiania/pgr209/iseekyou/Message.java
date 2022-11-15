@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class Message {
 
     private int id;
-    private int sender;
+    private int senderId;
     private String senderName;
     private String messageText;
     private Date messageDate;
@@ -14,13 +14,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(int sender, String senderName, String messageText) {
-        this.sender = sender;
-        this.senderName = senderName;
+    public Message(int sender, String messageText) {
+        this.senderId = sender;
         this.messageText = messageText;
         this.messageDate = Date.valueOf(LocalDate.now());
     }
-
 
     public int getId() {
         return id;
@@ -46,12 +44,12 @@ public class Message {
         this.messageDate = messageDate;
     }
 
-    public int getSender() {
-        return sender;
+    public int getSenderId() {
+        return senderId;
     }
 
-    public void setSender(int sender) {
-        this.sender = sender;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
     public String getSenderName() {

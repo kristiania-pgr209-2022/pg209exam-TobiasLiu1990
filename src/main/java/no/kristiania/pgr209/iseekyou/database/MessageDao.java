@@ -8,28 +8,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDao {
-
-    private final DataSource dataSource;
+public class MessageDao extends AbstractDao<Message> {
 
     @Inject
     public MessageDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
-    public void save(Message message, String fullName, int conversationId) throws SQLException {
+    @Override
+    public int save(Message message) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into messages (sender_id, date, content, conversation_id) values (?, ?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, fullName);
+                stmt.setInt(1, message.getSenderId());
                 stmt.setDate(2, message.getMessageDate());
                 stmt.setString(3, message.getMessageText());
-                stmt.setInt(4, conversationId);
+                stmt.setInt(4, message.getId());
                 stmt.executeUpdate();
 
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
                     message.setId(generatedKeys.getInt(1));
+                    return message.getId();
                 }
             }
         }
@@ -37,7 +37,6 @@ public class MessageDao {
 
     public List<Message> retrieveAllMessagesByConversationId(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-//            String query = "select * from messages where conversation_id = ? order by date desc";
             String query = """
                     SELECT Users.full_name, Messages.message_id, Messages.sender_id, Messages.date, Messages.content
                     FROM Users
@@ -52,9 +51,7 @@ public class MessageDao {
                     List<Message> conversationMessages = new ArrayList<>();
                     while (resultSet.next()) {
                         Message message = new Message();
-//                        message.setId(resultSet.getInt("message_id"));
                         message.setSenderName(resultSet.getString("full_name"));
-//                        message.setSender(resultSet.getInt("sender_id"));
                         message.setMessageText(resultSet.getString("content"));
                         message.setMessageDate(resultSet.getDate("date"));
                         conversationMessages.add(message);
@@ -65,5 +62,3 @@ public class MessageDao {
         }
     }
 }
-
-

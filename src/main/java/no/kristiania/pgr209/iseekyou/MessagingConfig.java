@@ -1,9 +1,7 @@
 package no.kristiania.pgr209.iseekyou;
 
 import jakarta.inject.Singleton;
-import no.kristiania.pgr209.iseekyou.database.ConversationDao;
-import no.kristiania.pgr209.iseekyou.database.MessageDao;
-import no.kristiania.pgr209.iseekyou.database.UserDao;
+import no.kristiania.pgr209.iseekyou.database.*;
 import no.kristiania.pgr209.iseekyou.server.MessageEndPoint;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -23,6 +21,7 @@ public class MessagingConfig extends ResourceConfig {
                 bind(UserDao.class).to(UserDao.class).in(Singleton.class);
                 bind(MessageDao.class).to(MessageDao.class).in(Singleton.class);
                 bind(ConversationDao.class).to(ConversationDao.class).in(Singleton.class);
+                bind(ConversationMembersDao.class).to(ConversationMembersDao.class).in(Singleton.class);
                 bind(dataSource).to(DataSource.class);
             }
         });

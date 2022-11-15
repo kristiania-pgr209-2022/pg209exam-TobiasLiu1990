@@ -1,5 +1,6 @@
 package no.kristiania.pgr209.iseekyou.database;
 
+import jakarta.inject.Inject;
 import no.kristiania.pgr209.iseekyou.User;
 
 import javax.sql.DataSource;
@@ -11,10 +12,12 @@ import java.util.List;
 
 public class UserDao extends AbstractDao<User> {
 
+    @Inject
     public UserDao(DataSource dataSource) {
         super(dataSource);
     }
 
+    @Override
     public int save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into users (full_name, email_address, favorite_color) values (?, ?, ?)";

@@ -13,5 +13,6 @@ public abstract class AbstractDao <T> {
     public AbstractDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+
     public abstract int save(T entity) throws SQLException;
 }

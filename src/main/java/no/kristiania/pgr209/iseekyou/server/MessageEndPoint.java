@@ -90,7 +90,7 @@ public class MessageEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
-        return conversationDao.retrieveAllConversationsByUserId(userId);
+        return conversationMembersDao.retrieveAllConversationsByUserId(userId);
     }
 
     //Shows all messages in a conversation when a conversation is clicked.
