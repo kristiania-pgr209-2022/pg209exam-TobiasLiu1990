@@ -150,17 +150,6 @@ function ShowConversationForUser({user, messages, setMessages}) {
                 </div>
             ))}
 
-
-            {/*{participants.map((p) => (*/}
-            {/*    <div>{p}</div>*/}
-            {/*))}*/}
-
-            {/*{conversation.map((c) => (*/}
-            {/*    <div>*/}
-            {/*        <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}*/}
-            {/*                value={c.id}>{c.id} - {c.conversationTitle}</button>*/}
-            {/*    </div>*/}
-            {/*))}*/}
             <div id="show-messages-div">
                 <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
             </div>
