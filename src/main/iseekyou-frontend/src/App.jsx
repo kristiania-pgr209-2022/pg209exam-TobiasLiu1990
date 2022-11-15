@@ -124,7 +124,7 @@ function ShowConversationForUser({user, messages, setMessages}) {
     //Show all participants in each conversation
     useEffect(() => {
         (async () => {
-            const res2 = await fetch("api/user/inbox/conversationMembers?userId=" + user.id);
+            const res2 = await fetch("/api/user/inbox/conversation/members?userId=" + user.id);
             setParticipants(await res2.json());
         })();
     },  [user.id])
@@ -136,6 +136,10 @@ function ShowConversationForUser({user, messages, setMessages}) {
     return (
         <div>
             <h2>Conversations</h2>
+
+            {participants.map((p) => (
+                <div>{p.fullName}</div>
+            ))}
 
             {conversation.map((c) => (
                 <div>

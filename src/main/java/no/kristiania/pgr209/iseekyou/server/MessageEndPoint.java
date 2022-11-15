@@ -61,6 +61,13 @@ public class MessageEndPoint {
         return conversationMembersDao.retrieveAllConversationsByUserId(userId);
     }
 
+    @Path("/user/inbox/conversation/members")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<String> conversationParticipants(@QueryParam("userId") int userId, int conversationId) throws SQLException {
+        return userDao.getConversationParticipants(userId, conversationId);
+    }
+
     //Shows all messages in a conversation when a conversation is clicked.
     @Path("/user/inbox/messages")
     @GET
