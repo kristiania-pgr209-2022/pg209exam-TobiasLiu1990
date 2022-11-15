@@ -26,7 +26,7 @@ public class UserDao extends AbstractDao<User> {
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
                     user.setId(generatedKeys.getInt(1));
-                    return user;
+                    return user.getId();
                 }
             }
         }
@@ -99,18 +99,6 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
-        var user = new User();
-        user.setId(resultSet.getInt("user_id"));
-        user.setFullName(resultSet.getString("full_name"));
-        user.setEmail(resultSet.getString("email_address"));
-        user.setColor(resultSet.getString("favorite_color"));
-//        UserColor color = UserColor.valueOf(resultSet.getString("favorite_color").toUpperCase());
-//        user.setColor(color);
-        return user;
-    }
-
-
     public List<User> getAllUsersExceptSender(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users where user_id != ?";
@@ -126,29 +114,13 @@ public class UserDao extends AbstractDao<User> {
             }
         }
     }
+
+    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
+        var user = new User();
+        user.setId(resultSet.getInt("user_id"));
+        user.setFullName(resultSet.getString("full_name"));
+        user.setEmail(resultSet.getString("email_address"));
+        user.setColor(resultSet.getString("favorite_color"));
+        return user;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

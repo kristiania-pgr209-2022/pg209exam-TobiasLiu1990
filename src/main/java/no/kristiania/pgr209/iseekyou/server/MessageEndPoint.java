@@ -24,8 +24,8 @@ public class MessageEndPoint {
     @Inject
     public MessageDao messageDao;
 
-    //@Inject
-    //public ConversationMembersDao conversationMembersDao;
+    @Inject
+    public ConversationMembersDao conversationMembersDao;
 
     //Lists all users for drop-down menu in front-end
     @Path("/user")
@@ -123,10 +123,10 @@ public class MessageEndPoint {
     @Path("/user/inbox/new/conversation/addRecipients")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public void addConversationUsers(ConversationMembers recipient) throws SQLException {
+    public int addConversationUsers(ConversationMembers recipient) throws SQLException {
         System.out.println("Conversation ID: " + recipient.getConversationId());
         System.out.println("Recipients ID: " + recipient.getRecipientId());
-
+        return conversationMembersDao.save(recipient);
         //Query to add to Conversation_Members table
     }
 
@@ -136,7 +136,4 @@ public class MessageEndPoint {
     public void addConversationMessage(Message message) {
         //Add message to DB
     }
-
-
-
 }

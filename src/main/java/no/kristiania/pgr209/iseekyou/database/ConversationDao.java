@@ -8,13 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConversationDao {
+public class ConversationDao extends AbstractDao<Conversation>{
 
-    private final DataSource dataSource;
-
-    @Inject
     public ConversationDao(DataSource dataSource) {
-        this.dataSource = dataSource;
+        super(dataSource);
     }
 
     //Saves a new conversation and also returns the object.
@@ -86,5 +83,4 @@ public class ConversationDao {
         }
         return null;
     }
-
 }

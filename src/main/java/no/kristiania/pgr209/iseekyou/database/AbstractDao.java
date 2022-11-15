@@ -14,6 +14,4 @@ public abstract class AbstractDao <T> {
         this.dataSource = dataSource;
     }
     public abstract int save(T entity) throws SQLException;
-    public abstract List<T> listAll() throws SQLException;
-    public abstract T retrieve(int id) throws SQLException;
 }
