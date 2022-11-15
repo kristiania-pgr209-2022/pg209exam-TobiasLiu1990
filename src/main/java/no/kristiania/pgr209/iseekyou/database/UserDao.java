@@ -15,7 +15,7 @@ public class UserDao extends AbstractDao<User> {
         super(dataSource);
     }
 
-    public void save(User user) throws SQLException {
+    public int save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into users (full_name, email_address, favorite_color) values (?, ?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -26,6 +26,7 @@ public class UserDao extends AbstractDao<User> {
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
                     user.setId(generatedKeys.getInt(1));
+                    return user;
                 }
             }
         }

@@ -13,7 +13,7 @@ public abstract class AbstractDao <T> {
     public AbstractDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    public abstract T save(T entity) throws SQLException;
+    public abstract int save(T entity) throws SQLException;
     public abstract List<T> listAll() throws SQLException;
     public abstract T retrieve(int id) throws SQLException;
 }
