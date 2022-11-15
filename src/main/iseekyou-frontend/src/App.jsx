@@ -61,13 +61,11 @@ function UpdateUserSettings({user}) {
                 "Content-Type": "application/json",
             },
         });
-
         if (res.ok) {
             user.color = color;
             user.email = email;
             user.fullName = fullName;
         }
-
     }
 
     return (
@@ -109,7 +107,6 @@ function UpdateUserSettings({user}) {
     )
 }
 
-
 //Get all conversations for user.
 function ShowConversationForUser({user}) {
     const [loading, setLoading] = useState(true);
@@ -141,10 +138,6 @@ function ShowConversationForUser({user}) {
             <div id="show-messages">
                 <ShowMessageBox id={conversationId}/>
             </div>
-
-            {/*<div id="new-conversation">*/}
-            {/*    <CreateNewConversation/>*/}
-            {/*</div>*/}
         </div>
     );
 }
@@ -164,7 +157,7 @@ function ShowConversationForUser({user}) {
             content = message
  */
 
-function CreateNewConversation() {
+function CreateNewConversation(recipients) {
     const [conversationTitle, setConversationTitle] = useState("");
     const [conversationId, setConversationId] = useState(0);
 
@@ -189,11 +182,6 @@ function CreateNewConversation() {
     //POST recipients
     async function handleSubmitRecipients(e) {
         e.preventDefault()
-
-        function handleRecipientClick(e) {
-            //knappar
-            e.preventDefault()
-        }
 
         await fetch("api/user/inbox/new/conversation/addRecipients", {
             method: "post",
@@ -234,8 +222,8 @@ function CreateNewConversation() {
                 <form onSubmit={handleSubmitRecipients}>
                     <h4>Recipients: </h4>
 
-                    {users.map((u) => (
-                        <button id={u.id} value={u.id} onClick={handleRecipientClick}>{u.email}</button>
+                    {recipients.map((u) => (
+                        <button id={u.id} value={u.id}>{u.email}</button>
                     ))}
                     <button>Submit recipients</button>
                 </form>
@@ -326,32 +314,13 @@ function FindRecipientsToAdd({user, recipients, setRecipients}) {
         console.log(fetchUsers());
     }, []);
 
-    // let users = FindConversationUsers(user.id);
-    // // Should add objects to recipientList (ConversationMembers objects)
-    // function handleClick(e) {
-    //     setRecipients(e.target.value);
-    //
-    //     recipientId = (e.target.value);
-    //     document.getElementById(e.target.value).style.visibility = 'hidden';
-    //
-    //     console.log("recipientList: " + recipientId)
-    // }
-
     return recipients;
-    // (
-    //     <div>
-    //         <h4>Recipients: </h4>
-    //
-    //         {users.map((u) => (
-    //             <button id={u.id} value={u.id} onClick={handleClick}>{u.email}</button>
-    //         ))}
-    //     </div>
-    // )
 }
 
 function CreateMessage({setMessages}) {
     async function handleSubmit(e) {
-        e.preventDefault;
+        e.preventDefault();
+
         const res = await fetch("api/newMessage");
         //Append new message to the messages state
         setMessages((oldMessages) => [...oldMessages, res.json()]);
@@ -360,8 +329,7 @@ function CreateMessage({setMessages}) {
     return (
         <label>
             Message:
-            <input type="text">
-            </input>
+            <input type="text" id="message"></input>
         </label>
     )
 }
@@ -409,6 +377,7 @@ function App() {
             {user && <UpdateUserSettings user={user}/>}
             {user && <ShowConversationForUser user={user}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
+            {user && <CreateNewConversation recipients={recipients}/>}
         </div>
     );
 }
