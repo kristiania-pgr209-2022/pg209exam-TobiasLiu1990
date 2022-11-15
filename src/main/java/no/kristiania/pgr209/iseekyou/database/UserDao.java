@@ -62,13 +62,12 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    public void updateEmail(User user, int id) throws SQLException {
-        String email = user.getEmail();
+    public void updateEmail(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "update users set email_address = ? where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, email);
-                stmt.setInt(2, id);
+                stmt.setString(1, user.getEmail());
+                stmt.setInt(2, user.getId());
                 stmt.executeUpdate();
             }
         }

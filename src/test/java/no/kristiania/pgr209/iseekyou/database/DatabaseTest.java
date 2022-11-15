@@ -57,7 +57,7 @@ public class DatabaseTest {
 
         // var jacobsPreferredNewName = new User("Jacob PleaseChangeMyName", "CrashTestDummy@Junit.tst", "Magenta");;
         jacob.setEmail("MmmmMmmmMmmm@Junit.tst");
-        userDao.updateEmail(jacob, jacob.getId());
+        userDao.updateEmail(jacob);
 
         assertThat(userDao.retrieve(jacob.getId()))
                 .hasNoNullFieldsOrProperties()
