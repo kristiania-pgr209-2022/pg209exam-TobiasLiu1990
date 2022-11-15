@@ -98,15 +98,7 @@ function UpdateUserSettings({user}) {
     )
 }
 
-/*
-    !!!!
-    NEED TO SHOW WHO IS IN THE CONVERSATION
-    !!!!
-    new query to show whose in the current thread for user.
-
- */
-//Get all conversations for user.
-//Takes in messages + setMessages state to pass to ShowMessageBox.
+//Takes messages + setMessages state to pass to ShowMessageBox.
 function ShowConversationForUser({user, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
@@ -185,21 +177,6 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
     );
 }
 
-/*
-    1. Table Conversation
-        Title finished in CreateConversationTitle
-    2. Need to POST:
-        Table Conversation_members:
-            Newest conversation ID
-            user ID
-    3. Need to POST:
-        Table Messages:
-            conversation_id (fk)
-            sender_id (user_id)
-            date (auto)
-            content = message
- */
-
 //1st param: user - is passed to the CreateMessage component.
 //2nd param: recipients - is a list of the people you can send to.
 function CreateNewConversation({user, recipients}) {
@@ -218,31 +195,30 @@ function CreateNewConversation({user, recipients}) {
                 "Content-Type": "application/json",
             },
         });
+        //Set conversation title div to hidden after successful post.
         if (res.ok) {
-            document.getElementById("new-conversation-title-div").style.visibility = 'hidden';
+            document.getElementById("new-conversation-title-div").style.visibility = "hidden";
             setConversationId(await res.json());
         }
-        console.log("New conversation title: " + conversationTitle);
     }
 
     //POST - Uses ID from conversation title above + recipientID (who you want to send to)
     async function handleSubmitRecipients(e) {
         e.preventDefault();
         recipientId = e.target.value;
-        console.log("Recipient Id: " + recipientId);
-        console.log("New conversation Id: " + conversationId);
 
-        await fetch("api/user/inbox/new/conversation/addRecipients", {
+        const res = await fetch("api/user/inbox/new/conversation/addRecipients", {
             method: "post",
             body: JSON.stringify({recipientId, conversationId}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
+        //Set recipient buttons to hidden after successful post.
+        if (res.ok) {
+            document.getElementById(recipientId).style.visibility = "hidden";
+        }
     }
-
-    //For message
-    //Post message
 
     return (
         <div id="new-conversation-div">
@@ -292,7 +268,6 @@ function FindRecipientsToAdd({user, recipients, setRecipients}) {
     return recipients;
 }
 
-//sender_id (usern), content, conversation_id. senderId = userId
 function CreateMessage({conversationId, userId}) {
     const [content, setContent] = useState("");
     let senderId = userId;
@@ -312,6 +287,11 @@ function CreateMessage({conversationId, userId}) {
                 "Content-Type": "application/json",
             },
         });
+        //Set submit message div to hidden after successful post. Also hides remaining recipients.
+        if (res.ok) {
+            document.getElementById("new-message-div").style.visibility = "hidden";
+            document.getElementById("new-recipients-div").style.visibility = "hidden";
+        }
         //Append new message to the messages state
         // setMessages((oldMessages) => [...oldMessages, res.json()]);
     }

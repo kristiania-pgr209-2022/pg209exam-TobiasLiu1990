@@ -99,10 +99,7 @@ public class MessageEndPoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public int addConversationUsers(ConversationMembers recipient) throws SQLException {
-        System.out.println("Conversation ID: " + recipient.getConversationId());
-        System.out.println("Recipients ID: " + recipient.getRecipientId());
         return conversationMembersDao.save(recipient);
-        //Query to add to Conversation_Members table
     }
 
     @Path("/user/inbox/new/conversation/message")
