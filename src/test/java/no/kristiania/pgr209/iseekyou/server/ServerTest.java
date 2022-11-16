@@ -46,7 +46,7 @@ public class ServerTest {
 
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains(",\"fullName\":\"Ola Nordman\",\"id\":1},{\"color\":\"black\",\"email\":\"snorre");
+                .contains(",\"fullName\":\"Ola Nordman\",\"id\":1},{\"age\":64,\"color\":\"black\",\"email\":\"snorre");
     }
 
     private HttpURLConnection openConnection(String path) throws IOException {
