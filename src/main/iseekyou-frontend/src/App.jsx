@@ -37,6 +37,10 @@ function ListUsers({user, setUser}) {
     );
 }
 
+function SetUserColor(color) {
+    document.getElementById("app-title").style.color = color;
+}
+
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
@@ -47,7 +51,7 @@ function UpdateUserSettings({user}) {
 
         const res = await fetch("/api/user/settings?userId=" + user.id, {
             method: "put",
-            body: JSON.stringify({id, fullName, email, color}),
+            body: JSON.stringify({fullName, email, color}),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -128,23 +132,29 @@ function ShowConversationForUser({user, messages, setMessages}) {
         return <div>Loading conversations...</div>
     }
 
+    //Sets the reply button to visible when a conversation is opened.
+    function handleClick(e) {
+        setConversationId(e.target.value);
+        document.getElementById("reply-div").style.visibility = "visible";
+    }
+
     return (
         <div>
             <h2>Conversations</h2>
-            <h5>Members in each conversation</h5>
 
-            {participants.map((p) => (<div>{p}</div>))}
+            <h5 style={{border: "solid black 1px"}}>
+                Members in each conversation <hr></hr>
+                {participants.map((p) => (<div>{p}</div>))}
+            </h5>
 
             {conversation.map((c) => (
                 <div>
-                    <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}
+                    <button key={c.id} onClick={handleClick}
                             value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
 
-            <div id="show-messages-div">
-                <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
-            </div>
+            <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
         </div>
     );
 }
@@ -166,15 +176,46 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
     }
 
     return (
-        <div>
+        <div id="show-messages-div">
             {messages.map((m) => (
                 <>
                     <h4>{m.senderName} - {m.messageDate}</h4>
                     <p>{m.content}</p>
                 </>
             ))}
+
+            <ReplyToMessage/>
         </div>
     );
+}
+
+//Should return the reply posted. Gets added on top of all the prev. messages.
+function ReplyToMessage({setMessages}) {
+    const [reply, setReply] = useState("");
+
+    async function handleSubmit() {
+        const res = await fetch("api/user/inbox/conversation/reply", {
+            method: "post",
+            body: JSON.stringify({}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        //Append new message to the messages state
+        if (res.ok) {
+            setMessages((oldMessages) => [...oldMessages, res.json()]);
+        }
+    }
+
+    return (
+        <div id="reply-div" style={{visibility: "hidden"}}>
+            <form onSubmit={handleSubmit}>
+                <input type="text" value={reply}
+                       onChange={(e) => setReply(e.target.value)}></input>
+                <button>Reply</button>
+            </form>
+        </div>
+    )
 }
 
 //1st param: user - is passed to the CreateMessage component.
@@ -246,26 +287,11 @@ function CreateNewConversation({user, recipients}) {
                 ))}
             </div>
 
-            <div id="new-message-div">
+            <div>
                 <CreateMessage conversationId={conversationId} userId={user.id}/>
             </div>
         </div>
     )
-}
-
-function FindRecipientsToAdd({user, recipients, setRecipients}) {
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + user.id);
-            setRecipients(await res.json());
-        }
-        fetchUsers()
-            .catch(console.error);
-        console.log(fetchUsers());
-    }, []);
-
-    return recipients;
 }
 
 function CreateMessage({conversationId, userId}) {
@@ -297,15 +323,15 @@ function CreateMessage({conversationId, userId}) {
     }
 
     return (
-        <div>
+        <div id="new-message-div">
             <form onSubmit={handleSubmit}>
                 <label>
                     Message:
-                    <input
+                    <textarea
+                        id="message-input"
                         type="text"
                         value={content}
-                        id="message-input"
-                        onChange={(e) => setContent(e.target.value)}></input>
+                        onChange={(e) => setContent(e.target.value)}></textarea>
                 </label>
                 <button>Submit message</button>
             </form>
@@ -313,6 +339,19 @@ function CreateMessage({conversationId, userId}) {
     )
 }
 
+function FindRecipientsToAdd({user, recipients, setRecipients}) {
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + user.id);
+            setRecipients(await res.json());
+        }
+        fetchUsers()
+            .catch(console.error);
+        console.log(fetchUsers());
+    }, []);
+
+    return recipients;
+}
 
 function App() {
     const [user, setUser] = useState();
@@ -324,6 +363,7 @@ function App() {
             <h1 id="app-title">I Seek You</h1>
 
             <ListUsers user={user} setUser={setUser}/>
+            {user && <SetUserColor user={user}/>}
             {user && <UpdateUserSettings user={user}/>}
             {user && <ShowConversationForUser user={user} messages={messages} setMessages={setMessages}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
