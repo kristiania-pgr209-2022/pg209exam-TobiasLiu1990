@@ -36,6 +36,13 @@ public class MessageEndPoint {
         return userDao.listAll();
     }
 
+    @Path("/user/new")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void saveNewUser(User user) throws SQLException {
+        userDao.save(user);
+    }
+
     //Updates user settings if changed fields are not empty.
     @Path("/user/settings")
     @PUT
@@ -113,6 +120,9 @@ public class MessageEndPoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public int addConversationUsers(ConversationMembers recipient) throws SQLException {
+        System.out.println("user id: " + recipient.getRecipientId());
+        System.out.println("conversation id: " + recipient.getConversationId());
+
         return conversationMembersDao.save(recipient);
     }
 
