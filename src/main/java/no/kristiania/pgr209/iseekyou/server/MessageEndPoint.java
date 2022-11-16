@@ -9,6 +9,7 @@ import no.kristiania.pgr209.iseekyou.Message;
 import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.database.*;
 
+import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class MessageEndPoint {
         }
     }
 
-    //Shows all conversations when a user is selected in drop-down menu.
+    //Shows all conversations for user
     @Path("/user/inbox")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -59,6 +60,7 @@ public class MessageEndPoint {
         return conversationMembersDao.retrieveAllConversationsByUserId(userId);
     }
 
+    //Get everyone in each conversation
     @Path("/user/inbox/conversation/members")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -67,11 +69,22 @@ public class MessageEndPoint {
     }
 
     //Shows all messages in a conversation when a conversation is clicked.
-    @Path("/user/inbox/messages")
+    @Path("/user/inbox/conversation/messages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
+    }
+
+    @Path("user/inbox/conversation/message/reply")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String replyToConversation(Message message) throws SQLException {
+        System.out.println("message id: " + message.getSenderId());
+        System.out.println("content: " + message.getContent());
+        System.out.println("conversation id: " + message.getConversationId());
+
+        return messageDao.reply(message);
     }
 
     //Create new conversation

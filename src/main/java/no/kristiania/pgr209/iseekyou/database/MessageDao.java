@@ -5,7 +5,6 @@ import no.kristiania.pgr209.iseekyou.Message;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class MessageDao extends AbstractDao<Message> {
     @Override
     public int save(Message message) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into messages (sender_id, content, conversation_id) values (?, ?, ?) ";
+            String query = "INSERT INTO messages (sender_id, content, conversation_id) VALUES (?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setInt(1, message.getSenderId());
                 stmt.setString(2, message.getContent());
@@ -43,7 +42,7 @@ public class MessageDao extends AbstractDao<Message> {
                     JOIN Messages
                         ON Users.user_id = Messages.sender_id
                     WHERE conversation_id = ?
-                    ORDER BY created DESC
+                    ORDER BY created
                     """;
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
@@ -57,11 +56,29 @@ public class MessageDao extends AbstractDao<Message> {
 
                         //Parse date later
 
-
                         conversationMessages.add(message);
                     }
                     return conversationMessages;
                 }
+            }
+        }
+    }
+
+    public String reply(Message message) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO messages (sender_id, content, conversation_id) VALUES (?, ?, ?)";
+            try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, message.getSenderId());
+                stmt.setString(2, message.getContent());
+                stmt.setInt(3, message.getConversationId());
+                stmt.executeUpdate();
+
+                return message.getContent();
+//                try (var generatedKeys = stmt.getGeneratedKeys()) {
+//                    generatedKeys.next();
+//                    message.setId(generatedKeys.getInt(1));
+//
+//                }
             }
         }
     }

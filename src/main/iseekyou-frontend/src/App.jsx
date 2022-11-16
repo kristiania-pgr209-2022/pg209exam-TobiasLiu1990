@@ -110,7 +110,8 @@ function UpdateUserSettings({user}) {
 }
 
 //Takes messages + setMessages state to pass to ShowMessageBox.
-function ShowConversationForUser({user, messages, setMessages}) {
+//user param is passed further down to reply.
+function ShowConversationsForUser({user, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
@@ -161,18 +162,18 @@ function ShowConversationForUser({user, messages, setMessages}) {
                 </div>
             ))}
 
-            <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
+            <ShowMessageBox user={user} conversationId={conversationId} messages={messages} setMessages={setMessages}/>
         </div>
     );
 }
 
 //Should show chat messages in a conversation
-function ShowMessageBox({conversationId, messages, setMessages}) {
+function ShowMessageBox({user, conversationId, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/user/inbox/messages?conversationId=" + conversationId);
+            const res = await fetch("/api/user/inbox/conversation/messages?conversationId=" + conversationId);
             setMessages(await res.json());
             setLoading(false);
         })();
@@ -190,35 +191,40 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
                     <p>{m.content}</p>
                 </>
             ))}
-
-            <ReplyToMessage/>
+            <ReplyToMessage user={user} conversationId={conversationId} setMessages={setMessages}/>
         </div>
     );
 }
 
+//Need sender_id, content, conversation_id
 //Should return the reply posted. Gets added on top of all the prev. messages.
-function ReplyToMessage({setMessages}) {
-    const [reply, setReply] = useState("");
+function ReplyToMessage({user, conversationId, setMessages}) {
+    const [content, setContent] = useState("");
+    let senderId = user.id;
 
-    async function handleSubmit() {
-        const res = await fetch("api/user/inbox/conversation/reply", {
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+
+        const res = await fetch("/api/user/inbox/conversation/message/reply", {
             method: "post",
-            body: JSON.stringify({}),
+            body: JSON.stringify({senderId, content, conversationId}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
         //Append new message to the messages state
         if (res.ok) {
-            setMessages((oldMessages) => [...oldMessages, res.json()]);
+            setMessages((oldMessages) => [...oldMessages, res.body]);
+            setContent("");
         }
     }
 
     return (
         <div id="reply-div" style={{visibility: "hidden"}}>
             <form onSubmit={handleSubmit}>
-                <input type="text" value={reply}
-                       onChange={(e) => setReply(e.target.value)}></input>
+                <input id="reply-field" type="text" value={content}
+                       onChange={(e) => setContent(e.target.value)}></input>
                 <button>Reply</button>
             </form>
         </div>
@@ -325,8 +331,6 @@ function CreateMessage({conversationId, userId}) {
             document.getElementById("new-message-div").style.visibility = "hidden";
             document.getElementById("new-recipients-div").style.visibility = "hidden";
         }
-        //Append new message to the messages state
-        // setMessages((oldMessages) => [...oldMessages, res.json()]);
     }
 
     return (
@@ -372,7 +376,7 @@ function App() {
             <ListUsers user={user} setUser={setUser}/>
             {user && <SetUserColor user={user}/>}
             {user && <UpdateUserSettings user={user}/>}
-            {user && <ShowConversationForUser user={user} messages={messages} setMessages={setMessages}/>}
+            {user && <ShowConversationsForUser user={user} messages={messages} setMessages={setMessages}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
             {user && <CreateNewConversation user={user} recipients={recipients}/>}
         </div>
