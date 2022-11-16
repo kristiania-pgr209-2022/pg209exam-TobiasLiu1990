@@ -113,15 +113,6 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
-        var user = new User();
-        user.setId(resultSet.getInt("user_id"));
-        user.setFullName(resultSet.getString("full_name"));
-        user.setEmail(resultSet.getString("email_address"));
-        user.setColor(resultSet.getString("favorite_color"));
-        return user;
-    }
-
     public List<String> getConversationParticipants(int userId, int conversationId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
@@ -145,5 +136,14 @@ public class UserDao extends AbstractDao<User> {
                 }
             }
         }
+    }
+
+    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
+        var user = new User();
+        user.setId(resultSet.getInt("user_id"));
+        user.setFullName(resultSet.getString("full_name"));
+        user.setEmail(resultSet.getString("email_address"));
+        user.setColor(resultSet.getString("favorite_color"));
+        return user;
     }
 }

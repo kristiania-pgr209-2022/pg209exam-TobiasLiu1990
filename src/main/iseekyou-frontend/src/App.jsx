@@ -7,6 +7,7 @@ function ListUsers({user, setUser}) {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
 
+    //Get all users
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/user");
@@ -19,17 +20,25 @@ function ListUsers({user, setUser}) {
         return <div>Loading user...</div>
     }
 
+
+    function handleChange(e) {
+        setUser(JSON.parse(e.target.value));
+    }
+
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
     return (
         <>
             <div id="show-users-drop-list">
                 <h2>User list</h2>
                 <h5 id="selected-user">Username: {user && user.fullName}</h5>
-                <select value={users} onChange={(e) => setUser(JSON.parse(e.target.value))}>
+                <h5 id="selected-user-color">Favorite color: {user && user.color}</h5>
+
+
+                <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
 
-                    {users.map(({id, fullName, email}) => (
-                        <option key={id} value={JSON.stringify({id, fullName, email})}>{id} {fullName} {email}</option>
+                    {users.map((u) => (
+                        <option key={u.id} value={JSON.stringify(u)}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
@@ -37,15 +46,20 @@ function ListUsers({user, setUser}) {
     );
 }
 
+function SetUserColor({user}) {
+    document.getElementById("app-title").style.color = user.color;
+}
+
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [color, setColor] = useState("");
+    let id = user.id;
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        const res = await fetch("/api/user/settings?userId=" + user.id, {
+        const res = await fetch("/api/user/settings", {
             method: "put",
             body: JSON.stringify({id, fullName, email, color}),
             headers: {
@@ -53,6 +67,7 @@ function UpdateUserSettings({user}) {
             },
         });
         if (res.ok) {
+
             user.color = color;
             user.email = email;
             user.fullName = fullName;
@@ -99,7 +114,8 @@ function UpdateUserSettings({user}) {
 }
 
 //Takes messages + setMessages state to pass to ShowMessageBox.
-function ShowConversationForUser({user, messages, setMessages}) {
+//user param is passed further down to reply.
+function ShowConversationsForUser({user, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
     const [conversation, setConversation] = useState([]);
     const [conversationId, setConversationId] = useState(0);
@@ -128,34 +144,40 @@ function ShowConversationForUser({user, messages, setMessages}) {
         return <div>Loading conversations...</div>
     }
 
+    //Sets the reply button to visible when a conversation is opened.
+    function handleClick(e) {
+        setConversationId(e.target.value);
+        document.getElementById("reply-div").style.visibility = "visible";
+    }
+
     return (
         <div>
             <h2>Conversations</h2>
-            <h5>Members in each conversation</h5>
 
-            {participants.map((p) => (<div>{p}</div>))}
+            <h5 style={{border: "solid black 1px"}}>
+                Members in each conversation <hr></hr>
+                {participants.map((p) => (<div>{p}</div>))}
+            </h5>
 
             {conversation.map((c) => (
                 <div>
-                    <button key={c.id} onClick={(e) => setConversationId(parseInt(e.target.value))}
+                    <button key={c.id} onClick={handleClick}
                             value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
 
-            <div id="show-messages-div">
-                <ShowMessageBox conversationId={conversationId} messages={messages} setMessages={setMessages}/>
-            </div>
+            <ShowMessageBox user={user} conversationId={conversationId} messages={messages} setMessages={setMessages}/>
         </div>
     );
 }
 
 //Should show chat messages in a conversation
-function ShowMessageBox({conversationId, messages, setMessages}) {
+function ShowMessageBox({user, conversationId, messages, setMessages}) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/user/inbox/messages?conversationId=" + conversationId);
+            const res = await fetch("/api/user/inbox/conversation/messages?conversationId=" + conversationId);
             setMessages(await res.json());
             setLoading(false);
         })();
@@ -166,15 +188,51 @@ function ShowMessageBox({conversationId, messages, setMessages}) {
     }
 
     return (
-        <div>
+        <div id="show-messages-div">
             {messages.map((m) => (
                 <>
                     <h4>{m.senderName} - {m.messageDate}</h4>
                     <p>{m.content}</p>
                 </>
             ))}
+            <ReplyToMessage user={user} conversationId={conversationId} setMessages={setMessages}/>
         </div>
     );
+}
+
+//Need sender_id, content, conversation_id
+//Should return the reply posted. Gets added on top of all the prev. messages.
+function ReplyToMessage({user, conversationId, setMessages}) {
+    const [content, setContent] = useState("");
+    let senderId = user.id;
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+
+        const res = await fetch("/api/user/inbox/conversation/message/reply", {
+            method: "post",
+            body: JSON.stringify({senderId, content, conversationId}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        //Append new message to the messages state
+        if (res.ok) {
+            setMessages((oldMessages) => [...oldMessages, res.body]);
+            setContent("");
+        }
+    }
+
+    return (
+        <div id="reply-div" style={{visibility: "hidden"}}>
+            <form onSubmit={handleSubmit}>
+                <input id="reply-field" type="text" value={content}
+                       onChange={(e) => setContent(e.target.value)}></input>
+                <button>Reply</button>
+            </form>
+        </div>
+    )
 }
 
 //1st param: user - is passed to the CreateMessage component.
@@ -246,26 +304,11 @@ function CreateNewConversation({user, recipients}) {
                 ))}
             </div>
 
-            <div id="new-message-div">
+            <div>
                 <CreateMessage conversationId={conversationId} userId={user.id}/>
             </div>
         </div>
     )
-}
-
-function FindRecipientsToAdd({user, recipients, setRecipients}) {
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + user.id);
-            setRecipients(await res.json());
-        }
-        fetchUsers()
-            .catch(console.error);
-        console.log(fetchUsers());
-    }, []);
-
-    return recipients;
 }
 
 function CreateMessage({conversationId, userId}) {
@@ -292,20 +335,18 @@ function CreateMessage({conversationId, userId}) {
             document.getElementById("new-message-div").style.visibility = "hidden";
             document.getElementById("new-recipients-div").style.visibility = "hidden";
         }
-        //Append new message to the messages state
-        // setMessages((oldMessages) => [...oldMessages, res.json()]);
     }
 
     return (
-        <div>
+        <div id="new-message-div">
             <form onSubmit={handleSubmit}>
                 <label>
                     Message:
-                    <input
+                    <textarea
+                        id="message-input"
                         type="text"
                         value={content}
-                        id="message-input"
-                        onChange={(e) => setContent(e.target.value)}></input>
+                        onChange={(e) => setContent(e.target.value)}></textarea>
                 </label>
                 <button>Submit message</button>
             </form>
@@ -313,6 +354,19 @@ function CreateMessage({conversationId, userId}) {
     )
 }
 
+function FindRecipientsToAdd({user, recipients, setRecipients}) {
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const res = await fetch("/api/user/inbox/new/conversationRecipients?userId=" + user.id);
+            setRecipients(await res.json());
+        }
+        fetchUsers()
+            .catch(console.error);
+        console.log(fetchUsers());
+    }, []);
+
+    return recipients;
+}
 
 function App() {
     const [user, setUser] = useState();
@@ -324,8 +378,9 @@ function App() {
             <h1 id="app-title">I Seek You</h1>
 
             <ListUsers user={user} setUser={setUser}/>
+            {user && <SetUserColor user={user}/>}
             {user && <UpdateUserSettings user={user}/>}
-            {user && <ShowConversationForUser user={user} messages={messages} setMessages={setMessages}/>}
+            {user && <ShowConversationsForUser user={user} messages={messages} setMessages={setMessages}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
             {user && <CreateNewConversation user={user} recipients={recipients}/>}
         </div>

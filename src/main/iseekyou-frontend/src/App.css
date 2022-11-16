@@ -2,9 +2,14 @@
   position: absolute;
   text-align: center;
   top: 0;
-  transform: translateX(0);
 }
 
+#selected-user, #selected-user-color {
+  margin: 0;
+  padding: 0;
+}
+
+/* User */
 #show-users-drop-list {
   position: absolute;
   font-size: 14px;
@@ -13,10 +18,23 @@
   top: 0;
 }
 
+#user-settings {
+  position: absolute;
+  font-size: 12px;
+  border: solid black 1px;
+  margin: 0.5em;
+  padding: 0.5em;
+  left: 0;
+  bottom: 10%;
+}
+
+
 /* For new conversation window */
 #new-conversation-div {
-  border: solid black 1px;
+  border: solid black 2px;
   position: absolute;
+  margin: 0.5em;
+  padding: 0.5em;
   top: 0;
   right: 0;
   width: 17em;
@@ -25,36 +43,25 @@
 
 #new-conversation-title-div {
   position: absolute;
-
-
 }
 
 #new-recipients-div {
   position: absolute;
-  transform: translateY(60%);
+  transform: translateY(120%);
   right: 0;
   font-size: 10px;
 }
 
 #new-message-div {
   position: absolute;
-  transform: translateY(300%);
-
-  top: 30%;
+  height: 10%;
+  top: 50%;
   right: 0;
 }
 
 #message-input {
-  height: 20%;
-}
-
-#user-settings {
-  position: absolute;
-  font-size: 12px;
-  margin: 0;
-  padding: 0;
-  left: 0;
-  bottom: 20%;
+  width: 90%;
+  resize: vertical;
 }
 
 #conversations {
@@ -68,6 +75,10 @@
   position: absolute;
   font-size: 12px;
   background: lightgray;
+}
+
+#reply-div {
+
 }
 
 
