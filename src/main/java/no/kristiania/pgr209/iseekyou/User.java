@@ -6,15 +6,17 @@ public class User {
     private String fullName;
     private String email;
     private String color;
+    private int age;
 
     public User() {
     }
 
-    public User(int id, String fullName, String email, String color) {
+    public User(int id, String fullName, String email, String color, int age) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.color = color;
+        this.age = age;
     }
 
     public String getColor() {
@@ -47,5 +49,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

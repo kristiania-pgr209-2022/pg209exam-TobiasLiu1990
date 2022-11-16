@@ -4,7 +4,7 @@
   top: 0;
 }
 
-#selected-user, #selected-user-color {
+#selected-user, #selected-user-color, #selected-user-age {
   margin: 0;
   padding: 0;
 }
@@ -27,7 +27,11 @@
   left: 0;
   bottom: 10%;
 }
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 /* For new conversation window */
 #new-conversation-div {

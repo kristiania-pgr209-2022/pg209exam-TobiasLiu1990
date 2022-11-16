@@ -50,6 +50,9 @@ public class MessageEndPoint {
         if (!user.getColor().equals("")) {
             userDao.updateFavoriteColor(user);
         }
+        if (user.getAge() > 0) {
+            userDao.updateAge(user);
+        }
     }
 
     //Shows all conversations for user

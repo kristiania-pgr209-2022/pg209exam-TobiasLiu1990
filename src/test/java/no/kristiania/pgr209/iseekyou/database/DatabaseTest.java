@@ -16,7 +16,7 @@ public class DatabaseTest {
 
     @Test
     void shouldRetrieveSavedUser() throws SQLException {
-        var user = new User(0,"Andre Persson", "Anpe@Junit.tst", "Magenta");
+        var user = new User(0,"Andre Persson", "Anpe@Junit.tst", "Magenta", 30);
         userDao.save(user);
         assertThat(userDao.retrieve(user.getId()))
                 .hasNoNullFieldsOrProperties()
@@ -27,7 +27,7 @@ public class DatabaseTest {
 
     @Test
     void shouldUpdateUserName() throws SQLException {
-        var jacob = new User(50,"Jacob PleaseChangeMyName", "Jacob@Junit.tst", "Magenta");
+        var jacob = new User(50,"Jacob PleaseChangeMyName", "Jacob@Junit.tst", "Magenta", 25);
         userDao.save(jacob);
         System.out.println(jacob.getId());
         assertThat(userDao.retrieve(jacob.getId()))
@@ -47,7 +47,7 @@ public class DatabaseTest {
 
     @Test
     void shouldUpdateEmail() throws SQLException {
-        var david = new User(100,"David Needs A New Email", "CrashTestDummy@Junit.tst", "Yellow");
+        var david = new User(100,"David Needs A New Email", "CrashTestDummy@Junit.tst", "Yellow", 60);
         userDao.save(david);
         assertThat(userDao.retrieve(david.getId()))
                 .hasNoNullFieldsOrProperties()
@@ -66,7 +66,7 @@ public class DatabaseTest {
 
     @Test
     void shouldUpdateFavoriteColor() throws SQLException {
-        var wrongColor = new User(200,"Mr Blue Sky", "ELO@Junit.tst", "Green");
+        var wrongColor = new User(200,"Mr Blue Sky", "ELO@Junit.tst", "Green", 34);
         userDao.save(wrongColor);
         assertThat(userDao.retrieve(wrongColor.getId()))
                 .hasNoNullFieldsOrProperties()
