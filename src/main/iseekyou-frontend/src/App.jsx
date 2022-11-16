@@ -7,6 +7,7 @@ function ListUsers({user, setUser}) {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
 
+    //Get all users
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/user");
@@ -19,17 +20,22 @@ function ListUsers({user, setUser}) {
         return <div>Loading user...</div>
     }
 
+
+    function handleChange(e) {
+        setUser(JSON.parse(e.target.value));
+    }
+
     //the empty <option></option> works as placeholder. Also, so anything below can be picked.
     return (
         <>
             <div id="show-users-drop-list">
                 <h2>User list</h2>
                 <h5 id="selected-user">Username: {user && user.fullName}</h5>
-                <select value={users} onChange={(e) => setUser(JSON.parse(e.target.value))}>
+                <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
 
-                    {users.map(({id, fullName, email}) => (
-                        <option key={id} value={JSON.stringify({id, fullName, email})}>{id} {fullName} {email}</option>
+                    {users.map((u) => (
+                        <option key={u.id} value={JSON.stringify(u)}>{u.id} {u.fullName} {u.email}</option>
                     ))}
                 </select>
             </div>
@@ -37,21 +43,22 @@ function ListUsers({user, setUser}) {
     );
 }
 
-function SetUserColor(color) {
-    document.getElementById("app-title").style.color = color;
+function SetUserColor({user}) {
+    document.getElementById("app-title").style.color = user.color;
 }
 
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [color, setColor] = useState("");
+    let id = user.id;
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        const res = await fetch("/api/user/settings?userId=" + user.id, {
+        const res = await fetch("/api/user/settings", {
             method: "put",
-            body: JSON.stringify({fullName, email, color}),
+            body: JSON.stringify({id, fullName, email, color}),
             headers: {
                 "Content-Type": "application/json",
             },

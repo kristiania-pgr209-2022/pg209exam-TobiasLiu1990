@@ -40,8 +40,6 @@ public class MessageEndPoint {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUserSettings(User user) throws SQLException {
-        //Maybe fet user to compare if changes are made first as well?
-
         if (!user.getFullName().equals("")) {
             userDao.updateUserName(user);
         }
