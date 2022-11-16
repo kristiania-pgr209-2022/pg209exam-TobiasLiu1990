@@ -36,6 +36,13 @@ public class MessageEndPoint {
         return userDao.listAll();
     }
 
+    @Path("/user/new")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void saveNewUser(User user) throws SQLException {
+        userDao.save(user);
+    }
+
     //Updates user settings if changed fields are not empty.
     @Path("/user/settings")
     @PUT

@@ -2,7 +2,6 @@ import './App.css'
 import * as React from "react";
 import {useEffect, useState} from "react";
 
-//Shows all users
 function ListUsers({user, setUser}) {
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
@@ -19,7 +18,6 @@ function ListUsers({user, setUser}) {
     if (loading) {
         return <div>Loading user...</div>
     }
-
 
     function handleChange(e) {
         setUser(JSON.parse(e.target.value));
@@ -51,6 +49,92 @@ function SetUserColor({user}) {
     document.getElementById("app-title").style.color = user.color;
 }
 
+function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, color, setColor}) {
+    return (
+        <div>
+            <div>
+                <label>
+                    New name:
+                    <input
+                        type="test"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    New E-mail address:{" "}
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Age: {" "}
+                    <input
+                        type="number"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}/>
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    New favorite color:{" "}
+                    <input
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                    />
+                </label>
+            </div>
+        </div>
+    )
+}
+
+function AddNewUser() {
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [age, setAge] = useState("");
+    const [color, setColor] = useState("");
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setFullName(e.target.value);
+        setEmail(e.target.value);
+        setAge(e.target.value);
+        setColor(e.target.value);
+
+        await fetch("/api/user/new", {
+            method: "post",
+            body: JSON.stringify({fullName, email, age, color}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+    return (
+        <div id="create-new-user-div">
+            <h3>Create new user</h3>
+            <form onSubmit={handleSubmit}>
+                <GetUserInput
+                    fullName={fullName} setFullName={setFullName} email={email} setEmail={setEmail}
+                    age={age} setAge={setAge} color={color} setColor={setColor}
+                />
+            <button>Add new user</button>
+            </form>
+        </div>
+    )
+}
+
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
@@ -78,6 +162,7 @@ function UpdateUserSettings({user}) {
 
     return (
         <div id="user-settings">
+            <h3>Change user settings</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
@@ -390,6 +475,8 @@ function App() {
     return (
         <div className="App">
             <h1 id="app-title">I Seek You</h1>
+
+            <AddNewUser/>
 
             <ListUsers user={user} setUser={setUser}/>
             {user && <SetUserColor user={user}/>}

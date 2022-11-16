@@ -18,14 +18,24 @@
   top: 0;
 }
 
-#user-settings {
+#create-new-user-div {
   position: absolute;
-  font-size: 12px;
   border: solid black 1px;
+  font-size: 12px;
   margin: 0.5em;
   padding: 0.5em;
   left: 0;
-  bottom: 10%;
+  top: 40%;
+  }
+
+#user-settings {
+  position: absolute;
+  border: solid black 1px;
+  font-size: 12px;
+  margin: 0.5em;
+  padding: 0.5em;
+  left: 0;
+  bottom: 2%;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
