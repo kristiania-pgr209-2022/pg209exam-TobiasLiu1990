@@ -1,9 +1,9 @@
-INSERT INTO users (full_name, email_address, favorite_color)
-VALUES ('Ola Nordman', 'olno@gmail.com', 'red'),
-       ('Snorre Snorreson', 'snorre@gmail.com', 'black'),
-       ('Tobias Tobiasson', 'tobe@gmail.com', 'green'),
-       ('Elon Musk', 'musken@tesla.ru', 'blue'),
-       ('Mahamta Ghandi', 'peace@nowar.in', 'brown');
+INSERT INTO users (full_name, email_address, favorite_color, age)
+VALUES ('Ola Nordman', 'olno@gmail.com', 'red', 34),
+       ('Snorre Snorreson', 'snorre@gmail.com', 'black', 64),
+       ('Tobias Tobiasson', 'tobe@gmail.com', 'green', 25),
+       ('Elon Musk', 'musken@tesla.ru', 'blue', 75),
+       ('Mahamta Ghandi', 'peace@nowar.in', 'brown', 73);
 
 INSERT INTO conversations (conversation_title)
 VALUES ('A little conversation from Ola to Snorre'),

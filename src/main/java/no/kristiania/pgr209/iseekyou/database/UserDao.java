@@ -18,11 +18,12 @@ public class UserDao extends AbstractDao<User> {
     @Override
     public int save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into users (full_name, email_address, favorite_color) values (?, ?, ?)";
+            String query = "insert into users (full_name, email_address, favorite_color, age) values (?, ?, ?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, user.getFullName());
                 stmt.setString(2, user.getEmail());
                 stmt.setString(3, user.getColor());
+                stmt.setInt(4, user.getAge());
                 stmt.executeUpdate();
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -65,6 +66,17 @@ public class UserDao extends AbstractDao<User> {
             String query = "update users set email_address = ? where user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, user.getEmail());
+                stmt.setInt(2, user.getId());
+                stmt.executeUpdate();
+            }
+        }
+    }
+
+    public void updateAge(User user) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "update users set age = ? where user_id = ?";
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, user.getAge());
                 stmt.setInt(2, user.getId());
                 stmt.executeUpdate();
             }
@@ -144,6 +156,7 @@ public class UserDao extends AbstractDao<User> {
         user.setFullName(resultSet.getString("full_name"));
         user.setEmail(resultSet.getString("email_address"));
         user.setColor(resultSet.getString("favorite_color"));
+        user.setAge(resultSet.getInt("age"));
         return user;
     }
 }

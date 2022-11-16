@@ -32,6 +32,7 @@ function ListUsers({user, setUser}) {
                 <h2>User list</h2>
                 <h5 id="selected-user">Username: {user && user.fullName}</h5>
                 <h5 id="selected-user-color">Favorite color: {user && user.color}</h5>
+                <h5 id="selected-user-age">Age: {user && user.age}</h5>
 
 
                 <select value={users} onChange={handleChange}>
@@ -53,6 +54,7 @@ function SetUserColor({user}) {
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
+    const [age, setAge] = useState(user.age);
     const [color, setColor] = useState("");
     let id = user.id;
 
@@ -61,16 +63,16 @@ function UpdateUserSettings({user}) {
 
         const res = await fetch("/api/user/settings", {
             method: "put",
-            body: JSON.stringify({id, fullName, email, color}),
+            body: JSON.stringify({id, fullName, email, age, color}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
         if (res.ok) {
-
-            user.color = color;
-            user.email = email;
             user.fullName = fullName;
+            user.email = email;
+            user.age = age;
+            user.color = color;
         }
     }
 
@@ -87,6 +89,7 @@ function UpdateUserSettings({user}) {
                         />
                     </label>
                 </div>
+
                 <div>
                     <label>
                         New E-mail address:{" "}
@@ -97,6 +100,17 @@ function UpdateUserSettings({user}) {
                         />
                     </label>
                 </div>
+
+                <div>
+                    <label>
+                        Age: {" "}
+                        <input
+                            type="number"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}/>
+                    </label>
+                </div>
+
                 <div>
                     <label>
                         New favorite color:{" "}
