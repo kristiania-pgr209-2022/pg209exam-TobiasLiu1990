@@ -297,12 +297,13 @@ function ReplyToMessage({user, conversationId, setMessages}) {
 function CreateNewConversation({user, recipients}) {
     const [conversationTitle, setConversationTitle] = useState("");
     const [conversationId, setConversationId] = useState(0);
+    const [runOnce, setRunOnce] = useState(true);       //Used to control a POST to run only once per creation of a conversation.
     let recipientId = 0;
+
 
     //POST - create new conversation object with title only. Then returns its ID.
     async function handleSubmitConversationTitle(e) {
         e.preventDefault();
-
         const res = await fetch("/api/user/inbox/new/conversation", {
             method: "post",
             body: JSON.stringify({conversationTitle}),
@@ -313,11 +314,17 @@ function CreateNewConversation({user, recipients}) {
         //Set conversation title div to hidden after successful post.
         if (res.ok) {
             document.getElementById("new-conversation-title-div").style.visibility = "hidden";
-            setConversationId(await res.json());
-            recipientId = user.id;
+            setConversationId(await res.json());}
+    }
 
-            //Adds the current user to the conversation created.
-            //recipientId here is current user id. (to match object)
+
+    async function handleSubmitRecipients(e) {
+        e.preventDefault();
+
+        if (runOnce === true) {
+            //Adds the current user to the conversation created
+            //recipientId here is current user id. (to match object in backend)
+            recipientId = user.id;
             await fetch("/api/user/inbox/new/conversation/addRecipients", {
                 method: "post",
                 body: JSON.stringify({recipientId, conversationId}),
@@ -326,13 +333,12 @@ function CreateNewConversation({user, recipients}) {
                 },
             });
         }
-    }
+        setRunOnce(false);  //Set state to false here so current user isnt added multiple times to its conversation thread.
 
-    //POST - Uses ID from conversation title above + recipientID (who you want to send to)
-    async function handleSubmitRecipients(e) {
-        e.preventDefault();
+
+
+        //POST - Uses ID from conversation title above + recipientID (who you want to send to)
         recipientId = e.target.value;
-
         const res = await fetch("/api/user/inbox/new/conversation/addRecipients", {
             method: "post",
             body: JSON.stringify({recipientId, conversationId}),
