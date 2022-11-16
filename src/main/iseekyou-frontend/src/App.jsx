@@ -49,68 +49,14 @@ function SetUserColor({user}) {
     document.getElementById("app-title").style.color = user.color;
 }
 
-function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, color, setColor}) {
-    return (
-        <div>
-            <div>
-                <label>
-                    New name:
-                    <input
-                        type="test"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                    />
-                </label>
-            </div>
-
-            <div>
-                <label>
-                    New E-mail address:{" "}
-                    <input
-                        type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-            </div>
-
-            <div>
-                <label>
-                    Age: {" "}
-                    <input
-                        type="number"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}/>
-                </label>
-            </div>
-
-            <div>
-                <label>
-                    New favorite color:{" "}
-                    <input
-                        type="text"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                    />
-                </label>
-            </div>
-        </div>
-    )
-}
-
 function AddNewUser() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
     const [color, setColor] = useState("");
 
-
     async function handleSubmit(e) {
         e.preventDefault();
-        setFullName(e.target.value);
-        setEmail(e.target.value);
-        setAge(e.target.value);
-        setColor(e.target.value);
 
         await fetch("/api/user/new", {
             method: "post",
@@ -173,6 +119,56 @@ function UpdateUserSettings({user}) {
         </div>
     )
 }
+
+function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, color, setColor}) {
+    return (
+        <div>
+            <div>
+                <label>
+                    New name:
+                    <input
+                        type="test"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    New E-mail address:{" "}
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    Age: {" "}
+                    <input
+                        type="number"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}/>
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    New favorite color:{" "}
+                    <input
+                        type="text"
+                        value={color}
+                        onChange={(e) => setColor(e.target.value)}
+                    />
+                </label>
+            </div>
+        </div>
+    )
+}
+
 
 //Takes messages + setMessages state to pass to ShowMessageBox.
 //user param is passed further down to reply.
