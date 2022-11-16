@@ -4,6 +4,11 @@
   top: 0;
 }
 
+#selected-user, #selected-user-color {
+  margin: 0;
+  padding: 0;
+}
+
 /* User */
 #show-users-drop-list {
   position: absolute;

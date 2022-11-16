@@ -31,6 +31,9 @@ function ListUsers({user, setUser}) {
             <div id="show-users-drop-list">
                 <h2>User list</h2>
                 <h5 id="selected-user">Username: {user && user.fullName}</h5>
+                <h5 id="selected-user-color">Favorite color: {user && user.color}</h5>
+
+
                 <select value={users} onChange={handleChange}>
                     <option id="first-option">Select a user to view conversation and messages</option>
 
@@ -64,6 +67,7 @@ function UpdateUserSettings({user}) {
             },
         });
         if (res.ok) {
+
             user.color = color;
             user.email = email;
             user.fullName = fullName;
