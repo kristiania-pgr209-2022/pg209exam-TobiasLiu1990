@@ -14,7 +14,7 @@ CREATE TABLE messages (
     message_id INT IDENTITY PRIMARY KEY,
     sender_id INT,
     CONSTRAINT fk_sender_user_id FOREIGN KEY(sender_id) REFERENCES users(user_id),
-    created SMALLDATETIME DEFAULT GETDATE(),
+    created DATETIME DEFAULT CURRENT_TIMESTAMP,
     content VARCHAR(4000),
     conversation_id INT,
     CONSTRAINT fk_messages_conversation FOREIGN KEY(conversation_id) REFERENCES conversations(conversation_id)

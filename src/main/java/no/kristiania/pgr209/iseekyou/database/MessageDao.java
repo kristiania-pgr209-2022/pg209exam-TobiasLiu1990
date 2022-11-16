@@ -5,6 +5,7 @@ import no.kristiania.pgr209.iseekyou.Message;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,11 @@ public class MessageDao extends AbstractDao<Message> {
                         Message message = new Message();
                         message.setSenderName(resultSet.getString("full_name"));
                         message.setContent(resultSet.getString("content"));
-                        message.setMessageDate(resultSet.getDate("created"));
+                        message.setMessageDate(resultSet.getTimestamp("created"));
+
+                        //Parse date later
+
+
                         conversationMessages.add(message);
                     }
                     return conversationMessages;
