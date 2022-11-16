@@ -129,7 +129,7 @@ function AddNewUser() {
                     fullName={fullName} setFullName={setFullName} email={email} setEmail={setEmail}
                     age={age} setAge={setAge} color={color} setColor={setColor}
                 />
-            <button>Add new user</button>
+                <button>Add new user</button>
             </form>
         </div>
     )
@@ -164,49 +164,11 @@ function UpdateUserSettings({user}) {
         <div id="user-settings">
             <h3>Change user settings</h3>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
-                        New name:
-                        <input
-                            type="test"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        New E-mail address:{" "}
-                        <input
-                            type="text"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Age: {" "}
-                        <input
-                            type="number"
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)}/>
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        New favorite color:{" "}
-                        <input
-                            type="text"
-                            value={color}
-                            onChange={(e) => setColor(e.target.value)}
-                        />
-                    </label>
-                </div>
-                <button>Apply changes</button>
+                <GetUserInput
+                    fullName={fullName} setFullName={setFullName} email={email} setEmail={setEmail}
+                    age={age} setAge={setAge} color={color} setColor={setColor}
+                />
+                <button>Submit changes</button>
             </form>
         </div>
     )
@@ -356,6 +318,17 @@ function CreateNewConversation({user, recipients}) {
         if (res.ok) {
             document.getElementById("new-conversation-title-div").style.visibility = "hidden";
             setConversationId(await res.json());
+            recipientId = user.id;
+
+            //Adds the current user to the conversation created.
+            //recipientId here is current user id. (to match object)
+            await fetch("/api/user/inbox/new/conversation/addRecipients", {
+                method: "post",
+                body: JSON.stringify({recipientId, conversationId}),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
         }
     }
 
@@ -364,7 +337,7 @@ function CreateNewConversation({user, recipients}) {
         e.preventDefault();
         recipientId = e.target.value;
 
-        const res = await fetch("api/user/inbox/new/conversation/addRecipients", {
+        const res = await fetch("/api/user/inbox/new/conversation/addRecipients", {
             method: "post",
             body: JSON.stringify({recipientId, conversationId}),
             headers: {
