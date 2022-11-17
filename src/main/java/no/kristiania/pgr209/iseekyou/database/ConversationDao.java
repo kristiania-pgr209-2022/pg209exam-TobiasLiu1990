@@ -5,8 +5,10 @@ import no.kristiania.pgr209.iseekyou.Conversation;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ConversationDao extends AbstractDao<Conversation>{
+public class ConversationDao extends AbstractDao<Conversation, Integer>{
 
     @Inject
     public ConversationDao(DataSource dataSource) {
@@ -14,7 +16,7 @@ public class ConversationDao extends AbstractDao<Conversation>{
     }
 
     //Saves a new conversation and also returns the object.
-    public int save(Conversation conversation) throws SQLException {
+    public Integer save(Conversation conversation) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into conversations (conversation_title) values (?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -29,19 +31,34 @@ public class ConversationDao extends AbstractDao<Conversation>{
         }
     }
 
-//    public Conversation retrieveLastConversation() throws SQLException {
-//        try (var connection = dataSource.getConnection()) {
-//            String query = "SELECT MAX(conversation_id) as conversation_id FROM Conversations";
-//            try (var stmt = connection.prepareStatement(query)) {
-//                try (var resultSet = stmt.executeQuery()) {
-//                    if (resultSet.next()) {
-//                        Conversation conversation = new Conversation();
-//                        conversation.setId(resultSet.getInt("conversation_id"));
-//                        return conversation;
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    public List<Conversation> retrieveAllConversationsByUserId(int id) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = """
+                    SELECT Conversations.conversation_id, Conversations.conversation_title
+                    FROM Conversations
+                    JOIN Conversation_members
+                        ON Conversations.conversation_id = Conversation_members.conversation_id
+                    JOIN Users
+                        ON Conversation_members.user_id = Users.user_id
+                    where Users.user_id = ?;
+                    """;
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (var resultSet = stmt.executeQuery()) {
+                    List<Conversation> conversations = new ArrayList<>();
+                    while (resultSet.next()) {
+                        conversations.add(mapFromResultSet(resultSet));
+                    }
+                    return conversations;
+                }
+            }
+        }
+    }
+
+    private Conversation mapFromResultSet(ResultSet resultSet) throws SQLException {
+        Conversation conversation = new Conversation();
+        conversation.setId(resultSet.getInt("conversation_id"));
+        conversation.setConversationTitle(resultSet.getString("conversation_title"));
+        return conversation;
+    }
 }
