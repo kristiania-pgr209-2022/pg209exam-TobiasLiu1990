@@ -53,9 +53,6 @@ public class NewConversationEndpoint {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public int addConversationUsers(ConversationMembers recipient) throws SQLException {
-        System.out.println("user id: " + recipient.getRecipientId());
-        System.out.println("conversation id: " + recipient.getConversationId());
-
         return conversationMembersDao.save(recipient);
     }
 
