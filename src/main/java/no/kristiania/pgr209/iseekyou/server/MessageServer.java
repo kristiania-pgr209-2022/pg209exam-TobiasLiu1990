@@ -1,7 +1,7 @@
 package no.kristiania.pgr209.iseekyou.server;
 
 import jakarta.servlet.DispatcherType;
-import no.kristiania.pgr209.iseekyou.MessagingConfig;
+import no.kristiania.pgr209.iseekyou.ResourceConfig;
 import no.kristiania.pgr209.iseekyou.Database;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
@@ -54,9 +54,9 @@ public class MessageServer {
 
     private ServletContextHandler createApiContext(DataSource dataSource) {
         var context = new ServletContextHandler(server, "/api");
-        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/*");
-        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/user/inbox/*");
-        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/user/inbox/new/*");
+        context.addServlet(new ServletHolder(new ServletContainer(new ResourceConfig(dataSource))), "/*");
+        context.addServlet(new ServletHolder(new ServletContainer(new ResourceConfig(dataSource))), "/user/inbox/*");
+        context.addServlet(new ServletHolder(new ServletContainer(new ResourceConfig(dataSource))), "/user/inbox/new/*");
 
         return context;
     }

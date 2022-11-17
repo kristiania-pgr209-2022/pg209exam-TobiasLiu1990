@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDao extends AbstractDao<Message> {
+public class MessageDao extends AbstractDao<Message, Message> {
 
     @Inject
     public MessageDao(DataSource dataSource) {
@@ -16,7 +16,7 @@ public class MessageDao extends AbstractDao<Message> {
     }
 
     @Override
-    public int save(Message message) throws SQLException {
+    public Message save(Message message) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO messages (sender_id, content, conversation_id) VALUES (?, ?, ?) ";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -28,7 +28,7 @@ public class MessageDao extends AbstractDao<Message> {
                 try (var generatedKeys = stmt.getGeneratedKeys()) {
                     generatedKeys.next();
                     message.setId(generatedKeys.getInt(1));
-                    return message.getId();
+                    return message;
                 }
             }
         }
@@ -60,25 +60,6 @@ public class MessageDao extends AbstractDao<Message> {
                     }
                     return conversationMessages;
                 }
-            }
-        }
-    }
-
-    public String reply(Message message) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO messages (sender_id, content, conversation_id) VALUES (?, ?, ?)";
-            try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setInt(1, message.getSenderId());
-                stmt.setString(2, message.getContent());
-                stmt.setInt(3, message.getConversationId());
-                stmt.executeUpdate();
-
-                return message.getContent();
-//                try (var generatedKeys = stmt.getGeneratedKeys()) {
-//                    generatedKeys.next();
-//                    message.setId(generatedKeys.getInt(1));
-//
-//                }
             }
         }
     }

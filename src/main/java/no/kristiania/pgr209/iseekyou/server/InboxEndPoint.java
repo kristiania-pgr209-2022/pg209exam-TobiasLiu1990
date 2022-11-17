@@ -29,7 +29,7 @@ public class InboxEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
-        return conversationMembersDao.retrieveAllConversationsByUserId(userId);
+        return conversationDao.retrieveAllConversationsByUserId(userId);
     }
 
     //Get everyone in each conversation
@@ -51,11 +51,11 @@ public class InboxEndPoint {
     @Path("/conversation/message/reply")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String replyToConversation(Message message) throws SQLException {
+    public Message replyToConversation(Message message) throws SQLException {
         System.out.println("message id: " + message.getSenderId());
         System.out.println("content: " + message.getContent());
         System.out.println("conversation id: " + message.getConversationId());
 
-        return messageDao.reply(message);
+        return messageDao.save(message);
     }
 }

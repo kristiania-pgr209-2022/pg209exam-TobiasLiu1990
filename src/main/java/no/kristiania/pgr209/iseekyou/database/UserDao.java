@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao extends AbstractDao<User> {
+public class UserDao extends AbstractDao<User, Integer> {
 
     @Inject
     public UserDao(DataSource dataSource) {
@@ -16,7 +16,7 @@ public class UserDao extends AbstractDao<User> {
     }
 
     @Override
-    public int save(User user) throws SQLException {
+    public Integer save(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "insert into users (full_name, email_address, favorite_color, age) values (?, ?, ?, ?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -124,8 +124,6 @@ public class UserDao extends AbstractDao<User> {
             }
         }
     }
-
-
 
     private User mapFromResultSet(ResultSet resultSet) throws SQLException {
         var user = new User();
