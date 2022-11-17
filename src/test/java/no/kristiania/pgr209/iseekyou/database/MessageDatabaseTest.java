@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.registerCustomDateFormat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageDatabaseTest {
 
@@ -75,5 +77,23 @@ public class MessageDatabaseTest {
 
         assertThat(lastMessageInConversation.getSenderName())
                 .isEqualTo(userThatWroteTheMessage.getFullName());
+    }
+
+    @Test
+    void retrievedMessagesShouldBeInChronologicalOrder() throws SQLException {
+        var content = "This is another test message";
+        var testMessage = new Message(5, content);
+        testMessage.setConversationId(2);
+        messageDao.save(testMessage);
+        testMessage.getId();
+
+        var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(2);
+
+        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
+        var almostLastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-2);
+        var timestamp = lastMessageInConversation.getMessageDate().toLocalDateTime();
+        var timestamp2 = almostLastMessageInConversation.getMessageDate().toLocalDateTime();
+
+        assertTrue(timestamp2.isBefore(timestamp));
     }
 }
