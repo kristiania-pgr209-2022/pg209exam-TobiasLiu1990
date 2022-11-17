@@ -8,8 +8,8 @@ public class Conversation {
     public Conversation() {
 
     }
-    public Conversation(String conversationName) {
-        this.conversationTitle = conversationName;
+    public Conversation(String conversationTitle) {
+        this.conversationTitle = conversationTitle;
     }
 
     public int getId() {
