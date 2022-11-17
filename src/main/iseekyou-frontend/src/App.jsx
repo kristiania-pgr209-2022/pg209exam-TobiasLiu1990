@@ -276,7 +276,7 @@ function ReplyToMessage({user, conversationId, setMessages}) {
         });
         //Append new message to the messages state
         if (res.ok) {
-            setMessages((oldMessages) => [...oldMessages, res.body]);
+            setMessages((oldMessages) => [...oldMessages, res.json()]);
             setContent("");
         }
     }
