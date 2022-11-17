@@ -12,16 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServerTest {
-
-    private MessageServer server;
-    private final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
-
-    @BeforeEach
-    void setUp() throws Exception {
-        server = new MessageServer(0, dataSource);
-        server.start();
-    }
+public class ServerTest extends AbstractServerTest{
 
     @Test
     void shouldServerHomePage() throws IOException {
@@ -34,9 +25,5 @@ public class ServerTest {
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
                 .contains("<title>I Seek You</title>");
-    }
-
-    private HttpURLConnection openConnection(String path) throws IOException {
-        return (HttpURLConnection) new URL(server.getURL(), path).openConnection();
     }
 }

@@ -23,7 +23,7 @@ public class InboxEndPoint {
     public ConversationMembersDao conversationMembersDao;
 
     //Shows all conversations for user
-    @Path("/")
+//    @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
