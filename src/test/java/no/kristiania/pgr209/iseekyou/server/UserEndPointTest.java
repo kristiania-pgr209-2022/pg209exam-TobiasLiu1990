@@ -52,7 +52,7 @@ public class UserEndPointTest extends AbstractServerTest {
         var connection = openConnection("/api/user");
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg\",\"fullName\":\"I'm a testcrashdummy\",\"id\":6");
+                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg\",\"fullName\":\"I'm a testcrashdummy\",\"id\":");
     }
 
     @Test
