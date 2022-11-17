@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserDatabaseTestDatasource {
+public class UserDatabaseTestDatasourceDataSource {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
     private final UserDao userDao = new UserDao(dataSource);

@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
-public class DatabaseDatasource {
+public class DatabaseDataSource {
 
     public static HikariDataSource getDatasource() {
         var dataSource = new HikariDataSource();

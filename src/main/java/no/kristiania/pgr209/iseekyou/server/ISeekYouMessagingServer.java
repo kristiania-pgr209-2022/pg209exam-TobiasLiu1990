@@ -2,7 +2,7 @@ package no.kristiania.pgr209.iseekyou.server;
 
 import jakarta.servlet.DispatcherType;
 import no.kristiania.pgr209.iseekyou.ResourceConfig;
-import no.kristiania.pgr209.iseekyou.Database;
+import no.kristiania.pgr209.iseekyou.DatabaseDataSource;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -99,6 +99,6 @@ public class ISeekYouMessagingServer {
                 .map(Integer::parseInt)
                 .orElse(8080);
 
-        new ISeekYouMessagingServer(port, Database.getDatasource()).start();
+        new ISeekYouMessagingServer(port, DatabaseDataSource.getDatasource()).start();
     }
 }
