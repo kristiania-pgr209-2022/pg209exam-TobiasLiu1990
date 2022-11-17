@@ -1,6 +1,8 @@
 package no.kristiania.pgr209.iseekyou;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Message {
 
@@ -9,7 +11,7 @@ public class Message {
     private int conversationId;
     private String senderName;
     private String content;
-    private Timestamp messageDate;
+    private LocalDateTime messageDate;
 
     public Message() {
     }
@@ -35,13 +37,7 @@ public class Message {
         this.content = content;
     }
 
-    public Timestamp getMessageDate() {
-        return messageDate;
-    }
 
-    public void setMessageDate(Timestamp messageDate) {
-        this.messageDate = messageDate;
-    }
 
     public int getSenderId() {
         return senderId;
@@ -65,5 +61,13 @@ public class Message {
 
     public void setConversationId(int conversationId) {
         this.conversationId = conversationId;
+    }
+
+    public LocalDateTime getMessageDate() {
+        return messageDate;
+    }
+
+    public void setMessageDate(LocalDateTime messageDate) {
+        this.messageDate = messageDate;
     }
 }

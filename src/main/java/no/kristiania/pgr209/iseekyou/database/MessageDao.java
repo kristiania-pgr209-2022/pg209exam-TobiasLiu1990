@@ -5,8 +5,17 @@ import no.kristiania.pgr209.iseekyou.Message;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MessageDao extends AbstractDao<Message, Message> {
 
@@ -52,9 +61,7 @@ public class MessageDao extends AbstractDao<Message, Message> {
                         Message message = new Message();
                         message.setSenderName(resultSet.getString("full_name"));
                         message.setContent(resultSet.getString("content"));
-                        message.setMessageDate(resultSet.getTimestamp("created"));
-
-                        //Parse date later
+                        message.setMessageDate(formatDate(resultSet.getTimestamp("created")));
 
                         conversationMessages.add(message);
                     }
@@ -63,4 +70,9 @@ public class MessageDao extends AbstractDao<Message, Message> {
             }
         }
     }
+
+    private LocalDateTime formatDate(Timestamp timestamp) {
+        return timestamp.toLocalDateTime().withNano(0);
+    }
+
 }
