@@ -4,9 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.pgr209.iseekyou.Conversation;
-import no.kristiania.pgr209.iseekyou.ConversationMembers;
 import no.kristiania.pgr209.iseekyou.Message;
-import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.database.*;
 
 import java.sql.SQLException;
@@ -37,7 +35,7 @@ public class InboxEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<String> conversationParticipants(@QueryParam("userId") int userId, @QueryParam("conversationId") int conversationId) throws SQLException {
-        return conversationMembersDao.getConversationParticipants(userId, conversationId);
+        return conversationMembersDao.getConversationParticipantsExceptCurrentUser(userId, conversationId);
     }
 
     //Shows all messages in a conversation when a conversation is clicked.

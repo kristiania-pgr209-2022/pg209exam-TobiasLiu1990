@@ -21,7 +21,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "Name: " + this.fullName + "\n" +
+        return "ID: " + this.id + "\n" +
+                "Name: " + this.fullName + "\n" +
                 "Mail: " + this.email + "\n" +
                 "Age: " + this.age + "\n" +
                 "Favorite color: " + this.color;

@@ -21,7 +21,6 @@ public class UserDatabaseTest {
     @Test
     void shouldRetrieveSavedUser() throws SQLException {
         var user = sampleUser();
-        user.setEmail(user.getId() + user.getEmail());
         userDao.save(user);
 
         assertThat(userDao.retrieve(user.getId()))
@@ -34,7 +33,6 @@ public class UserDatabaseTest {
     @Test
     void shouldRetrieveSavedUserUsingConstructor() throws SQLException {
         var user = new User(1000, "Nameless", "nej@gmail.com", "white", 100);
-        user.setEmail(user.getId() + user.getEmail());
         userDao.save(user);
 
         assertThat(userDao.retrieve(user.getId()))
@@ -54,7 +52,6 @@ public class UserDatabaseTest {
     @Test
     void shouldUpdateFullname() throws SQLException {
         var originalUser = sampleUser();
-        originalUser.setEmail(originalUser.getId() + originalUser.getEmail());
         userDao.save(originalUser);
 
         assertThat(userDao.retrieve(originalUser.getId()))
@@ -73,7 +70,6 @@ public class UserDatabaseTest {
     @Test
     void shouldUpdateEmail() throws SQLException {
         var originalUser = sampleUser();
-        originalUser.setEmail(originalUser.getId() + originalUser.getEmail());
         userDao.save(originalUser);
 
         assertThat(userDao.retrieve(originalUser.getId()))
@@ -92,7 +88,6 @@ public class UserDatabaseTest {
     @Test
     void shouldUpdateAge() throws SQLException {
         var originalUser = sampleUser();
-        originalUser.setEmail(originalUser.getId() + originalUser.getEmail());
         userDao.save(originalUser);
 
         assertThat(userDao.retrieve(originalUser.getId()))
@@ -111,7 +106,6 @@ public class UserDatabaseTest {
     @Test
     void shouldUpdateUserFavoriteColor() throws SQLException {
         var originalUser = sampleUser();
-        originalUser.setEmail(originalUser.getId() + originalUser.getEmail());
         userDao.save(originalUser);
 
         assertThat(userDao.retrieve(originalUser.getId()))
@@ -149,7 +143,6 @@ public class UserDatabaseTest {
     void shouldRetrieveAllUsersAdded() throws SQLException {
         for (int i = 10; i < 15; i++) {
             User user = sampleUser();
-            user.setEmail(user.getId() + "-" + user.getEmail());
             userDao.save(user);
         }
 
