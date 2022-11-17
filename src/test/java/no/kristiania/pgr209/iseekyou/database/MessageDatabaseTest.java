@@ -29,7 +29,6 @@ public class MessageDatabaseTest {
         messageDao.save(testMessage);
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(3);
-        getAllMessagesById.stream().map(Message::getContent).forEach(System.out::println);
 
         var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
 

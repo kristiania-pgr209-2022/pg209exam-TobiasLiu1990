@@ -85,5 +85,4 @@ public class InboxEndPointTest extends AbstractServerTest{
                 .asString(StandardCharsets.UTF_8)
                 .contains(",{\"content\":\"Posting a little test message\",");
     }
-
 }
