@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 
-public abstract class AbstractDao <T> {
+public abstract class AbstractDao <T, V> {
     protected final DataSource dataSource;
 
     @Inject
@@ -14,5 +14,5 @@ public abstract class AbstractDao <T> {
         this.dataSource = dataSource;
     }
 
-    public abstract int save(T entity) throws SQLException;
+    public abstract V save(T entity) throws SQLException;
 }
