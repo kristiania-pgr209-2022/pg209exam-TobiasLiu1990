@@ -13,7 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MessageDatabaseTest {
+public class MessageDatabaseTestDatasource {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
     private final MessageDao messageDao = new MessageDao(dataSource);
@@ -29,7 +29,6 @@ public class MessageDatabaseTest {
         messageDao.save(testMessage);
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(3);
-        getAllMessagesById.stream().map(Message::getContent).forEach(System.out::println);
 
         var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
 
