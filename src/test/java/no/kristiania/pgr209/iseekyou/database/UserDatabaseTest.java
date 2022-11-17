@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 
 import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -140,17 +141,28 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldRetrieveAllUsersAdded() throws SQLException {
-        for (int i = 10; i < 15; i++) {
-            User user = sampleUser();
-            userDao.save(user);
+    void shouldRetrieveAllUsers() throws SQLException {
+        List<User> userList = userDao.listAll();
+
+        var user = sampleUser();
+        userDao.save(user);
+
+        List<User> newUserList = userDao.listAll();
+
+        assertThat(userList.size())
+                .isLessThan(newUserList.size());
+
+        for (User u : newUserList) {
+            assertThat(userDao.retrieve(u.getId()))
+                    .hasNoNullFieldsOrProperties()
+                    .isNotNull();
         }
 
-        List<User> allUsers = userDao.listAll();
-
-        for (User u : allUsers) {
-            System.out.println(u);
-        }
+        assertThat(userDao.retrieve(user.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(user)
+                .isNotSameAs(user);
     }
 
     //DB User table tests
