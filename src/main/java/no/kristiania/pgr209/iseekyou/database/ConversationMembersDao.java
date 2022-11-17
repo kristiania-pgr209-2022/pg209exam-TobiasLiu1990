@@ -1,11 +1,9 @@
 package no.kristiania.pgr209.iseekyou.database;
 
 import jakarta.inject.Inject;
-import no.kristiania.pgr209.iseekyou.Conversation;
 import no.kristiania.pgr209.iseekyou.ConversationMembers;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class ConversationMembersDao extends AbstractDao<ConversationMembers, Int
         }
     }
 
-    public List<String> getConversationParticipants(int userId, int conversationId) throws SQLException {
+    public List<String> getConversationParticipantsExceptCurrentUser(int userId, int conversationId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT DISTINCT(Users.full_name)

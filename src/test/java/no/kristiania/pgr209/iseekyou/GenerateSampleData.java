@@ -29,7 +29,7 @@ public class GenerateSampleData {
                 pickOne("Hansen", "Johansen", "Olsen", "Larsen", "Andersen", "Pedersen"));
 
         String[] lastName = user.getFullName().split(" ");
-        user.setEmail(lastName[lastName.length-1] + sampleDomains());
+        user.setEmail(lastName[lastName.length-1] + id + sampleDomains());
 
         user.setAge(Integer.parseInt(pickOne("20", "30", "40", "50")));
         user.setColor(pickOne("red", "green", "blue", "black", "yellow", "orange", "pink", "purple"));
