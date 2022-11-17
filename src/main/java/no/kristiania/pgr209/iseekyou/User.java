@@ -19,6 +19,14 @@ public class User {
         this.age = age;
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + this.fullName + "\n" +
+                "Mail: " + this.email + "\n" +
+                "Age: " + this.age + "\n" +
+                "Favorite color: " + this.color;
+    }
+
     public String getColor() {
         return color;
     }
