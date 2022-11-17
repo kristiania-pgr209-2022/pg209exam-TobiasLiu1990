@@ -6,7 +6,6 @@ import no.kristiania.pgr209.iseekyou.Message;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +63,9 @@ public class MessageDatabaseTest {
 
     @Test
     void retrievedMessageShouldShowSendersName() throws SQLException {
-        var testMessage = new Message();
-        testMessage.setContent("This is another test message");
+        var content = "This is another test message";
+        var testMessage = new Message(5, content);
         testMessage.setConversationId(2);
-        testMessage.setSenderId(5);
         messageDao.save(testMessage);
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(2);
