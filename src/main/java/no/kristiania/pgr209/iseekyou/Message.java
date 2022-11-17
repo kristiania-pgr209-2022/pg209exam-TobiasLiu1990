@@ -1,8 +1,6 @@
 package no.kristiania.pgr209.iseekyou;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
 public class Message {
 
