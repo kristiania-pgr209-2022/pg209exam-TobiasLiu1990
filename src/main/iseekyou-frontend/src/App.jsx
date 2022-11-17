@@ -192,7 +192,7 @@ function ShowConversationsForUser({user, messages, setMessages}) {
         (async () => {
             const res = await fetch(
                 "/api/user/inbox/conversation/members?userId=" + user.id +
-                "&cId=" + conversationId);
+                "&conversationId=" + conversationId);
             setParticipants(await res.json());
         })();
     }, [conversationId])
@@ -314,7 +314,8 @@ function CreateNewConversation({user, recipients}) {
         //Set conversation title div to hidden after successful post.
         if (res.ok) {
             document.getElementById("new-conversation-title-div").style.visibility = "hidden";
-            setConversationId(await res.json());}
+            setConversationId(await res.json());
+        }
     }
 
 
