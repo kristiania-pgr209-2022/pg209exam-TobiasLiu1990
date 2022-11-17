@@ -85,14 +85,13 @@ public class MessageDatabaseTest {
         var testMessage = new Message(5, content);
         testMessage.setConversationId(2);
         messageDao.save(testMessage);
-        testMessage.getId();
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(2);
 
         var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
         var almostLastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-2);
-        var timestamp = lastMessageInConversation.getMessageDate().toLocalDateTime();
-        var timestamp2 = almostLastMessageInConversation.getMessageDate().toLocalDateTime();
+        var timestamp = lastMessageInConversation.getMessageDate();
+        var timestamp2 = almostLastMessageInConversation.getMessageDate();
 
         assertTrue(timestamp2.isBefore(timestamp));
     }
