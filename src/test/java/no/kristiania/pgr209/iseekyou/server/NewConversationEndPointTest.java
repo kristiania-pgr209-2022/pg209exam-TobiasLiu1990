@@ -55,7 +55,7 @@ public class NewConversationEndPointTest extends AbstractServerTest{
 
     @Test
     void shouldAddAReplyToAConversation() throws IOException {
-        var postConnection = openConnection("/api/user/inbox/conversation/message/reply");
+        var postConnection = openConnection("/api/user/inbox/conversation/message");
         postConnection.setRequestMethod("POST");
         postConnection.setRequestProperty("Content-Type" , "application/json");
         postConnection.setDoOutput(true);
@@ -71,7 +71,7 @@ public class NewConversationEndPointTest extends AbstractServerTest{
 
         assertThat(postConnection.getResponseCode())
                 .as(postConnection.getResponseMessage() + " for " + postConnection.getURL())
-                .isEqualTo(200);
+                .isEqualTo(204);
 
         var connection = openConnection("/api/user/inbox/conversation/messages?conversationId=" + 1);
         assertThat(connection.getInputStream())
