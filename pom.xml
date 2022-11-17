@@ -122,7 +122,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>no.kristiania.pgr209.iseekyou.server.MessageServer</mainClass>
+                            <mainClass>no.kristiania.pgr209.iseekyou.server.ISeekYouMessagingServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

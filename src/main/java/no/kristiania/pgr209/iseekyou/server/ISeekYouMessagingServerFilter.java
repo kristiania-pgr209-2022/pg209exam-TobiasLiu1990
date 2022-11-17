@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class MessageServerFilter implements Filter {
+public class ISeekYouMessagingServerFilter implements Filter {
 
-    private Logger logger = LoggerFactory.getLogger(MessageServerFilter.class);
+    private Logger logger = LoggerFactory.getLogger(ISeekYouMessagingServerFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {

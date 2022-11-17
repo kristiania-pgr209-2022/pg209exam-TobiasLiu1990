@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * SampleData is just for creating random objects of Book.
+ * SampleData is just for creating random objects of Users.
  * Easy way to see if it works as it should
  */
 
