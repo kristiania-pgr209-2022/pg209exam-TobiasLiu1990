@@ -6,8 +6,12 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.List;
 
+import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DatabaseTest {
 
@@ -16,8 +20,11 @@ public class DatabaseTest {
 
     @Test
     void shouldRetrieveSavedUser() throws SQLException {
-        var user = new User(0,"Andre Persson", "Anpe@Junit.tst", "Magenta", 30);
-        userDao.save(user);
+        var user = sampleUser();
+        user.setEmail("12345343" + user.getEmail());
+        int id = userDao.save(user);
+        user.setId(id);
+
         assertThat(userDao.retrieve(user.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
@@ -26,60 +33,118 @@ public class DatabaseTest {
     }
 
     @Test
-    void shouldUpdateUserName() throws SQLException {
-        var jacob = new User(50,"Jacob PleaseChangeMyName", "Jacob@Junit.tst", "Magenta", 25);
-        userDao.save(jacob);
-        System.out.println(jacob.getId());
-        assertThat(userDao.retrieve(jacob.getId()))
+    void shouldUpdateFullname() throws SQLException {
+        var originalUser = sampleUser();
+        int id = userDao.save(originalUser);
+        originalUser.setId(id);
+
+        assertThat(userDao.retrieve(originalUser.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(jacob);
+                .isEqualTo(originalUser);
 
-        jacob.setFullName("Jacobs NewName");
-        userDao.updateUserName(jacob);
+        originalUser.setEmail(id + "-" + originalUser.getEmail());
 
-        assertThat(userDao.retrieve(jacob.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(jacob)
-                .isNotSameAs(jacob);
+        var updatedUser = new User();
+        updatedUser.setFullName("A new name");
+        userDao.updateUserName(updatedUser);
+
+        assertThat(originalUser.getFullName())
+                .isNotSameAs(updatedUser.getFullName());
     }
 
     @Test
     void shouldUpdateEmail() throws SQLException {
-        var david = new User(100,"David Needs A New Email", "CrashTestDummy@Junit.tst", "Yellow", 60);
-        userDao.save(david);
-        assertThat(userDao.retrieve(david.getId()))
+        var originalUser = sampleUser();
+        int id = userDao.save(originalUser);
+        originalUser.setId(id);
+
+        assertThat(userDao.retrieve(originalUser.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(david);
+                .isEqualTo(originalUser);
 
-        david.setEmail("MmmmMmmmMmmm@Junit.tst");
-        userDao.updateEmail(david);
+        originalUser.setEmail(id + "-" + originalUser.getEmail());
+        var updatedUser = new User();
+        updatedUser.setEmail("New@mail.com");
+        userDao.updateEmail(updatedUser);
 
-        assertThat(userDao.retrieve(david.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(david)
-                .isNotSameAs(david);
+        assertThat(originalUser.getEmail())
+                .isNotSameAs(updatedUser.getEmail());
     }
 
     @Test
-    void shouldUpdateFavoriteColor() throws SQLException {
-        var wrongColor = new User(200,"Mr Blue Sky", "ELO@Junit.tst", "Green", 34);
-        userDao.save(wrongColor);
-        assertThat(userDao.retrieve(wrongColor.getId()))
+    void shouldUpdateAge() throws SQLException {
+        var originalUser = sampleUser();
+        int id = userDao.save(originalUser);
+        originalUser.setId(id);
+
+        assertThat(userDao.retrieve(originalUser.getId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(wrongColor);
+                .isEqualTo(originalUser);
 
-        wrongColor.setColor("Blue");
-        userDao.updateFavoriteColor(wrongColor);
+        originalUser.setEmail(id + "-" + originalUser.getEmail());
+        var updatedUser = new User();
+        updatedUser.setAge(originalUser.getAge() + 1);
+        userDao.updateAge(updatedUser);
 
-        assertThat(userDao.retrieve(wrongColor.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(wrongColor)
-                .isNotSameAs(wrongColor);
+        assertThat(originalUser.getAge())
+                .isNotSameAs(updatedUser.getAge());
     }
+
+    @Test
+    void shouldUpdateUserFavoriteColor() throws SQLException {
+        var originalUser = sampleUser();
+        int id = userDao.save(originalUser);
+        originalUser.setId(id);
+
+        assertThat(userDao.retrieve(originalUser.getId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isEqualTo(originalUser);
+
+        originalUser.setEmail(id + "-" + originalUser.getEmail());
+
+        var updatedUser = new User();
+        updatedUser.setColor("white");  //White is not an alternative in SampleUser() for generating color.
+        userDao.updateFavoriteColor(updatedUser);
+
+        assertThat(originalUser.getColor())
+                .isNotSameAs(updatedUser.getColor());
+    }
+
+    @Test
+    void shouldNotBeAbleToHaveSameEmail() throws SQLException {
+        var user1 = sampleUser();
+        var user2 = sampleUser();
+        user1.setEmail("hello@gmail.com");
+        user2.setEmail("hello@gmail.com");
+
+        try {
+            userDao.save(user1);
+            userDao.save(user2);
+            fail("Emails are unique. Save user2 should fail");
+        } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
+            assertNotNull(e);
+        }
+
+    }
+
+    @Test
+    void shouldReturnAllUsersAdded() throws SQLException {
+        for (int i = 100; i < 105; i++) {
+            User user = sampleUser();
+            user.setId(i);
+            user.setEmail(i + "-" + user.getEmail());
+            userDao.save(user);
+        }
+
+        List<User> allUsers = userDao.listAll();
+
+        for (User u : allUsers) {
+            System.out.println(u);
+        }
+    }
+
 }

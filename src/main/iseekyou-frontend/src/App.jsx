@@ -58,6 +58,8 @@ function AddNewUser() {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        if (fullName.match())
+
         await fetch("/api/user/new", {
             method: "post",
             body: JSON.stringify({fullName, email, age, color}),

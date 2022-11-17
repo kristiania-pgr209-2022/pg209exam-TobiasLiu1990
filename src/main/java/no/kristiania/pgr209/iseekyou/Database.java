@@ -9,17 +9,17 @@ import java.util.Properties;
 
 public class Database {
 
-    public static HikariDataSource getDatasource(){
+    public static HikariDataSource getDatasource() {
         var dataSource = new HikariDataSource();
 
         String url = System.getenv("JDBC_URL");
         String username = System.getenv("JDBC_USERNAME");
         String password = System.getenv("JDBC_PASSWORD");
 
-        if(url == null || username == null || password == null){
+        if (url == null || username == null || password == null) {
             var properties = new Properties();
 
-            try(var fileReader = new FileReader("application.properties")){
+            try (var fileReader = new FileReader("application.properties")) {
                 properties.load(fileReader);
             } catch (IOException e) {
                 e.printStackTrace();
