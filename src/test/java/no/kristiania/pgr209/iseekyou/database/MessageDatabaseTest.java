@@ -92,6 +92,6 @@ public class MessageDatabaseTest {
         var timestamp = lastMessageInConversation.getMessageDate();
         var timestamp2 = almostLastMessageInConversation.getMessageDate();
 
-        assertTrue(timestamp2.isBefore(timestamp));
+        assertTrue(timestamp2.isBefore(timestamp.withNano(2)));
     }
 }
