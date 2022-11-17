@@ -10,30 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NewConversationEndPointTest extends AbstractServerTest{
 
-//    @Test
-//    void shouldCreateANewConversation() throws IOException {
-//        var postConnection = openConnection("/api/user/inbox/new/conversation");
-//        postConnection.setRequestMethod("POST");
-//        postConnection.setRequestProperty("Content-Type" , "application/json");
-//        postConnection.setDoOutput(true);
-//        postConnection.getOutputStream().write(
-//                Json.createObjectBuilder()
-//                        .add("conversationTitle", "This is a new test-conversation")
-//                        .build()
-//                        .toString()
-//                        .getBytes(StandardCharsets.UTF_8)
-//        );
-//
-//        assertThat(postConnection.getResponseCode())
-//                .as(postConnection.getResponseMessage() + " for " + postConnection.getURL())
-//                .isEqualTo(200);
-//
-//        var connection = openConnection("/api/user/inbox");
-//        assertThat(connection.getInputStream())
-//                .asString(StandardCharsets.UTF_8)
-//                .contains(",{\"content\":\"Posting a little test message\",");
-//    }
-
     @Test
     void shouldGetAllUsersExceptTheCurrentLoggedInUser() throws IOException {
         var postConnection = openConnection(
