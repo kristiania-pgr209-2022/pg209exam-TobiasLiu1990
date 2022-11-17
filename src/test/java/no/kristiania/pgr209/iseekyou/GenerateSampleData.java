@@ -1,5 +1,10 @@
 package no.kristiania.pgr209.iseekyou;
 
+import no.kristiania.pgr209.iseekyou.database.UserDao;
+import org.h2.jdbcx.JdbcDataSource;
+
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -10,10 +15,16 @@ import java.util.Random;
 public class GenerateSampleData {
 
     private static final Random random = new Random();
+    private static final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
+    private static final UserDao userDao = new UserDao(dataSource);
 
-    public static User sampleUser() {
+    public static User sampleUser() throws SQLException {
         var user = new User();
 
+        List<User> users = userDao.listAll();
+        int id = users.size() + 1;
+
+        user.setId(id);
         user.setFullName(pickOne("Jakob", "Nora", "Emil", "Emma", "Noah", "Ella") + " " +
                 pickOne("Hansen", "Johansen", "Olsen", "Larsen", "Andersen", "Pedersen"));
 
