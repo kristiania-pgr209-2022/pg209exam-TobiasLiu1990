@@ -16,7 +16,7 @@ import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConversationsDatabaseTest {
+public class ConversationsDatabaseTestDatasource {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
     private final ConversationDao conversationDao = new ConversationDao(dataSource);
