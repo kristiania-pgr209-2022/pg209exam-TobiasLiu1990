@@ -50,10 +50,6 @@ public class InboxEndPoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Message replyToConversation(Message message) throws SQLException {
-        System.out.println("message id: " + message.getSenderId());
-        System.out.println("content: " + message.getContent());
-        System.out.println("conversation id: " + message.getConversationId());
-
         return messageDao.save(message);
     }
 }

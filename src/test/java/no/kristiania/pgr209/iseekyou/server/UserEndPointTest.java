@@ -25,7 +25,7 @@ public class UserEndPointTest extends AbstractServerTest {
 
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains(",\"fullName\":\"Ola Nordman\",\"id\":1},{\"age\":64,\"color\":\"black\",\"email\":\"snorre");
+                .contains("age\":73,\"color\":\"brown\",\"email\":\"peace@nowar.in\",\"fullName\":\"Mahamta Ghandi\",\"id\":5");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UserEndPointTest extends AbstractServerTest {
         putConnection.setDoOutput(true);
         putConnection.getOutputStream().write(
                 Json.createObjectBuilder()
-                        .add("id", 5)
+                        .add("id", 6)
                         .add("fullName", "My new test name")
                         .add("email", "mynewtestemail@Junit.gg")
                         .add("age", 100)
@@ -81,6 +81,6 @@ public class UserEndPointTest extends AbstractServerTest {
         var connection = openConnection("/api/user");
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains("{\"age\":100,\"color\":\"yellow\",\"email\":\"mynewtestemail@Junit.gg\",\"fullName\":\"My new test name\",\"id\":5");
+                .contains("{\"age\":100,\"color\":\"yellow\",\"email\":\"mynewtestemail@Junit.gg\",\"fullName\":\"My new test name\",\"id\":6");
     }
 }
