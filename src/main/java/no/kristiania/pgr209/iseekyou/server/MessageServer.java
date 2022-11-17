@@ -55,8 +55,8 @@ public class MessageServer {
     private ServletContextHandler createApiContext(DataSource dataSource) {
         var context = new ServletContextHandler(server, "/api");
         context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/*");
-        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/user/*");
-        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/new/*");
+        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/user/inbox/*");
+        context.addServlet(new ServletHolder(new ServletContainer(new MessagingConfig(dataSource))), "/user/inbox/new/*");
 
         return context;
     }

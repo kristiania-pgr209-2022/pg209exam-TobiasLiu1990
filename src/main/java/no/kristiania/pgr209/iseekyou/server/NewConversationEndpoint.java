@@ -33,7 +33,7 @@ public class NewConversationEndpoint {
     //Create new conversation
     //Will return the id of created conversation.
     //To avoid if many uses/posts new conversations, ID could otherwise be wrong if fetched in different method
-    @Path("/user/inbox/new/conversation")
+    @Path("/conversation")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public int newConversation(Conversation conversation) throws SQLException {
@@ -41,7 +41,7 @@ public class NewConversationEndpoint {
     }
 
     //Find all recipients except current
-    @Path("/user/inbox/new/conversationRecipients")
+    @Path("/conversationRecipients")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     public List<User> getConversationUsers(@QueryParam("userId") int userId) throws SQLException {
@@ -49,7 +49,7 @@ public class NewConversationEndpoint {
     }
 
     //ADD recipients for new conversation
-    @Path("/user/inbox/new/conversation/addRecipients")
+    @Path("/conversation/addRecipients")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public int addConversationUsers(ConversationMembers recipient) throws SQLException {
@@ -59,7 +59,7 @@ public class NewConversationEndpoint {
         return conversationMembersDao.save(recipient);
     }
 
-    @Path("/user/inbox/new/conversation/message")
+    @Path("/conversation/message")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public void addConversationMessage(Message message) throws SQLException {
