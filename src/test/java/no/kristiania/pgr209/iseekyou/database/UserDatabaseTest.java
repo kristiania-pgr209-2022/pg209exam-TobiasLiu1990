@@ -141,7 +141,7 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldRetrieveAllUsers() throws SQLException {
+    void shouldRetrieveAllUsersIncludingAddedUser() throws SQLException {
         List<User> userList = userDao.listAll();
 
         var user = sampleUser();
