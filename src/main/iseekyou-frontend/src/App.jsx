@@ -49,16 +49,36 @@ function SetUserColor({user}) {
     document.getElementById("app-title").style.color = user.color;
 }
 
+// function checkUserInput(fullName, email) {
+//     const nameRegex = "[a-zA-Z] [a-zA-Z]+";
+//     const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
+//
+//     console.log("fullName: " + fullName)
+//     return (nameRegex.match(fullName) && emailRegex.match(email));
+// }
+
 function AddNewUser() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
     const [color, setColor] = useState("");
+    const nameRegex = "^[A-Z][a-z]+\\s[A-Z][a-z]+$";
+    const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
 
     async function handleSubmit(e) {
         e.preventDefault();
 
+        console.log("name: " + fullName);
+        if (!nameRegex.match(fullName)) {
+            alert("invalid name")
+        }
+
+        if (!emailRegex.match(email)) {
+            alert("Invalid mail")
+            return;
+        }
         if (age === "" || age <= 0) {
+            alert("invalid age")
             return;
         }
 
@@ -95,10 +115,16 @@ function UpdateUserSettings({user}) {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (age === "" || age <= 0) {
+        if (!checkUserInput(fullName, email) || age === "" || age <= 0) {
+            alert("Invalid name or mail or age")
             setAge("");
             return;
         }
+
+        // if (age === "" || age <= 0) {
+        //     setAge("");
+        //     return;
+        // }
 
         const res = await fetch("/api/user/settings", {
             method: "put",
@@ -130,13 +156,6 @@ function UpdateUserSettings({user}) {
 }
 
 function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, color, setColor}) {
-    const nameRegex = "[a-zA-Z] [a-zA-Z]+";
-    const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
-
-    // if (fullName === "" || age <= 0) {
-    //     return;
-    // }
-
     return (
         <div>
             <div>
