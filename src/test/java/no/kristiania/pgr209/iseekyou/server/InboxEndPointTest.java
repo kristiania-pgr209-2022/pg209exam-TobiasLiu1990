@@ -8,13 +8,13 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class InboxEndPointTest extends AbstractServerTest{
+public class InboxEndPointTest extends AbstractServerTest {
 
     @Test
     void shouldListUsersConversations() throws IOException {
         var connection = openConnection("/api/user/inbox?userId=" + 1);
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type" , "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
         assertThat(connection.getResponseCode())
@@ -31,7 +31,7 @@ public class InboxEndPointTest extends AbstractServerTest{
         var connection = openConnection(
                 "/api/user/inbox/conversation/members?userId=" + 3 + "&conversationId=" + 2);
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type" , "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
         assertThat(connection.getResponseCode())
@@ -46,9 +46,9 @@ public class InboxEndPointTest extends AbstractServerTest{
     @Test
     void shouldListAllMessagesSpecificToTheClickedConversation() throws IOException {
         var connection = openConnection(
-        "/api/user/inbox/conversation/messages?conversationId=" + 2);
+                "/api/user/inbox/conversation/messages?conversationId=" + 2);
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type" , "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
         assertThat(connection.getResponseCode())
@@ -64,7 +64,7 @@ public class InboxEndPointTest extends AbstractServerTest{
     void shouldSaveAReplyToTheConversationThatIsAddedAtTheEndIfTheConversation() throws IOException {
         var postConnection = openConnection("/api/user/inbox/conversation/message/reply");
         postConnection.setRequestMethod("POST");
-        postConnection.setRequestProperty("Content-Type" , "application/json");
+        postConnection.setRequestProperty("Content-Type", "application/json");
         postConnection.setDoOutput(true);
         postConnection.getOutputStream().write(
                 Json.createObjectBuilder()

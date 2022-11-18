@@ -56,26 +56,14 @@ function AddNewUser() {
     const [age, setAge] = useState(0);
     const [color, setColor] = useState("")
 
-    // const nameRegex = new RegExp("[a-zA-Z]*\s[a-zA-Z]*");
-    // const emailRegex = new RegExp("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
-
     async function handleSubmit(e) {
         e.preventDefault();
 
-        // console.log("name: " + fullName);
-        // if (!nameRegex.test(fullName)) {
-        //     alert("invalid name")
-        //     return;
-        // }
-        //
-        // if (!emailRegex.test(email)) {
-        //     alert("Invalid mail")
-        //     return;
-        // }
-        // if (age === "" || age <= 0) {
-        //     alert("invalid age")
-        //     return;
-        // }
+        if (age <= 0) {
+            alert("Age must be at least 1")
+            setAge(0);
+            return;
+        }
 
         await fetch("/api/user/new", {
             method: "post",
@@ -109,6 +97,12 @@ function UpdateUserSettings({user, setUser}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        if (age <= 0) {
+            alert("Age must be at least 1")
+            setAge(0);
+            return;
+        }
 
         const res = await fetch("/api/user/settings", {
             method: "put",

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * SampleData is just for creating random objects of Users.
- * Easy way to see if it works as it should
+ * GenerateSampleData is used to generate random Users for testing purposes.
+ * Ensure unique primary key for DB by getting the size of user table + 1. this is then used for id and email.
  */
 
 public class GenerateSampleData {
@@ -29,7 +29,7 @@ public class GenerateSampleData {
                 pickOne("Hansen", "Johansen", "Olsen", "Larsen", "Andersen", "Pedersen"));
 
         String[] lastName = user.getFullName().split(" ");
-        user.setEmail(lastName[lastName.length-1] + id + sampleDomains());
+        user.setEmail(lastName[lastName.length - 1] + id + sampleDomains());
 
         user.setAge(Integer.parseInt(pickOne("20", "30", "40", "50")));
         user.setColor(pickOne("red", "green", "blue", "black", "yellow", "orange", "pink", "purple"));

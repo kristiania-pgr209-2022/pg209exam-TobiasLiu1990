@@ -27,12 +27,12 @@ public class UserEndPointTest extends AbstractServerTest {
     void shouldSaveNewUser() throws IOException {
         var postConnection = openConnection("/api/user/new");
         postConnection.setRequestMethod("POST");
-        postConnection.setRequestProperty("Content-Type" , "application/json");
+        postConnection.setRequestProperty("Content-Type", "application/json");
         postConnection.setDoOutput(true);
         postConnection.getOutputStream().write(
                 Json.createObjectBuilder()
-                        .add("fullName", "I'm a testcrashdummy")
-                        .add("email", "Test@Junit.gg")
+                        .add("fullName", "Im a testcrashdummy")
+                        .add("email", "Test@Junit.gg.com")
                         .add("age", 25)
                         .add("color", "blue")
                         .build()
@@ -42,20 +42,19 @@ public class UserEndPointTest extends AbstractServerTest {
 
         assertThat(postConnection.getResponseCode())
                 .as(postConnection.getResponseMessage() + " for " + postConnection.getURL())
-                .isEqualTo(204);
+                .isEqualTo(201);
 
         var connection = openConnection("/api/user");
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg\",\"fullName\":\"I'm a testcrashdummy\",\"id\":");
+                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg.com\",\"fullName\":\"Im a testcrashdummy\",\"id\":");
     }
 
     @Test
     void shouldUpdateAllUsersSettings() throws IOException {
-
         var putConnection = openConnection("/api/user/settings");
         putConnection.setRequestMethod("PUT");
-        putConnection.setRequestProperty("Content-Type" , "application/json");
+        putConnection.setRequestProperty("Content-Type", "application/json");
         putConnection.setDoOutput(true);
         putConnection.getOutputStream().write(
                 Json.createObjectBuilder()
@@ -77,5 +76,45 @@ public class UserEndPointTest extends AbstractServerTest {
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
                 .contains("{\"age\":100,\"color\":\"yellow\",\"email\":\"mynewtestemail@Junit.gg\",\"fullName\":\"My new test name\",\"id\":6");
+    }
+
+    @Test
+    void shouldFailUpdatingUser() throws IOException {
+        var putConnection = openConnection("/api/user/settings");
+        putConnection.setRequestMethod("PUT");
+        putConnection.setRequestProperty("Content-Type", "application/json");
+        putConnection.setDoOutput(true);
+        putConnection.getOutputStream().write(
+                Json.createObjectBuilder()
+                        .add("fullName", "Only a fullname")
+                        .add("email", "")
+                        .build()
+                        .toString()
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        assertThat(putConnection.getResponseCode())
+                .as(putConnection.getResponseMessage() + " for " + putConnection.getURL())
+                .isEqualTo(400);
+    }
+
+    @Test
+    void shouldFailAddingUser() throws IOException {
+        var putConnection = openConnection("/api/user/new");
+        putConnection.setRequestMethod("POST");
+        putConnection.setRequestProperty("Content-Type", "application/json");
+        putConnection.setDoOutput(true);
+        putConnection.getOutputStream().write(
+                Json.createObjectBuilder()
+                        .add("fullName", "Only a fullname")
+                        .add("email", "")
+                        .build()
+                        .toString()
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        assertThat(putConnection.getResponseCode())
+                .as(putConnection.getResponseMessage() + " for " + putConnection.getURL())
+                .isEqualTo(400);
     }
 }

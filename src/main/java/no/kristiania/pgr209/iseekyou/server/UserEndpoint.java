@@ -27,8 +27,12 @@ public class UserEndpoint {
     @Path("/user/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void saveNewUser(User user) throws SQLException {
-        userDao.save(user);
+    public Response saveNewUser(User user) throws SQLException {
+        if (userDao.save(user)) {
+            return Response.status(201).build();
+        } else {
+            return Response.status(400).build();    //Bad request
+        }
     }
 
     //Updates user settings if changed fields are not empty.
@@ -37,9 +41,9 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUserSettings(User user) throws SQLException {
         if (userDao.updateUser(user)) {
-            return Response.ok().build();
+            return Response.status(204).build();    //Updated successfully
         } else {
-            return Response.status(400).build();
+            return Response.status(400).build();    //Bad request
         }
     }
 }

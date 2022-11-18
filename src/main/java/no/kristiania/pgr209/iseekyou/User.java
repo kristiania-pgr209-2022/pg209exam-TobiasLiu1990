@@ -11,12 +11,12 @@ public class User {
     public User() {
     }
 
-    public User(int id, String fullName, String email, String color, int age) {
+    public User(int id, String fullName, String email, int age, String color) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
-        this.color = color;
         this.age = age;
+        this.color = color;
     }
 
     @Override

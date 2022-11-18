@@ -30,7 +30,7 @@ public class MessageDatabaseTest {
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(3);
 
-        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
+        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size() - 1);
 
         assertThat(lastMessageInConversation.getContent())
                 .isEqualTo(testMessage.getContent());
@@ -44,7 +44,7 @@ public class MessageDatabaseTest {
 
         List<Message> fifteenMessages = new ArrayList<>();
 
-        for (int i = 0; i <= 15; i++){
+        for (int i = 0; i <= 15; i++) {
             var message = new Message();
             message.setContent("I can count to " + i);
             message.setSenderId(5);
@@ -52,7 +52,7 @@ public class MessageDatabaseTest {
             fifteenMessages.add(message);
         }
 
-        for (var fifteenMessage : fifteenMessages){
+        for (var fifteenMessage : fifteenMessages) {
             messageDao.save(fifteenMessage);
         }
 
@@ -70,7 +70,7 @@ public class MessageDatabaseTest {
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(2);
 
-        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
+        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size() - 1);
         var userThatWroteTheMessage = userDao.retrieve(testMessage.getSenderId());
 
         assertThat(lastMessageInConversation.getSenderName())
@@ -86,8 +86,8 @@ public class MessageDatabaseTest {
 
         var getAllMessagesById = messageDao.retrieveAllMessagesByConversationId(2);
 
-        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-1);
-        var almostLastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size()-2);
+        var lastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size() - 1);
+        var almostLastMessageInConversation = getAllMessagesById.get(getAllMessagesById.size() - 2);
         var timestamp = lastMessageInConversation.getMessageDate();
         var timestamp2 = almostLastMessageInConversation.getMessageDate();
 

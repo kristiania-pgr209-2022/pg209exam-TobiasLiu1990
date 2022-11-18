@@ -10,8 +10,8 @@ import java.util.List;
 
 import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class UserDatabaseTest {
 
@@ -31,18 +31,6 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldRetrieveSavedUserUsingConstructor() throws SQLException {
-        var user = new User(1000, "Nameless", "nej@gmail.com", "white", 100);
-        userDao.save(user);
-
-        assertThat(userDao.retrieve(user.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(user)
-                .isNotSameAs(user);
-    }
-
-    @Test
     void shouldNotRetrieveNonExistingUser() throws SQLException {
         assertThat(userDao.retrieve(123))
                 .usingRecursiveComparison()
@@ -50,75 +38,22 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldUpdateFullname() throws SQLException {
-        var originalUser = sampleUser();
+    void shouldUpdateUser() throws SQLException {
+        var originalUser = new User(100, "Original Person", "original@gmail.com", 50, "blue");
         userDao.save(originalUser);
 
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
+        var update = new User(originalUser.getId(), "Updated Person", "updated@gmail.com", 100, "red");
+        userDao.updateUser(update);
 
-        var updatedUser = new User();
-        updatedUser.setFullName("A new name");
-        userDao.updateUserName(updatedUser);
+        var retrieveOriginalUserAfterUpdate = userDao.retrieve(originalUser.getId());
 
-        assertThat(originalUser.getFullName())
-                .isNotSameAs(updatedUser.getFullName());
-    }
 
-    @Test
-    void shouldUpdateEmail() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
+        assertNotEquals(originalUser, retrieveOriginalUserAfterUpdate);
 
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setEmail("New@mail.com");
-        userDao.updateEmail(updatedUser);
-
-        assertThat(originalUser.getEmail())
-                .isNotSameAs(updatedUser.getEmail());
-    }
-
-    @Test
-    void shouldUpdateAge() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
-
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setAge(originalUser.getAge() + 1);
-        userDao.updateAge(updatedUser);
-
-        assertThat(originalUser.getAge())
-                .isNotSameAs(updatedUser.getAge());
-    }
-
-    @Test
-    void shouldUpdateUserFavoriteColor() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
-
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setColor("white");  //White is not an alternative in SampleUser() for generating color.
-        userDao.updateFavoriteColor(updatedUser);
-
-        assertThat(originalUser.getColor())
-                .isNotSameAs(updatedUser.getColor());
+        assertEquals(retrieveOriginalUserAfterUpdate.getFullName(), update.getFullName());
+        assertEquals(retrieveOriginalUserAfterUpdate.getEmail(), update.getEmail());
+        assertEquals(retrieveOriginalUserAfterUpdate.getAge(), update.getAge());
+        assertEquals(retrieveOriginalUserAfterUpdate.getColor(), update.getColor());
     }
 
     @Test
@@ -164,57 +99,22 @@ public class UserDatabaseTest {
                 .isNotSameAs(user);
     }
 
-    //DB User table tests
+    //A bit of work around to get this test to show that its actually not possible to use the same email twice in DB.
     @Test
-    void shouldNotBeAbleToHaveSameEmail() throws SQLException {
-        var user1 = sampleUser();
-        var user2 = sampleUser();
-        user1.setEmail("hello@gmail.com");
-        user2.setEmail("hello@gmail.com");
+    void shouldFailOnDuplicateEmail() throws SQLException {
+        List<String> allEmails = userDao.retrieveAllEmails();
+        int numOfEmails = allEmails.size();
 
-        try {
-            userDao.save(user1);
-            userDao.save(user2);
-            fail("Emails are unique. Save user2 should fail");
-        } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
-            assertNotNull(e);
+        for (int i = 0; i < 10; i++) {
+            var thor = sampleUser();
+            thor.setEmail("should@fail.com");
+            userDao.save(thor);
         }
-    }
 
-    @Test
-    void shouldNotSaveUserWithBlankFields() throws SQLException {
-        var user = new User();
+        List<String> shouldShowOneMoreEmails = userDao.retrieveAllEmails();
+        int numOfEmailsPlusOne = shouldShowOneMoreEmails.size();
 
-        for (int i = 0; i < 4; i++) {
-            user = fillFieldsToUserObject(user, i);
-
-            if (i < 3) {
-                try {
-                    userDao.save(user);
-                    fail("Should not be able to save user object without all fields empty");
-                } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
-                    assertNotNull(e);
-                }
-            } else {
-                userDao.save(user);
-
-                assertThat(userDao.retrieve(user.getId()))
-                        .hasNoNullFieldsOrProperties()
-                        .usingRecursiveComparison()
-                        .isEqualTo(user)
-                        .isNotSameAs(user);
-            }
-        }
-    }
-
-    public User fillFieldsToUserObject(User user, int i) {
-        switch (i) {
-            case 0 -> user.setFullName("Johan Johansen");
-            case 1 -> user.setEmail("Johan@gmail.com");
-            case 2 -> user.setAge(30);
-            case 3 -> user.setColor("red");
-        }
-        return user;
+        assertEquals((numOfEmailsPlusOne - numOfEmails), 1);
     }
 }
 

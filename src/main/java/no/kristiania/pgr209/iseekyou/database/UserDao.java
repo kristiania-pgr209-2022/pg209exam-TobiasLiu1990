@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDao extends AbstractDao<User, Integer> {
+public class UserDao extends AbstractDao<User, Boolean> {
 
     @Inject
     public UserDao(DataSource dataSource) {
@@ -16,27 +16,31 @@ public class UserDao extends AbstractDao<User, Integer> {
     }
 
     @Override
-    public Integer save(User user) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "insert into users (full_name, email_address, favorite_color, age) values (?, ?, ?, ?)";
-            try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setString(1, user.getFullName());
-                stmt.setString(2, user.getEmail());
-                stmt.setString(3, user.getColor());
-                stmt.setInt(4, user.getAge());
-                stmt.executeUpdate();
-                try (var generatedKeys = stmt.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    user.setId(generatedKeys.getInt(1));
-                    return user.getId();
+    public Boolean save(User user) throws SQLException {
+        if (validateUser(user)) {
+            try (var connection = dataSource.getConnection()) {
+                String query = "INSERT INTO users (full_name, email_address, favorite_color, age) VALUES (?, ?, ?, ?)";
+                try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setString(1, user.getFullName());
+                    stmt.setString(2, user.getEmail());
+                    stmt.setString(3, user.getColor());
+                    stmt.setInt(4, user.getAge());
+                    stmt.executeUpdate();
+                    try (var generatedKeys = stmt.getGeneratedKeys()) {
+                        generatedKeys.next();
+                        user.setId(generatedKeys.getInt(1));
+                    }
+                    return true;
                 }
             }
         }
+        return false;
     }
+
 
     public User retrieve(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users where user_id = ?";
+            String query = "SELECT * FROM users WHERE user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {
@@ -50,75 +54,27 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    public void updateUserName(User user) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "update users set full_name = ? where user_id = ?";
-            try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, user.getFullName());
-                stmt.setInt(2, user.getId());
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    public void updateEmail(User user) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "update users set email_address = ? where user_id = ?";
-            try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, user.getEmail());
-                stmt.setInt(2, user.getId());
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    public void updateAge(User user) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "update users set age = ? where user_id = ?";
-            try (var stmt = connection.prepareStatement(query)) {
-                stmt.setInt(1, user.getAge());
-                stmt.setInt(2, user.getId());
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    public void updateFavoriteColor(User user) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "update users set favorite_color = ? where user_id = ?";
-            try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, user.getColor());
-                stmt.setInt(2, user.getId());
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    public boolean validateUser(User user) {
-        return !user.getFullName().equals("") && user.getAge() > 0 && !user.getEmail().equals("") && !user.getColor().equals("");
-    }
-
     public boolean updateUser(User user) throws SQLException {
-        if (!validateUser(user)) return false;
-
-        try (var connection = dataSource.getConnection()) {
-            String query = "UPDATE users SET full_name = ?, age = ?, email_address = ?, favorite_color = ? WHERE user_id = ?";
-
-            try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, user.getFullName());
-                stmt.setInt(2, user.getAge());
-                stmt.setString(3, user.getEmail());
-                stmt.setString(4, user.getColor());
-                stmt.setInt(5, user.getId());
-                stmt.executeUpdate();
+        if (validateUser(user)) {
+            try (var connection = dataSource.getConnection()) {
+                String query = "UPDATE users SET full_name = ?, email_address = ?, age = ?, favorite_color = ? WHERE user_id = ?";
+                try (var stmt = connection.prepareStatement(query)) {
+                    stmt.setString(1, user.getFullName());
+                    stmt.setString(2, user.getEmail());
+                    stmt.setInt(3, user.getAge());
+                    stmt.setString(4, user.getColor());
+                    stmt.setInt(5, user.getId());
+                    stmt.executeUpdate();
+                }
+                return true;
             }
-            return true;
         }
+        return false;
     }
 
     public List<User> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users";
+            String query = "SELECT * FROM users";
             try (var stmt = connection.prepareStatement(query)) {
                 try (var resultSet = stmt.executeQuery()) {
                     List<User> userList = new ArrayList<>();
@@ -131,11 +87,26 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    public List<User> retrieveAllUsersExceptSender(int userId) throws SQLException {
+    public List<String> retrieveAllEmails() throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users where user_id != ?";
+            String query = "SELECT email_address FROM users";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setInt(1, userId);
+                try (var resultSet = stmt.executeQuery()) {
+                    List<String> emails = new ArrayList<>();
+                    while (resultSet.next()) {
+                        emails.add(resultSet.getString("email_address"));
+                    }
+                    return emails;
+                }
+            }
+        }
+    }
+
+    public List<User> retrieveAllUsersExceptSender(int id) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM users WHERE user_id != ?";
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {
                     List<User> userList = new ArrayList<>();
                     while (resultSet.next()) {
@@ -145,6 +116,35 @@ public class UserDao extends AbstractDao<User, Integer> {
                 }
             }
         }
+    }
+
+    /*
+        Check so user fields cant be empty.
+        Regex checks so there are at least first name and last name.
+        Email regex checks format so there is an @ between email-name and domain.
+        Checks so email does not already exist in database.
+     */
+    public boolean validateUser(User user) throws SQLException {
+        String nameRegex = ("[a-zA-Z]+ [a-zA-Z]+( [a-zA-Z]+)*");
+        String emailRegex = ("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
+        String existingEmail = "";
+
+        List<String> listOfEmails = retrieveAllEmails();
+
+        for (String email : listOfEmails) {
+            if (user.getEmail().equals(email)) {
+                existingEmail = email;
+            }
+        }
+
+        if (!user.getFullName().equals("") && !user.getEmail().equals("") && user.getAge() > 0 && !user.getColor().equals("")) {
+            if (user.getFullName().matches(nameRegex) && user.getEmail().matches(emailRegex)) {
+                if (!user.getEmail().equals(existingEmail)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private User mapFromResultSet(ResultSet resultSet) throws SQLException {
