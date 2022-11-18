@@ -10,8 +10,8 @@ import java.util.List;
 
 import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class UserDatabaseTest {
 
@@ -99,22 +99,22 @@ public class UserDatabaseTest {
                 .isNotSameAs(user);
     }
 
-    //DB User table tests
+    //A bit of work around to get this test to show that its actually not possible to use the same email twice in DB.
     @Test
-    void shouldNotBeAbleToHaveSameEmail() throws SQLException {
-        try {
-            var user1 = sampleUser();
-            user1.setEmail("hello@gmail.com");
-            userDao.save(user1);
+    void shouldFailOnDuplicateEmail() throws SQLException {
+        List<String> allEmails = userDao.retrieveAllEmails();
+        int numOfEmails = allEmails.size();
 
-            var user2 = sampleUser();
-            user2.setEmail("hello@gmail.com");
-            userDao.save(user2);
-
-            fail("Emails are unique. Save user2 should fail");
-        } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
-            assertNotNull(e);
+        for (int i = 0; i < 10; i++) {
+            var thor = sampleUser();
+            thor.setEmail("should@fail.com");
+            userDao.save(thor);
         }
+
+        List<String> shouldShowOneMoreEmails = userDao.retrieveAllEmails();
+        int numOfEmailsPlusOne = shouldShowOneMoreEmails.size();
+
+        assertEquals((numOfEmailsPlusOne - numOfEmails), 1);
     }
 }
 

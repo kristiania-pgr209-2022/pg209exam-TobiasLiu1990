@@ -9,6 +9,7 @@ import java.util.Random;
 
 /**
  * GenerateSampleData is used to generate random Users for testing purposes.
+ * Ensure unique primary key for DB by getting the size of user table + 1. this is then used for id and email.
  */
 
 public class GenerateSampleData {

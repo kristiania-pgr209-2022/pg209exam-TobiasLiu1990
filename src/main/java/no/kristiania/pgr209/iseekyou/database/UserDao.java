@@ -26,9 +26,9 @@ public class UserDao extends AbstractDao<User, Boolean> {
                     stmt.setString(3, user.getColor());
                     stmt.setInt(4, user.getAge());
                     stmt.executeUpdate();
-
                     try (var generatedKeys = stmt.getGeneratedKeys()) {
-                        saveUserId(generatedKeys, user);
+                        generatedKeys.next();
+                        user.setId(generatedKeys.getInt(1));
                     }
                     return true;
                 }
@@ -37,11 +37,6 @@ public class UserDao extends AbstractDao<User, Boolean> {
         return false;
     }
 
-    public int saveUserId(ResultSet generatedKeys , User user) throws SQLException {
-        generatedKeys.next();
-        user.setId(generatedKeys.getInt(1));
-        return user.getId();
-    }
 
     public User retrieve(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -63,7 +58,6 @@ public class UserDao extends AbstractDao<User, Boolean> {
         if (validateUser(user)) {
             try (var connection = dataSource.getConnection()) {
                 String query = "UPDATE users SET full_name = ?, email_address = ?, age = ?, favorite_color = ? WHERE user_id = ?";
-
                 try (var stmt = connection.prepareStatement(query)) {
                     stmt.setString(1, user.getFullName());
                     stmt.setString(2, user.getEmail());
@@ -93,11 +87,26 @@ public class UserDao extends AbstractDao<User, Boolean> {
         }
     }
 
-    public List<User> retrieveAllUsersExceptSender(int userId) throws SQLException {
+    public List<String> retrieveAllEmails() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT email_address FROM users";
+            try (var stmt = connection.prepareStatement(query)) {
+                try (var resultSet = stmt.executeQuery()) {
+                    List<String> emails = new ArrayList<>();
+                    while (resultSet.next()) {
+                        emails.add(resultSet.getString("email_address"));
+                    }
+                    return emails;
+                }
+            }
+        }
+    }
+
+    public List<User> retrieveAllUsersExceptSender(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM users WHERE user_id != ?";
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setInt(1, userId);
+                stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {
                     List<User> userList = new ArrayList<>();
                     while (resultSet.next()) {
@@ -109,13 +118,30 @@ public class UserDao extends AbstractDao<User, Boolean> {
         }
     }
 
-    public boolean validateUser(User user) {
-         String nameRegex = ("[a-zA-Z]+ [a-zA-Z]+( [a-zA-Z]+)*");
-         String emailRegex = ("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
+    /*
+        Check so user fields cant be empty.
+        Regex checks so there are at least first name and last name.
+        Email regex checks format so there is an @ between email-name and domain.
+        Checks so email does not already exist in database.
+     */
+    public boolean validateUser(User user) throws SQLException {
+        String nameRegex = ("[a-zA-Z]+ [a-zA-Z]+( [a-zA-Z]+)*");
+        String emailRegex = ("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
+        String existingEmail = "";
+
+        List<String> listOfEmails = retrieveAllEmails();
+
+        for (String email : listOfEmails) {
+            if (user.getEmail().equals(email)) {
+                existingEmail = email;
+            }
+        }
 
         if (!user.getFullName().equals("") && !user.getEmail().equals("") && user.getAge() > 0 && !user.getColor().equals("")) {
             if (user.getFullName().matches(nameRegex) && user.getEmail().matches(emailRegex)) {
-                return true;
+                if (!user.getEmail().equals(existingEmail)) {
+                    return true;
+                }
             }
         }
         return false;
