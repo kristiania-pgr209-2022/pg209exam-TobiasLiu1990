@@ -31,18 +31,6 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldRetrieveSavedUserUsingConstructor() throws SQLException {
-        var user = new User(1000, "Nameless", "nej@gmail.com", 100, "white");
-        userDao.save(user);
-
-        assertThat(userDao.retrieve(user.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(user)
-                .isNotSameAs(user);
-    }
-
-    @Test
     void shouldNotRetrieveNonExistingUser() throws SQLException {
         assertThat(userDao.retrieve(123))
                 .usingRecursiveComparison()

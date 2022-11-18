@@ -26,15 +26,21 @@ public class UserDao extends AbstractDao<User, Boolean> {
                     stmt.setString(3, user.getColor());
                     stmt.setInt(4, user.getAge());
                     stmt.executeUpdate();
+
                     try (var generatedKeys = stmt.getGeneratedKeys()) {
-                        generatedKeys.next();
-                        user.setId(generatedKeys.getInt(1));
+                        saveUserId(generatedKeys, user);
                     }
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public int saveUserId(ResultSet generatedKeys , User user) throws SQLException {
+        generatedKeys.next();
+        user.setId(generatedKeys.getInt(1));
+        return user.getId();
     }
 
     public User retrieve(int id) throws SQLException {

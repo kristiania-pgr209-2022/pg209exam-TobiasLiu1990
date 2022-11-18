@@ -31,8 +31,8 @@ public class UserEndPointTest extends AbstractServerTest {
         postConnection.setDoOutput(true);
         postConnection.getOutputStream().write(
                 Json.createObjectBuilder()
-                        .add("fullName", "I'm a testcrashdummy")
-                        .add("email", "Test@Junit.gg")
+                        .add("fullName", "Im a testcrashdummy")
+                        .add("email", "Test@Junit.gg.com")
                         .add("age", 25)
                         .add("color", "blue")
                         .build()
@@ -47,7 +47,7 @@ public class UserEndPointTest extends AbstractServerTest {
         var connection = openConnection("/api/user");
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg\",\"fullName\":\"I'm a testcrashdummy\",\"id\":");
+                .contains("color\":\"blue\",\"email\":\"Test@Junit.gg.com\",\"fullName\":\"Im a testcrashdummy\",\"id\":");
     }
 
     @Test
