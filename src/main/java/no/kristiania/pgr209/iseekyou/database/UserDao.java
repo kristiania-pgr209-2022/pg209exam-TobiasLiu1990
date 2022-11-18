@@ -94,6 +94,18 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
+    public boolean updateUser(User user) throws SQLException {
+        if(!validateUser(user)) return false;
+        try (var connection = dataSource.getConnection()) {
+            String query = "update users set(favorite_color, age, full_name, email_address) values(?, ?, ?, ?) where user_id = ?";
+            try (var stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, user.getColor());
+                stmt.setInt(2, user.getId());
+                stmt.executeUpdate();
+            }
+        }
+    }
+
     public List<User> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users";

@@ -61,7 +61,8 @@ function AddNewUser() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
-    const [color, setColor] = useState("");
+    const [color, setColor] = useState("")
+
     const nameRegex = new RegExp("[a-zA-Z]*\s[a-zA-Z]*");
     const emailRegex = new RegExp("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
 
@@ -106,22 +107,21 @@ function AddNewUser() {
     )
 }
 
-function UpdateUserSettings({user}) {
+function UpdateUserSettings({user, setUser}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
     const [color, setColor] = useState("");
-    let id = user.id;
+    const id = user.id;
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (!checkUserInput(fullName, email) || age === "" || age <= 0) {
-            alert("Invalid name or mail or age")
-            setAge("");
-            return;
-        }
-
+        // if (!checkUserInput(fullName, email) || age === "" || age <= 0) {
+        //     alert("Invalid name or mail or age")
+        //     setAge("");
+        //     return;
+        // }
         // if (age === "" || age <= 0) {
         //     setAge("");
         //     return;
@@ -135,10 +135,7 @@ function UpdateUserSettings({user}) {
             },
         });
         if (res.ok) {
-            user.fullName = fullName;
-            user.email = email;
-            user.age = age;
-            user.color = color;
+            setUser({fullName, email, age, color, id})
         }
     }
 
@@ -320,7 +317,8 @@ function ReplyToMessage({user, conversationId, setMessages}) {
         });
         //Append new message to the messages state
         if (res.ok) {
-            setMessages((oldMessages) => [...oldMessages, res.json()]);
+            const newMessage = await res.json();
+            setMessages((oldMessages) => [...oldMessages, newMessage]);
             setContent("");
         }
     }
