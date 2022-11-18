@@ -20,7 +20,7 @@ public class UserEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> listAllUsers() throws SQLException {
-        return userDao.listAll();
+        return userDao.retrieveAll();
     }
 
     @Path("/user/new")

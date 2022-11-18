@@ -94,7 +94,7 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    public List<User> listAll() throws SQLException {
+    public List<User> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users";
             try (var stmt = connection.prepareStatement(query)) {
@@ -109,7 +109,7 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
-    public List<User> getAllUsersExceptSender(int userId) throws SQLException {
+    public List<User> retrieveAllUsersExceptSender(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "select * from users where user_id != ?";
             try (var stmt = connection.prepareStatement(query)) {
