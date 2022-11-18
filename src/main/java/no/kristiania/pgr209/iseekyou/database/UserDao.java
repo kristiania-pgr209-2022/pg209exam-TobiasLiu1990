@@ -94,15 +94,25 @@ public class UserDao extends AbstractDao<User, Integer> {
         }
     }
 
+    public boolean validateUser(User user) {
+        return !user.getFullName().equals("") && user.getAge() > 0 && !user.getEmail().equals("") && !user.getColor().equals("");
+    }
+
     public boolean updateUser(User user) throws SQLException {
-        if(!validateUser(user)) return false;
+        if (!validateUser(user)) return false;
+
         try (var connection = dataSource.getConnection()) {
-            String query = "update users set(favorite_color, age, full_name, email_address) values(?, ?, ?, ?) where user_id = ?";
+            String query = "UPDATE users SET full_name = ?, age = ?, email_address = ?, favorite_color = ? WHERE user_id = ?";
+
             try (var stmt = connection.prepareStatement(query)) {
-                stmt.setString(1, user.getColor());
-                stmt.setInt(2, user.getId());
+                stmt.setString(1, user.getFullName());
+                stmt.setInt(2, user.getAge());
+                stmt.setString(3, user.getEmail());
+                stmt.setString(4, user.getColor());
+                stmt.setInt(5, user.getId());
                 stmt.executeUpdate();
             }
+            return true;
         }
     }
 
