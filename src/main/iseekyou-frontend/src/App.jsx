@@ -62,7 +62,7 @@ function AddNewUser() {
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
     const [color, setColor] = useState("");
-    const nameRegex = "^[A-Z][a-z]+\\s[A-Z][a-z]+$";
+    const nameRegex = "[a-zA-Z]\s[a-zA-Z]";
     const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
 
     async function handleSubmit(e) {
