@@ -56,9 +56,6 @@ function AddNewUser() {
     const [age, setAge] = useState(0);
     const [color, setColor] = useState("")
 
-    // const nameRegex = new RegExp("[a-zA-Z]*\s[a-zA-Z]*");
-    // const emailRegex = new RegExp("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
-
     async function handleSubmit(e) {
         e.preventDefault();
 

@@ -18,7 +18,7 @@ public class ConversationDao extends AbstractDao<Conversation, Integer> {
     //Saves a new conversation and also returns the object.
     public Integer save(Conversation conversation) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "insert into conversations (conversation_title) values (?)";
+            String query = "INSERT INTO conversations (conversation_title) VALUES (?)";
             try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 stmt.setString(1, conversation.getConversationTitle());
                 stmt.executeUpdate();

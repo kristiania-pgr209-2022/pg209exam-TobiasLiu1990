@@ -19,7 +19,7 @@ public class UserDao extends AbstractDao<User, Boolean> {
     public Boolean save(User user) throws SQLException {
         if (validateUser(user)) {
             try (var connection = dataSource.getConnection()) {
-                String query = "insert into users (full_name, email_address, favorite_color, age) values (?, ?, ?, ?)";
+                String query = "INSERT INTO users (full_name, email_address, favorite_color, age) VALUES (?, ?, ?, ?)";
                 try (var stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     stmt.setString(1, user.getFullName());
                     stmt.setString(2, user.getEmail());
@@ -39,7 +39,7 @@ public class UserDao extends AbstractDao<User, Boolean> {
 
     public User retrieve(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users where user_id = ?";
+            String query = "SELECT * FROM users WHERE user_id = ?";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, id);
                 try (var resultSet = stmt.executeQuery()) {
@@ -74,7 +74,7 @@ public class UserDao extends AbstractDao<User, Boolean> {
 
     public List<User> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users";
+            String query = "SELECT * FROM users";
             try (var stmt = connection.prepareStatement(query)) {
                 try (var resultSet = stmt.executeQuery()) {
                     List<User> userList = new ArrayList<>();
@@ -89,7 +89,7 @@ public class UserDao extends AbstractDao<User, Boolean> {
 
     public List<User> retrieveAllUsersExceptSender(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "select * from users where user_id != ?";
+            String query = "SELECT * FROM users WHERE user_id != ?";
             try (var stmt = connection.prepareStatement(query)) {
                 stmt.setInt(1, userId);
                 try (var resultSet = stmt.executeQuery()) {
@@ -104,8 +104,13 @@ public class UserDao extends AbstractDao<User, Boolean> {
     }
 
     public boolean validateUser(User user) {
+         String nameRegex = ("[a-zA-Z]+ [a-zA-Z]+( [a-zA-Z]+)*");
+         String emailRegex = ("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
+
         if (!user.getFullName().equals("") && !user.getEmail().equals("") && user.getAge() > 0 && !user.getColor().equals("")) {
-            return true;
+            if (user.getFullName().matches(nameRegex) && user.getEmail().matches(emailRegex)) {
+                return true;
+            }
         }
         return false;
     }

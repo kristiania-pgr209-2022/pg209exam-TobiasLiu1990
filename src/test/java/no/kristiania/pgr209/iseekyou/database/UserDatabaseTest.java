@@ -127,43 +127,6 @@ public class UserDatabaseTest {
             assertNotNull(e);
         }
     }
-
-    @Test
-    void shouldNotSaveUserWithBlankFields() throws SQLException {
-        var user = new User();
-
-        for (int i = 0; i <= 3; i++) {
-            user = fillFieldsToUserObject(user, i);
-            System.out.println("Iteration: \n" + i + " " + user);
-
-            if (i <= 2) {
-                try {
-                    userDao.save(user);
-                    fail("Should not be able to save user object without all fields empty");
-                } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
-                    assertNotNull(e);
-                }
-            } else {
-                userDao.save(user);
-
-                assertThat(userDao.retrieve(user.getId()))
-                        .hasNoNullFieldsOrProperties()
-                        .usingRecursiveComparison()
-                        .isEqualTo(user)
-                        .isNotSameAs(user);
-            }
-        }
-    }
-
-    public User fillFieldsToUserObject(User user, int i) {
-        switch (i) {
-            case 0 -> user.setFullName("Johan Johansen");
-            case 1 -> user.setEmail("Johan@gmail.com");
-            case 2 -> user.setAge(30);
-            case 3 -> user.setColor("red");
-        }
-        return user;
-    }
 }
 
 
