@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServerTest extends AbstractServerTest{
+public class ServerTest extends AbstractServerTest {
 
     @Test
     void shouldServerHomePage() throws IOException {

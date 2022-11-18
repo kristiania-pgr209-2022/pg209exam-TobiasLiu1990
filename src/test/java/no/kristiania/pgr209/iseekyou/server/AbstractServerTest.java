@@ -10,11 +10,11 @@ import java.net.URL;
 
 public class AbstractServerTest {
     private final JdbcDataSource dataSource = (JdbcDataSource) InMemoryDataSource.createDataSource();
-    private ISeekYouMessagingServer server;
+    private ISeekYouServer server;
 
     @BeforeEach
     void setUp() throws Exception {
-        server = new ISeekYouMessagingServer(0, dataSource);
+        server = new ISeekYouServer(0, dataSource);
         server.start();
     }
 

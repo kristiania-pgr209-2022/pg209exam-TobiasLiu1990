@@ -24,13 +24,13 @@ import java.net.URL;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class ISeekYouMessagingServer {
+public class ISeekYouServer {
 
     private final Server server;
-    private final Logger logger = LoggerFactory.getLogger(ISeekYouMessagingServer.class);
+    private final Logger logger = LoggerFactory.getLogger(ISeekYouServer.class);
 
     //Receive dataSource depending on caller (prod vs testing)
-    public ISeekYouMessagingServer(int port, DataSource dataSource) throws IOException {
+    public ISeekYouServer(int port, DataSource dataSource) throws IOException {
         this.server = new Server(port);
         server.setHandler(new HandlerList(createApiContext(dataSource), createWebApp()));
         server.setRequestLog(new CustomRequestLog());
@@ -47,7 +47,7 @@ public class ISeekYouMessagingServer {
         webContext.setInitParameter("jersey.config.server.provider.packages", "no.kristiania.pgr209.iseekyou");
 
         //Filter
-        webContext.addFilter(new FilterHolder(new ISeekYouMessagingServerFilter()), "/", EnumSet.of(DispatcherType.REQUEST));
+        webContext.addFilter(new FilterHolder(new ISeekYouServerFilter()), "/", EnumSet.of(DispatcherType.REQUEST));
 
         return webContext;
     }
@@ -99,6 +99,6 @@ public class ISeekYouMessagingServer {
                 .map(Integer::parseInt)
                 .orElse(8080);
 
-        new ISeekYouMessagingServer(port, DatabaseDataSource.getDatasource()).start();
+        new ISeekYouServer(port, DatabaseDataSource.getDatasource()).start();
     }
 }

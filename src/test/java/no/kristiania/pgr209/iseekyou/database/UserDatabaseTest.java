@@ -11,7 +11,7 @@ import java.util.List;
 import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDatabaseTest {
 
@@ -32,7 +32,7 @@ public class UserDatabaseTest {
 
     @Test
     void shouldRetrieveSavedUserUsingConstructor() throws SQLException {
-        var user = new User(1000, "Nameless", "nej@gmail.com", "white", 100);
+        var user = new User(1000, "Nameless", "nej@gmail.com", 100, "white");
         userDao.save(user);
 
         assertThat(userDao.retrieve(user.getId()))
@@ -50,75 +50,22 @@ public class UserDatabaseTest {
     }
 
     @Test
-    void shouldUpdateFullname() throws SQLException {
-        var originalUser = sampleUser();
+    void shouldUpdateUser() throws SQLException {
+        var originalUser = new User(100, "Original Person", "original@gmail.com", 50, "blue");
         userDao.save(originalUser);
 
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
+        var update = new User(originalUser.getId(), "Updated Person", "updated@gmail.com", 100, "red");
+        userDao.updateUser(update);
 
-        var updatedUser = new User();
-        updatedUser.setFullName("A new name");
-        userDao.updateUserName(updatedUser);
+        var retrieveOriginalUserAfterUpdate = userDao.retrieve(originalUser.getId());
 
-        assertThat(originalUser.getFullName())
-                .isNotSameAs(updatedUser.getFullName());
-    }
 
-    @Test
-    void shouldUpdateEmail() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
+        assertNotEquals(originalUser, retrieveOriginalUserAfterUpdate);
 
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setEmail("New@mail.com");
-        userDao.updateEmail(updatedUser);
-
-        assertThat(originalUser.getEmail())
-                .isNotSameAs(updatedUser.getEmail());
-    }
-
-    @Test
-    void shouldUpdateAge() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
-
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setAge(originalUser.getAge() + 1);
-        userDao.updateAge(updatedUser);
-
-        assertThat(originalUser.getAge())
-                .isNotSameAs(updatedUser.getAge());
-    }
-
-    @Test
-    void shouldUpdateUserFavoriteColor() throws SQLException {
-        var originalUser = sampleUser();
-        userDao.save(originalUser);
-
-        assertThat(userDao.retrieve(originalUser.getId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isEqualTo(originalUser);
-
-        var updatedUser = new User();
-        updatedUser.setColor("white");  //White is not an alternative in SampleUser() for generating color.
-        userDao.updateFavoriteColor(updatedUser);
-
-        assertThat(originalUser.getColor())
-                .isNotSameAs(updatedUser.getColor());
+        assertEquals(retrieveOriginalUserAfterUpdate.getFullName(), update.getFullName());
+        assertEquals(retrieveOriginalUserAfterUpdate.getEmail(), update.getEmail());
+        assertEquals(retrieveOriginalUserAfterUpdate.getAge(), update.getAge());
+        assertEquals(retrieveOriginalUserAfterUpdate.getColor(), update.getColor());
     }
 
     @Test
@@ -185,10 +132,11 @@ public class UserDatabaseTest {
     void shouldNotSaveUserWithBlankFields() throws SQLException {
         var user = new User();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i <= 3; i++) {
             user = fillFieldsToUserObject(user, i);
+            System.out.println("Iteration: \n" + i + " " + user);
 
-            if (i < 3) {
+            if (i <= 2) {
                 try {
                     userDao.save(user);
                     fail("Should not be able to save user object without all fields empty");

@@ -8,14 +8,14 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NewConversationEndPointTest extends AbstractServerTest{
+public class NewConversationEndPointTest extends AbstractServerTest {
 
     @Test
     void shouldGetAllUsersExceptTheCurrentLoggedInUser() throws IOException {
         var postConnection = openConnection(
                 "/api/user/inbox/new/conversationRecipients?userId=" + 1);
         postConnection.setRequestMethod("GET");
-        postConnection.setRequestProperty("Content-Type" , "application/json");
+        postConnection.setRequestProperty("Content-Type", "application/json");
         postConnection.setDoOutput(true);
 
         assertThat(postConnection.getResponseCode())
@@ -32,7 +32,7 @@ public class NewConversationEndPointTest extends AbstractServerTest{
     void shouldAddRecipientsToAConversation() throws IOException {
         var postConnection = openConnection("/api/user/inbox/new/conversation/addRecipients");
         postConnection.setRequestMethod("POST");
-        postConnection.setRequestProperty("Content-Type" , "application/json");
+        postConnection.setRequestProperty("Content-Type", "application/json");
         postConnection.setDoOutput(true);
         postConnection.getOutputStream().write(
                 Json.createObjectBuilder()
@@ -57,7 +57,7 @@ public class NewConversationEndPointTest extends AbstractServerTest{
     void shouldAddAReplyToAConversation() throws IOException {
         var postConnection = openConnection("/api/user/inbox/conversation/message");
         postConnection.setRequestMethod("POST");
-        postConnection.setRequestProperty("Content-Type" , "application/json");
+        postConnection.setRequestProperty("Content-Type", "application/json");
         postConnection.setDoOutput(true);
         postConnection.getOutputStream().write(
                 Json.createObjectBuilder()

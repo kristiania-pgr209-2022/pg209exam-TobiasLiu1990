@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConversationDao extends AbstractDao<Conversation, Integer>{
+public class ConversationDao extends AbstractDao<Conversation, Integer> {
 
     @Inject
     public ConversationDao(DataSource dataSource) {
