@@ -62,18 +62,19 @@ function AddNewUser() {
     const [email, setEmail] = useState("");
     const [age, setAge] = useState("");
     const [color, setColor] = useState("");
-    const nameRegex = "[a-zA-Z]\s[a-zA-Z]";
-    const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
+    const nameRegex = new RegExp("[a-zA-Z]*\s[a-zA-Z]*");
+    const emailRegex = new RegExp("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
         console.log("name: " + fullName);
-        if (!nameRegex.match(fullName)) {
+        if (!nameRegex.test(fullName)) {
             alert("invalid name")
+            return;
         }
 
-        if (!emailRegex.match(email)) {
+        if (!emailRegex.test(email)) {
             alert("Invalid mail")
             return;
         }
