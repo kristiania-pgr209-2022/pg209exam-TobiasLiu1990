@@ -27,7 +27,7 @@ public class ConversationMembersDao extends AbstractDao<ConversationMembers, Int
         }
     }
 
-    public List<String> getConversationParticipantsExceptCurrentUser(int userId, int conversationId) throws SQLException {
+    public List<String> retrieveConversationParticipantsExceptCurrentUser(int userId, int conversationId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT DISTINCT(Users.full_name)

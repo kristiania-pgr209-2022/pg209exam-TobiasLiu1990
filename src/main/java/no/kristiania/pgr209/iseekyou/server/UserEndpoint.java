@@ -3,6 +3,7 @@ package no.kristiania.pgr209.iseekyou.server;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import no.kristiania.pgr209.iseekyou.User;
 import no.kristiania.pgr209.iseekyou.database.UserDao;
 
@@ -20,7 +21,7 @@ public class UserEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> listAllUsers() throws SQLException {
-        return userDao.listAll();
+        return userDao.retrieveAll();
     }
 
     @Path("/user/new")
@@ -34,18 +35,11 @@ public class UserEndpoint {
     @Path("/user/settings")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUserSettings(User user) throws SQLException {
-        if (!user.getFullName().equals("")) {
-            userDao.updateUserName(user);
-        }
-        if (!user.getEmail().equals("")) {
-            userDao.updateEmail(user);
-        }
-        if (!user.getColor().equals("")) {
-            userDao.updateFavoriteColor(user);
-        }
-        if (user.getAge() > 0) {
-            userDao.updateAge(user);
+    public Response updateUserSettings(User user) throws SQLException {
+        if (userDao.updateUser(user)) {
+            return Response.ok().build();
+        } else {
+            return Response.status(400).build();
         }
     }
 }

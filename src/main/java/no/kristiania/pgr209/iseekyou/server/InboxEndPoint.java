@@ -26,7 +26,7 @@ public class InboxEndPoint {
 //    @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Conversation> userConversations(@QueryParam("userId") int userId) throws SQLException {
+    public List<Conversation> retrieveAllConversationsForUser(@QueryParam("userId") int userId) throws SQLException {
         return conversationDao.retrieveAllConversationsByUserId(userId);
     }
 
@@ -34,15 +34,15 @@ public class InboxEndPoint {
     @Path("/conversation/members")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> conversationParticipants(@QueryParam("userId") int userId, @QueryParam("conversationId") int conversationId) throws SQLException {
-        return conversationMembersDao.getConversationParticipantsExceptCurrentUser(userId, conversationId);
+    public List<String> retrieveConversationParticipants(@QueryParam("userId") int userId, @QueryParam("conversationId") int conversationId) throws SQLException {
+        return conversationMembersDao.retrieveConversationParticipantsExceptCurrentUser(userId, conversationId);
     }
 
     //Shows all messages in a conversation when a conversation is clicked.
     @Path("/conversation/messages")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Message> conversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
+    public List<Message> retrieveConversationMessages(@QueryParam("conversationId") int conversationId) throws SQLException {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
 

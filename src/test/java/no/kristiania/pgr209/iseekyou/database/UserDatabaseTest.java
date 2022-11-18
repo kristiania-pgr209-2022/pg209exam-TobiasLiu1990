@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Random;
 
 import static no.kristiania.pgr209.iseekyou.GenerateSampleData.sampleUser;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -127,7 +126,7 @@ public class UserDatabaseTest {
         var currentUser = sampleUser();
         userDao.save(currentUser);
 
-        List<User> allUsers = userDao.listAll();
+        List<User> allUsers = userDao.retrieveAll();
         int totalUsers = allUsers.size();
 
         assertThat(userDao.retrieve(currentUser.getId()))
@@ -136,18 +135,18 @@ public class UserDatabaseTest {
                 .isEqualTo(currentUser)
                 .isNotSameAs(currentUser);
 
-        assertThat(userDao.getAllUsersExceptSender(currentUser.getId()))
+        assertThat(userDao.retrieveAllUsersExceptSender(currentUser.getId()))
                 .hasSizeLessThan(totalUsers);
     }
 
     @Test
     void shouldRetrieveAllUsersIncludingAddedUser() throws SQLException {
-        List<User> userList = userDao.listAll();
+        List<User> userList = userDao.retrieveAll();
 
         var user = sampleUser();
         userDao.save(user);
 
-        List<User> newUserList = userDao.listAll();
+        List<User> newUserList = userDao.retrieveAll();
 
         assertThat(userList.size())
                 .isLessThan(newUserList.size());

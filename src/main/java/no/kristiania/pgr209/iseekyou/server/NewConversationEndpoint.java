@@ -44,8 +44,8 @@ public class NewConversationEndpoint {
     @Path("/conversationRecipients")
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<User> getConversationUsers(@QueryParam("userId") int userId) throws SQLException {
-        return userDao.getAllUsersExceptSender(userId);
+    public List<User> retrieveConversationUsers(@QueryParam("userId") int userId) throws SQLException {
+        return userDao.retrieveAllUsersExceptSender(userId);
     }
 
     //ADD recipients for new conversation

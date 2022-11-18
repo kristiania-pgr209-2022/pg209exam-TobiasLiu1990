@@ -4,7 +4,7 @@
   top: 0;
 }
 
-#selected-user, #selected-user-color, #selected-user-age {
+#selected-user, #selected-user-color, #selected-user-age, #selected-user-email {
   margin: 0;
   padding: 0;
 }

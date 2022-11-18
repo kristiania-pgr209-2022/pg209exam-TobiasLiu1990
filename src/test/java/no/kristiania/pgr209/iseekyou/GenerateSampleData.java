@@ -21,7 +21,7 @@ public class GenerateSampleData {
     public static User sampleUser() throws SQLException {
         var user = new User();
 
-        List<User> users = userDao.listAll();
+        List<User> users = userDao.retrieveAll();
         int id = users.size() + 1;
 
         user.setId(id);

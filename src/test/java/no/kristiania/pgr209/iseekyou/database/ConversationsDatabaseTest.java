@@ -109,7 +109,7 @@ public class ConversationsDatabaseTest {
         conversationMembersDao.save(conversationMember1);
         conversationMembersDao.save(conversationMember2);
 
-        List<String> conversationParticipants = conversationMembersDao.getConversationParticipantsExceptCurrentUser(user1.getId(), conversation.getId());
+        List<String> conversationParticipants = conversationMembersDao.retrieveConversationParticipantsExceptCurrentUser(user1.getId(), conversation.getId());
         assertEquals(1, conversationParticipants.size());
     }
 }

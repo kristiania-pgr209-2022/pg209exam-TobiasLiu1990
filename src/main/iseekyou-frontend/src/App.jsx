@@ -29,8 +29,9 @@ function ListUsers({user, setUser}) {
             <div id="show-users-drop-list">
                 <h2>User list</h2>
                 <h5 id="selected-user">Username: {user && user.fullName}</h5>
-                <h5 id="selected-user-color">Favorite color: {user && user.color}</h5>
+                <h5 id="selected-user-email">Email: {user && user.email}</h5>
                 <h5 id="selected-user-age">Age: {user && user.age}</h5>
+                <h5 id="selected-user-color">Favorite color: {user && user.color}</h5>
 
 
                 <select value={users} onChange={handleChange}>
@@ -52,13 +53,29 @@ function SetUserColor({user}) {
 function AddNewUser() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
-    const [age, setAge] = useState("");
-    const [color, setColor] = useState("");
+    const [age, setAge] = useState(0);
+    const [color, setColor] = useState("")
+
+    // const nameRegex = new RegExp("[a-zA-Z]*\s[a-zA-Z]*");
+    // const emailRegex = new RegExp("[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}");
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (fullName.match())
+        // console.log("name: " + fullName);
+        // if (!nameRegex.test(fullName)) {
+        //     alert("invalid name")
+        //     return;
+        // }
+        //
+        // if (!emailRegex.test(email)) {
+        //     alert("Invalid mail")
+        //     return;
+        // }
+        // if (age === "" || age <= 0) {
+        //     alert("invalid age")
+        //     return;
+        // }
 
         await fetch("/api/user/new", {
             method: "post",
@@ -83,12 +100,12 @@ function AddNewUser() {
     )
 }
 
-function UpdateUserSettings({user}) {
-    const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
+function UpdateUserSettings({user, setUser}) {
+    const [fullName, setFullName] = useState(user.fullName);
+    const [email, setEmail] = useState(user.email);
     const [age, setAge] = useState(user.age);
-    const [color, setColor] = useState("");
-    let id = user.id;
+    const [color, setColor] = useState(user.color);
+    const id = user.id;
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -101,10 +118,7 @@ function UpdateUserSettings({user}) {
             },
         });
         if (res.ok) {
-            user.fullName = fullName;
-            user.email = email;
-            user.age = age;
-            user.color = color;
+            setUser({fullName, email, age, color, id})
         }
     }
 
@@ -131,7 +145,13 @@ function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, colo
                     <input
                         type="test"
                         value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
+                        onChange={(e) => {
+
+                                setFullName(e.target.value)
+
+
+
+                        }}
                     />
                 </label>
             </div>
@@ -153,7 +173,9 @@ function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, colo
                     <input
                         type="number"
                         value={age}
-                        onChange={(e) => setAge(e.target.value)}/>
+                        onChange={(e) => {
+                            setAge(e.target.value)
+                        }}/>
                 </label>
             </div>
 
@@ -278,7 +300,8 @@ function ReplyToMessage({user, conversationId, setMessages}) {
         });
         //Append new message to the messages state
         if (res.ok) {
-            setMessages((oldMessages) => [...oldMessages, res.json()]);
+            const newMessage = await res.json();
+            setMessages((oldMessages) => [...oldMessages, newMessage]);
             setContent("");
         }
     }
@@ -336,7 +359,7 @@ function CreateNewConversation({user, recipients}) {
                 },
             });
         }
-        setRunOnce(false);  //Set state to false here so current user isnt added multiple times to its conversation thread.
+        setRunOnce(false);  //Set state to false here so current user isn't added multiple times to its conversation thread.
 
 
 
@@ -396,9 +419,6 @@ function CreateMessage({conversationId, userId}) {
     async function handleSubmit(e) {
         e.preventDefault();
         setContent(e.target.value);
-        console.log("Sender id: " + senderId)
-        console.log("Content to send: " + content)
-        console.log("Conversion Id: " + conversationId)
 
         const res = await fetch("api/user/inbox/new/conversation/message", {
             method: "post",
@@ -421,7 +441,6 @@ function CreateMessage({conversationId, userId}) {
                     Message:
                     <textarea
                         id="message-input"
-                        type="text"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}></textarea>
                 </label>
@@ -458,7 +477,7 @@ function App() {
 
             <ListUsers user={user} setUser={setUser}/>
             {user && <SetUserColor user={user}/>}
-            {user && <UpdateUserSettings user={user}/>}
+            {user && <UpdateUserSettings user={user} setUser={setUser}/>}
             {user && <ShowConversationsForUser user={user} messages={messages} setMessages={setMessages}/>}
             {user && <FindRecipientsToAdd user={user} recipient={recipients} setRecipients={setRecipients}/>}
             {user && <CreateNewConversation user={user} recipients={recipients}/>}
