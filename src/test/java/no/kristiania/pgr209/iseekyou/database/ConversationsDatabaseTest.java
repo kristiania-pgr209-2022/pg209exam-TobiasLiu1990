@@ -92,8 +92,8 @@ public class ConversationsDatabaseTest {
     @Test
     void shouldRetrieveAllConversationParticipantsExceptCurrentUser() throws SQLException {
         var user1 = sampleUser();
-        var user2 = sampleUser();
         userDao.save(user1);
+        var user2 = sampleUser();
         userDao.save(user2);
 
         var conversation = new Conversation("Christmas");

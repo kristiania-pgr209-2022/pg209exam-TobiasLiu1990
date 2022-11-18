@@ -102,14 +102,15 @@ public class UserDatabaseTest {
     //DB User table tests
     @Test
     void shouldNotBeAbleToHaveSameEmail() throws SQLException {
-        var user1 = sampleUser();
-        var user2 = sampleUser();
-        user1.setEmail("hello@gmail.com");
-        user2.setEmail("hello@gmail.com");
-
         try {
+            var user1 = sampleUser();
+            user1.setEmail("hello@gmail.com");
             userDao.save(user1);
+
+            var user2 = sampleUser();
+            user2.setEmail("hello@gmail.com");
             userDao.save(user2);
+
             fail("Emails are unique. Save user2 should fail");
         } catch (org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException e) {
             assertNotNull(e);

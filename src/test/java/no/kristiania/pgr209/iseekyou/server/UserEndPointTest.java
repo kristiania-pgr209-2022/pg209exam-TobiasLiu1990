@@ -97,4 +97,24 @@ public class UserEndPointTest extends AbstractServerTest {
                 .as(putConnection.getResponseMessage() + " for " + putConnection.getURL())
                 .isEqualTo(400);
     }
+
+    @Test
+    void shouldFailAddingUser() throws IOException {
+        var putConnection = openConnection("/api/user/new");
+        putConnection.setRequestMethod("POST");
+        putConnection.setRequestProperty("Content-Type", "application/json");
+        putConnection.setDoOutput(true);
+        putConnection.getOutputStream().write(
+                Json.createObjectBuilder()
+                        .add("fullName", "Only a fullname")
+                        .add("email", "")
+                        .build()
+                        .toString()
+                        .getBytes(StandardCharsets.UTF_8)
+        );
+
+        assertThat(putConnection.getResponseCode())
+                .as(putConnection.getResponseMessage() + " for " + putConnection.getURL())
+                .isEqualTo(400);
+    }
 }
