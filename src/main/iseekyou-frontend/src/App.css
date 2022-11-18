@@ -37,11 +37,7 @@
   left: 0;
   bottom: 2%;
 }
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+
 
 /* For new conversation window */
 #new-conversation-div {
@@ -61,7 +57,7 @@ input::-webkit-inner-spin-button {
 
 #new-recipients-div {
   position: absolute;
-  transform: translateY(120%);
+  transform: translateY(70%);
   right: 0;
   font-size: 10px;
 }
@@ -69,7 +65,7 @@ input::-webkit-inner-spin-button {
 #new-message-div {
   position: absolute;
   height: 10%;
-  top: 50%;
+  top: 60%;
   right: 0;
 }
 
@@ -78,11 +74,8 @@ input::-webkit-inner-spin-button {
   resize: vertical;
 }
 
-#conversations {
-  position: absolute;
-  font-size: 12px;
-  left: 20%;
-  top: 10%;
+#conversations-div {
+  font-size: 13px;
 }
 
 #show-messages-div {
@@ -91,10 +84,17 @@ input::-webkit-inner-spin-button {
   background: lightgray;
 }
 
-#reply-div {
-
+#show-message-sender-date-h4, #show-message-content-div, #reply-div {
+  margin: 0.3em;
+  padding: 0;
 }
 
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 #first-option {
   font-weight: bold;

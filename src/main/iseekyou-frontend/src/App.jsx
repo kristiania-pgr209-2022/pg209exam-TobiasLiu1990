@@ -50,6 +50,12 @@ function SetUserColor({user}) {
     document.getElementById("app-title").style.color = user.color;
 }
 
+function checkColor(colorName) {
+    const s = new Option().style;
+    s.color = colorName;
+    return s.color === colorName;
+}
+
 function AddNewUser() {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
@@ -59,19 +65,27 @@ function AddNewUser() {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        if (!checkColor(color)) {
+            alert("Invalid color")
+            return;
+        }
+
         if (age <= 0) {
             alert("Age must be at least 1")
             setAge(0);
             return;
         }
 
-        await fetch("/api/user/new", {
+        const res = await fetch("/api/user/new", {
             method: "post",
             body: JSON.stringify({fullName, email, age, color}),
             headers: {
                 "Content-Type": "application/json",
             },
         });
+        if (res.ok) {
+            window.location.reload();
+        }
     }
 
     return (
@@ -97,6 +111,11 @@ function UpdateUserSettings({user, setUser}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        if (!checkColor(color)) {
+            alert("Invalid color")
+            return;
+        }
 
         if (age <= 0) {
             alert("Age must be at least 1")
@@ -135,16 +154,12 @@ function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, colo
         <div>
             <div>
                 <label>
-                    New name:
+                    New first name and last name:
                     <input
                         type="test"
                         value={fullName}
                         onChange={(e) => {
-
-                                setFullName(e.target.value)
-
-
-
+                            setFullName(e.target.value)
                         }}
                     />
                 </label>
@@ -226,7 +241,7 @@ function ShowConversationsForUser({user, messages, setMessages}) {
     }
 
     return (
-        <div>
+        <div id="conversations-div">
             <h2>Conversations</h2>
 
             <h5 style={{border: "solid black 1px"}}>
@@ -240,7 +255,6 @@ function ShowConversationsForUser({user, messages, setMessages}) {
                             value={c.id}>{c.id} - {c.conversationTitle}</button>
                 </div>
             ))}
-
             <ShowMessageBox user={user} conversationId={conversationId} messages={messages} setMessages={setMessages}/>
         </div>
     );
@@ -266,8 +280,8 @@ function ShowMessageBox({user, conversationId, messages, setMessages}) {
         <div id="show-messages-div">
             {messages.map((m) => (
                 <>
-                    <h4>{m.senderName} - {m.messageDate}</h4>
-                    <p>{m.content}</p>
+                    <h4 id="show-message-sender-date-h4">{m.senderName} - {m.messageDate}</h4>
+                    <div id="show-message-content-div">{m.content}</div>
                 </>
             ))}
             <ReplyToMessage user={user} conversationId={conversationId} setMessages={setMessages}/>
@@ -283,7 +297,6 @@ function ReplyToMessage({user, conversationId, setMessages}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-
 
         const res = await fetch("/api/user/inbox/conversation/message/reply", {
             method: "post",
@@ -319,7 +332,6 @@ function CreateNewConversation({user, recipients}) {
     const [runOnce, setRunOnce] = useState(true);       //Used to control a POST to run only once per creation of a conversation.
     let recipientId = 0;
 
-
     //POST - create new conversation object with title only. Then returns its ID.
     async function handleSubmitConversationTitle(e) {
         e.preventDefault();
@@ -337,7 +349,6 @@ function CreateNewConversation({user, recipients}) {
         }
     }
 
-
     async function handleSubmitRecipients(e) {
         e.preventDefault();
 
@@ -354,8 +365,6 @@ function CreateNewConversation({user, recipients}) {
             });
         }
         setRunOnce(false);  //Set state to false here so current user isn't added multiple times to its conversation thread.
-
-
 
         //POST - Uses ID from conversation title above + recipientID (who you want to send to)
         recipientId = e.target.value;
@@ -409,7 +418,6 @@ function CreateMessage({conversationId, userId}) {
     const [content, setContent] = useState("");
     let senderId = userId;
 
-
     async function handleSubmit(e) {
         e.preventDefault();
         setContent(e.target.value);
@@ -425,6 +433,7 @@ function CreateMessage({conversationId, userId}) {
         if (res.ok) {
             document.getElementById("new-message-div").style.visibility = "hidden";
             document.getElementById("new-recipients-div").style.visibility = "hidden";
+            window.location.reload();
         }
     }
 

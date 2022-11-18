@@ -2,6 +2,35 @@
 
 # PG209 Backend programmering eksamen
 
+#### Feature lista:
+* Kan skapa ny brukere - uppdaterar sidan automatiskt
+* Lista över alla brukere
+* Välja brukere i listan för att "loggas in"
+
+* När man väljer brukeren i drop-listan så kan man:
+  * Ändra på bruker-settings.
+    * Fullname: Må innehålle minst 2 "namn" (förnamn, efternamn). Kan innehålla fler namn.
+    * E-mail: Må ha @ och en domain. Ex. backend.pgr209@kristiania.backend.no
+    * Age: Må vara större än 0
+    * Color: Går inte att skriva in icke-existerande färg
+
+  * Se alla konversationer (trådar)
+    * När man öppnar en konversation ser man alla som är med och alla meddelanden.
+    * Man kan svara på konversationen.
+      * Meddelandet man skriver kommer ut direkt.
+      * Men man måste refresha/byta konversation för att se sitt namn + tiden man skrev den.
+      * Alla andra som är med kan då se samma sak.
+      
+  * Längst till höger så är ett fält för att skapa ny konversation.
+    * Först skrivs titeln in.
+    * Sedan kan man välja vem man vill skicka till. (Går inte i fel ordning pga hur primary key tas ut och används)
+    * Sedan kan man submitta konversationen.
+    * När man har skapat den så refreshas sidan.
+
+
+
+
+
 ## Sjekkliste for innleveringen
 
 * [x] Dere har lest eksamensteksten
