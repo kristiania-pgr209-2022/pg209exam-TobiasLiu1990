@@ -58,6 +58,10 @@ function AddNewUser() {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        if (age === "" || age <= 0) {
+            return;
+        }
+
         await fetch("/api/user/new", {
             method: "post",
             body: JSON.stringify({fullName, email, age, color}),
@@ -84,12 +88,17 @@ function AddNewUser() {
 function UpdateUserSettings({user}) {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
-    const [age, setAge] = useState(user.age);
+    const [age, setAge] = useState("");
     const [color, setColor] = useState("");
     let id = user.id;
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        if (age === "" || age <= 0) {
+            setAge("");
+            return;
+        }
 
         const res = await fetch("/api/user/settings", {
             method: "put",
@@ -121,6 +130,13 @@ function UpdateUserSettings({user}) {
 }
 
 function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, color, setColor}) {
+    const nameRegex = "[a-zA-Z] [a-zA-Z]+";
+    const emailRegex = "[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.*[a-zA-Z0-9]+)*\\.[a-zA-Z]{2,}";
+
+    // if (fullName === "" || age <= 0) {
+    //     return;
+    // }
+
     return (
         <div>
             <div>
@@ -129,7 +145,13 @@ function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, colo
                     <input
                         type="test"
                         value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
+                        onChange={(e) => {
+
+                                setFullName(e.target.value)
+
+
+
+                        }}
                     />
                 </label>
             </div>
@@ -151,7 +173,9 @@ function GetUserInput({fullName, setFullName, email, setEmail, age, setAge, colo
                     <input
                         type="number"
                         value={age}
-                        onChange={(e) => setAge(e.target.value)}/>
+                        onChange={(e) => {
+                            setAge(e.target.value)
+                        }}/>
                 </label>
             </div>
 
