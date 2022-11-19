@@ -27,7 +27,7 @@
     * Sedan kan man submitta konversationen.
     * När man har skapat den så refreshas sidan.
 
-
+![ISeekYouDBDiagram](https://user-images.githubusercontent.com/95290084/202867639-c79f881b-6ddc-4c26-a6f1-333da9d74a7f.png)
 
 
 
