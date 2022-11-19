@@ -2,6 +2,8 @@
 
 # PG209 Backend programmering eksamen
 
+Länk till Azure Websites Deployment: https://pg209exam-sg-tl-tobia.azurewebsites.net/
+
 #### Feature lista:
 * Kan skapa ny brukere - uppdaterar sidan automatiskt
 * Lista över alla brukere
