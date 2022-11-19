@@ -37,15 +37,15 @@ Länk till Azure Websites Deployment: https://pg209exam-sg-tl-tobia.azurewebsite
 
 * [x] Dere har lest eksamensteksten
 * [x] Koden er sjekket inn på github.com/pg209-2022 repository
-* [ ] Dere har lastet opp en ZIP-fil lastet ned fra Github
+* [x] Dere har lastet opp en ZIP-fil lastet ned fra Github
 * [x] Dere har committed kode med begge prosjektdeltagernes GitHub-konto (alternativt: README beskriver hvordan dere har jobbet)
 
 ## README.md
 
-* [ ] Inneholder link til Azure Websites deployment
+* [x] Inneholder link til Azure Websites deployment
 * [x] Inneholder en korrekt badge til GitHub Actions
-* [ ] Beskriver hva dere har løst utover minimum
-* [ ] Inneholder et diagram over databasemodellen
+* [x] Beskriver hva dere har løst utover minimum
+* [x] Inneholder et diagram over databasemodellen
 
 ## Koden
 
@@ -53,7 +53,7 @@ Länk till Azure Websites Deployment: https://pg209exam-sg-tl-tobia.azurewebsite
 * [x] Er deployet korrekt til Azure Websites
 * [x] Inneholder tester av HTTP og database-logikk
 * [x] Bruker Flyway DB for å sette opp databasen
-* [ ] Skriver ut nyttige logmeldinger
+* [x] Skriver ut nyttige logmeldinger
 
 ## Basisfunksjonalitet
 
