@@ -20,7 +20,7 @@ public class UserEndPointTest extends AbstractServerTest {
 
         assertThat(connection.getInputStream())
                 .asString(StandardCharsets.UTF_8)
-                .contains("age\":73,\"color\":\"brown\",\"email\":\"peace@nowar.in\",\"fullName\":\"Mahamta Ghandi\",\"id\":5");
+                .contains("age\":73,\"color\":\"brown\",\"email\":\"peace@no.war.in\",\"fullName\":\"Mahamta Ghandi\",\"id\":5");
     }
 
     @Test

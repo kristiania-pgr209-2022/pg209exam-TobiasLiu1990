@@ -3,7 +3,7 @@ VALUES ('Ola Nordman', 'olno@gmail.com', 'red', 34),
        ('Snorre Snorreson', 'snorre@gmail.com', 'yellow', 64),
        ('Thor Odinson', 'strongest@avenger.com', 'blue', 25),
        ('Elon Musk', 'musken@tesla.ru', 'blue', 75),
-       ('Mahamta Ghandi', 'peace@peace.in', 'brown', 73);
+       ('Mahamta Ghandi', 'peace@no.war.in', 'brown', 73);
 
 INSERT INTO conversations (conversation_title)
 VALUES ('A little conversation from Ola to Snorre'),
