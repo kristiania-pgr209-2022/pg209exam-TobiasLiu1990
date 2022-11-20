@@ -35,7 +35,7 @@ public class UserEndpoint {
         }
     }
 
-    //Updates user settings if changed fields are not empty.
+    //Inputs are checked in UserDao
     @Path("/user/settings")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)

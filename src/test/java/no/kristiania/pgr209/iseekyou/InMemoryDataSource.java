@@ -6,8 +6,8 @@ import org.h2.jdbcx.JdbcDataSource;
 import javax.sql.DataSource;
 
 /**
- *  H2 test database
- *  Uses migration where there are some entries already. These are used for some tests
+ * H2 test database
+ * Uses migration where there are some entries already. These are used for some tests
  */
 
 public class InMemoryDataSource {

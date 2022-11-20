@@ -23,7 +23,6 @@ public class InboxEndPoint {
     public ConversationMembersDao conversationMembersDao;
 
     //Shows all conversations for user
-//    @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Conversation> retrieveAllConversationsForUser(@QueryParam("userId") int userId) throws SQLException {
@@ -46,6 +45,7 @@ public class InboxEndPoint {
         return messageDao.retrieveAllMessagesByConversationId(conversationId);
     }
 
+    //Reply to a conversation.
     @Path("/conversation/message/reply")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

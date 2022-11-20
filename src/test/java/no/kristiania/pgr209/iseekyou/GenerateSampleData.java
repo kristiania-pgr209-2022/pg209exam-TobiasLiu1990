@@ -36,7 +36,6 @@ public class GenerateSampleData {
         return user;
     }
 
-
     private static String sampleDomains() {
         return pickOne("@gmail.com", "@gmail.no", "@hotmail.com", "@yahoo.com", "@junit.gg");
     }

@@ -56,6 +56,7 @@ public class NewConversationEndpoint {
         return conversationMembersDao.save(recipient);
     }
 
+    //Lastly, send the new message for the conversation.
     @Path("/conversation/message")
     @POST
     @Produces(MediaType.APPLICATION_JSON)

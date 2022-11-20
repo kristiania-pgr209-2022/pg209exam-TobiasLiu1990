@@ -1,35 +1,58 @@
 [![Java CI with Maven](https://github.com/kristiania-pgr209-2022/pg209exam-TobiasLiu1990/actions/workflows/maven.yml/badge.svg)](https://github.com/kristiania-pgr209-2022/pg209exam-TobiasLiu1990/actions/workflows/maven.yml)
 
-# PG209 Backend programmering eksamen
+# PG209 Backend programming exam
 
-Länk till Azure Websites Deployment: https://pg209exam-sg-tl-tobia.azurewebsites.net/
+Link to Azure Websites Deployment: https://pg209exam-sg-tl-tobia.azurewebsites.net/
 
-#### Feature lista:
-* Kan skapa ny brukere - uppdaterar sidan automatiskt
-* Lista över alla brukere
-* Välja brukere i listan för att "loggas in"
+#### Feature list:
+ * Our chat is demonstrated on a single page (frontend).
+   * Able to create a new user - page updates automatically to refresh.
+   * List of all users in a drop-down menu.
+     - Choose who to login as. Information about the current user will show above the menu.
+   
+   * After logging in you can:
+     - Change user settings.
+       - Full name: Must include at least 2 names (first name and last name).
+       - E-mail: Must include an @ between name and domain (can have multiple names/domains). For example pgr.209@student.kristiania.no or hello@hello.com
+       - Age: Must be over 0.
+       - Color: Must input a real color.
+         - Input control is made in the DAO (UserDao).
+           - Does nothing if fields are empty. 
+           - Regex control for name and email.
+           - Cant use a duplicate email.
+     
+   * See all conversations (message threads)
+     - When selecting a conversation:
+       - A box will appear to all participants (we chose to exclude the current user to show for him/herself since it felt redundant).
+       - All messages will appear.
+       - At the bottom, it is possible to reply to the conversation.
+         - The message itself will appear directly. But to see your name and date of the message in the conversation, you have to refresh/change thread, for it to appear.
+       
+   * Create new conversation
+     - To the right, it is possible to create a new conversation.
+       - First you need to enter the conversation title (this generates the ID of the conversation that is used to add recipients in next part).
+       - Then you can add recipients to the conversation.
+       - Lastly, write a message for the conversation.
+       - When a conversation is created, the page will refresh.
+       - Everyone added can see and reply to the conversation.
 
-* När man väljer brukeren i drop-listan så kan man:
-  * Ändra på bruker-settings.
-    * Fullname: Må innehålle minst 2 "namn" (förnamn, efternamn). Kan innehålla fler namn.
-    * E-mail: Må ha @ och en domain. Ex. backend.pgr209@kristiania.backend.no
-    * Age: Må vara större än 0
-    * Color: Går inte att skriva in icke-existerande färg
 
-  * Se alla konversationer (trådar)
-    * När man öppnar en konversation ser man alla som är med och alla meddelanden.
-    * Man kan svara på konversationen.
-      * Meddelandet man skriver kommer ut direkt.
-      * Men man måste refresha/byta konversation för att se sitt namn + tiden man skrev den.
-      * Alla andra som är med kan då se samma sak.
-      
-  * Längst till höger så är ett fält för att skapa ny konversation.
-    * Först skrivs titeln in.
-    * Sedan kan man välja vem man vill skicka till. (Går inte i fel ordning pga hur primary key tas ut och används)
-    * Sedan kan man submitta konversationen.
-    * När man har skapat den så refreshas sidan.
-
+Our final database UML-diagram
 ![ISeekYouDBDiagram](https://user-images.githubusercontent.com/95290084/202867639-c79f881b-6ddc-4c26-a6f1-333da9d74a7f.png)
+
+
+
+Our very rough design of how we planned for it to look like, which held pretty good.
+![frontendDesign](resources/First fast sketch of chat app model.png)
+
+
+#### Teamwork
+We started with doing a lot of planning for how the project would look like.
+We planned out a very rough sketch that held all the way.
+The database UML-diagram was changed multiple times (we kept everything in resources on root).
+
+Most work has been together either meeting up or on discord, doing pair programming. Only some minor work was planned and divided between us.
+Through the whole project, we have basically discussed everything with each other to avoid misunderstandings, so we knew how to proceed.
 
 
 

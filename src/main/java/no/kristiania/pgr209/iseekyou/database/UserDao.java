@@ -37,7 +37,6 @@ public class UserDao extends AbstractDao<User, Boolean> {
         return false;
     }
 
-
     public User retrieve(int id) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM users WHERE user_id = ?";

@@ -65,8 +65,8 @@ public class MessageDao extends AbstractDao<Message, Message> {
         }
     }
 
+    //Separated this as inline as it became long and unreadable.
     private LocalDateTime formatDate(Timestamp timestamp) {
         return timestamp.toLocalDateTime().withNano(0);
     }
-
 }

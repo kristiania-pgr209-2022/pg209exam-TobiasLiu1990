@@ -1,7 +1,5 @@
 package no.kristiania.pgr209.iseekyou;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Message {
@@ -36,8 +34,6 @@ public class Message {
     public void setContent(String content) {
         this.content = content;
     }
-
-
 
     public int getSenderId() {
         return senderId;
