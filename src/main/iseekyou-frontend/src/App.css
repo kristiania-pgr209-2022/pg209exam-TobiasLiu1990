@@ -1,0 +1,143 @@
+#app-title {
+  position: absolute;
+  text-align: center;
+  top: 0;
+}
+
+#selected-user, #selected-user-color, #selected-user-age, #selected-user-email {
+  margin: 0;
+  padding: 0;
+}
+
+/* User */
+#show-users-drop-list {
+  position: absolute;
+  font-size: 14px;
+  background: red;
+  left: 0;
+  top: 0;
+}
+
+#create-new-user-div {
+  position: absolute;
+  border: solid black 1px;
+  font-size: 12px;
+  margin: 0.5em;
+  padding: 0.5em;
+  left: 0;
+  top: 40%;
+  }
+
+#user-settings {
+  position: absolute;
+  border: solid black 1px;
+  font-size: 12px;
+  margin: 0.5em;
+  padding: 0.5em;
+  left: 0;
+  bottom: 2%;
+}
+
+
+/* For new conversation window */
+#new-conversation-div {
+  border: solid black 2px;
+  position: absolute;
+  margin: 0.5em;
+  padding: 0.5em;
+  top: 0;
+  right: 0;
+  width: 17em;
+  height: 100%;
+}
+
+#new-conversation-title-div {
+  position: absolute;
+}
+
+#new-recipients-div {
+  position: absolute;
+  transform: translateY(70%);
+  right: 0;
+  font-size: 10px;
+}
+
+#new-message-div {
+  position: absolute;
+  height: 10%;
+  top: 60%;
+  right: 0;
+}
+
+#message-input {
+  width: 90%;
+  resize: vertical;
+}
+
+#conversations-div {
+  font-size: 13px;
+}
+
+#show-messages-div {
+  position: absolute;
+  font-size: 12px;
+  background: lightgray;
+}
+
+#show-message-sender-date-h4, #show-message-content-div, #reply-div {
+  margin: 0.3em;
+  padding: 0;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#first-option {
+  font-weight: bold;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
